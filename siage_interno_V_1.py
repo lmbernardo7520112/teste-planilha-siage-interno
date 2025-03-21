@@ -60,10 +60,11 @@ def criar_aba_em_branco(wb, titulo, img):
     return ws
 
 # Função para criar uma aba de disciplina (com cabeçalho e fórmulas)
-def criar_aba_disciplina(wb, titulo, img):
+def criar_aba_disciplina(wb, titulo, img, contador_imagem):
     """
     Cria uma nova aba no Workbook com o título especificado,
     adiciona a imagem, o título, o cabeçalho e as fórmulas.
+    :param contador_imagem: Um contador para garantir que cada imagem tenha um nome único.
     """
     ws = wb.create_sheet(title=titulo)
     
@@ -74,7 +75,9 @@ def criar_aba_disciplina(wb, titulo, img):
     ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
     
     # Adiciona a imagem na célula mesclada
-    ws.add_image(img, 'A1')
+    img_copy = Image(img)  # Cria uma cópia da imagem para evitar duplicação de nomes
+    img_copy.anchor = 'A1'
+    ws.add_image(img_copy)
     
     # Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
     cell = ws['A1']
@@ -147,8 +150,10 @@ def criar_planilha():
     criar_aba_em_branco(wb, "SEC", img)
 
     # Cria uma sheet para cada disciplina (com cabeçalho e fórmulas)
+    contador_imagem = 1  # Contador para garantir nomes únicos para as imagens
     for disciplina in DISCIPLINAS:
-        criar_aba_disciplina(wb, disciplina, img)
+        criar_aba_disciplina(wb, disciplina, img, contador_imagem)
+        contador_imagem += 1
 
     # Cria as abas adicionais em branco
     abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
