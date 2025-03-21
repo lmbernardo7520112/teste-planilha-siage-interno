@@ -2,6 +2,7 @@ import pandas as pd
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.drawing.image import Image
+from openpyxl.styles import Font, Alignment
 import os
 
 # Lista de disciplinas
@@ -42,23 +43,39 @@ img.height = int(img.height * 0.5)  # Nova altura: 106 pixels
 # Cria a aba "SEC" (Secretaria Escolar) em branco
 ws_sec = wb.create_sheet(title="SEC")
 
-# Adiciona a imagem na célula A1 da aba "SEC"
+# Mescla as células da primeira linha de A a J
+ws_sec.merge_cells('A1:J1')
+
+# Ajusta a altura da linha mesclada para caber a imagem
+ws_sec.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+
+# Adiciona a imagem na célula mesclada
 ws_sec.add_image(img, 'A1')
 
-# Ajusta a altura da linha e a largura da coluna para caber a imagem reduzida
-ws_sec.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
-ws_sec.column_dimensions['A'].width = img.width / 7  # Ajusta a largura da coluna (em caracteres)
+# Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
+cell = ws_sec['A1']
+cell.value = "COMPOSITOR LUIS RAMALHO"
+cell.font = Font(name='Arial', size=26, bold=True)
+cell.alignment = Alignment(horizontal='center', vertical='center')
 
 # Cria uma sheet para cada disciplina
 for disciplina in disciplinas:
     ws = wb.create_sheet(title=disciplina)
     
-    # Adiciona a imagem na célula A1 da aba da disciplina
+    # Mescla as células da primeira linha de A a J
+    ws.merge_cells('A1:J1')
+    
+    # Ajusta a altura da linha mesclada para caber a imagem
+    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+    
+    # Adiciona a imagem na célula mesclada
     ws.add_image(img, 'A1')
     
-    # Ajusta a altura da linha e a largura da coluna para caber a imagem reduzida
-    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
-    ws.column_dimensions['A'].width = img.width / 7  # Ajusta a largura da coluna (em caracteres)
+    # Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
+    cell = ws['A1']
+    cell.value = "COMPOSITOR LUIS RAMALHO"
+    cell.font = Font(name='Arial', size=26, bold=True)
+    cell.alignment = Alignment(horizontal='center', vertical='center')
     
     # Desloca o cabeçalho 10 células para baixo (linha 11)
     for _ in range(10):  # Adiciona 10 linhas em branco
@@ -92,12 +109,20 @@ abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
 for aba in abas_adicionais:
     ws = wb.create_sheet(title=aba)
     
-    # Adiciona a imagem na célula A1 da aba adicional
+    # Mescla as células da primeira linha de A a J
+    ws.merge_cells('A1:J1')
+    
+    # Ajusta a altura da linha mesclada para caber a imagem
+    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+    
+    # Adiciona a imagem na célula mesclada
     ws.add_image(img, 'A1')
     
-    # Ajusta a altura da linha e a largura da coluna para caber a imagem reduzida
-    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
-    ws.column_dimensions['A'].width = img.width / 7  # Ajusta a largura da coluna (em caracteres)
+    # Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
+    cell = ws['A1']
+    cell.value = "COMPOSITOR LUIS RAMALHO"
+    cell.font = Font(name='Arial', size=26, bold=True)
+    cell.alignment = Alignment(horizontal='center', vertical='center')
 
 # Define o caminho onde o arquivo será salvo
 caminho_padrao = "/mnt/c/Users/lmbernardo/Downloads"  # Caminho no WSL2 para a pasta Downloads do Windows
