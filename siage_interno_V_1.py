@@ -35,15 +35,19 @@ if not os.path.exists(caminho_imagem):
 # Carrega a imagem
 img = Image(caminho_imagem)
 
-# Ajusta o tamanho da imagem para caber na célula A1
-img.width = 100  # Largura da imagem (em pixels)
-img.height = 100  # Altura da imagem (em pixels)
+# Reduz a imagem em 50%
+img.width = int(img.width * 0.5)  # Nova largura: 540 pixels
+img.height = int(img.height * 0.5)  # Nova altura: 106 pixels
 
 # Cria a aba "SEC" (Secretaria Escolar) em branco
 ws_sec = wb.create_sheet(title="SEC")
 
 # Adiciona a imagem na célula A1 da aba "SEC"
 ws_sec.add_image(img, 'A1')
+
+# Ajusta a altura da linha e a largura da coluna para caber a imagem reduzida
+ws_sec.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+ws_sec.column_dimensions['A'].width = img.width / 7  # Ajusta a largura da coluna (em caracteres)
 
 # Cria uma sheet para cada disciplina
 for disciplina in disciplinas:
@@ -52,10 +56,16 @@ for disciplina in disciplinas:
     # Adiciona a imagem na célula A1 da aba da disciplina
     ws.add_image(img, 'A1')
     
-    # Desloca o cabeçalho 10 células para baixo
-    for r in dataframe_to_rows(df, index=False, header=True):
-        ws.append([None] * 10)  # Adiciona 10 linhas em branco
-        ws.append(r)
+    # Ajusta a altura da linha e a largura da coluna para caber a imagem reduzida
+    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+    ws.column_dimensions['A'].width = img.width / 7  # Ajusta a largura da coluna (em caracteres)
+    
+    # Desloca o cabeçalho 10 células para baixo (linha 11)
+    for _ in range(10):  # Adiciona 10 linhas em branco
+        ws.append([])
+    
+    # Adiciona o cabeçalho (nomes das colunas) na linha 11
+    ws.append(colunas)
     
     # Adiciona fórmulas para calcular as médias e situações
     for row in range(12, 47):  # 35 alunos (linhas 12 a 46, devido ao deslocamento)
@@ -84,6 +94,10 @@ for aba in abas_adicionais:
     
     # Adiciona a imagem na célula A1 da aba adicional
     ws.add_image(img, 'A1')
+    
+    # Ajusta a altura da linha e a largura da coluna para caber a imagem reduzida
+    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+    ws.column_dimensions['A'].width = img.width / 7  # Ajusta a largura da coluna (em caracteres)
 
 # Define o caminho onde o arquivo será salvo
 caminho_padrao = "/mnt/c/Users/lmbernardo/Downloads"  # Caminho no WSL2 para a pasta Downloads do Windows
