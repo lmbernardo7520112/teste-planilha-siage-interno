@@ -98,12 +98,6 @@ def criar_planilha():
     """
     Função principal para criar a planilha de notas.
     """
-    # Cria um DataFrame vazio com as colunas definidas
-    df = pd.DataFrame(columns=COLUNAS)
-
-    # Adiciona números de 1 a 35 na coluna "Nº"
-    df["Nº"] = range(1, 36)
-
     # Cria um arquivo Excel usando openpyxl
     wb = Workbook()
 
