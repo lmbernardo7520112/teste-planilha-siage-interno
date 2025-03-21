@@ -60,10 +60,11 @@ def criar_aba_em_branco(wb, titulo, img):
     return ws
 
 # Função para criar uma aba de disciplina (com cabeçalho e fórmulas)
-def criar_aba_disciplina(wb, titulo, img, contador_imagem):
+def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
     """
     Cria uma nova aba no Workbook com o título especificado,
     adiciona a imagem, o título, o cabeçalho e as fórmulas.
+    :param caminho_imagem: Caminho da imagem a ser carregada.
     :param contador_imagem: Um contador para garantir que cada imagem tenha um nome único.
     """
     ws = wb.create_sheet(title=titulo)
@@ -72,12 +73,17 @@ def criar_aba_disciplina(wb, titulo, img, contador_imagem):
     ws.merge_cells('A1:J1')
     
     # Ajusta a altura da linha mesclada para caber a imagem
-    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+    ws.row_dimensions[1].height = 80  # Ajusta a altura da linha (em pontos)
+    
+    # Carrega a imagem a partir do caminho
+    img = Image(caminho_imagem)
+    
+    # Reduz a imagem em 50%
+    img.width = int(img.width * 0.5)  # Nova largura: 50% do original
+    img.height = int(img.height * 0.5)  # Nova altura: 50% do original
     
     # Adiciona a imagem na célula mesclada
-    img_copy = Image(img)  # Cria uma cópia da imagem para evitar duplicação de nomes
-    img_copy.anchor = 'A1'
-    ws.add_image(img_copy)
+    ws.add_image(img, 'A1')
     
     # Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
     cell = ws['A1']
@@ -139,20 +145,14 @@ def criar_planilha():
     if not os.path.exists(CAMINHO_IMAGEM):
         raise FileNotFoundError(f"A imagem não foi encontrada no caminho: {CAMINHO_IMAGEM}")
 
-    # Carrega a imagem
-    img = Image(CAMINHO_IMAGEM)
-
-    # Reduz a imagem em 50%
-    img.width = int(img.width * 0.5)  # Nova largura: 540 pixels
-    img.height = int(img.height * 0.5)  # Nova altura: 106 pixels
-
     # Cria a aba "SEC" (Secretaria Escolar) em branco
+    img = Image(CAMINHO_IMAGEM)
     criar_aba_em_branco(wb, "SEC", img)
 
     # Cria uma sheet para cada disciplina (com cabeçalho e fórmulas)
     contador_imagem = 1  # Contador para garantir nomes únicos para as imagens
     for disciplina in DISCIPLINAS:
-        criar_aba_disciplina(wb, disciplina, img, contador_imagem)
+        criar_aba_disciplina(wb, disciplina, CAMINHO_IMAGEM, contador_imagem)
         contador_imagem += 1
 
     # Cria as abas adicionais em branco
