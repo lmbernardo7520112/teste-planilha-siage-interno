@@ -20,7 +20,7 @@ CAMINHO_IMAGEM = os.path.expanduser("~/teste-planilha-siage-interno/siage_intern
 def criar_aba(wb, titulo, img):
     """
     Cria uma nova aba no Workbook com o título especificado,
-    adiciona a imagem e o cabeçalho.
+    adiciona a imagem, o título e o cabeçalho.
     """
     ws = wb.create_sheet(title=titulo)
     
