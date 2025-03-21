@@ -1,5 +1,5 @@
 from openpyxl.utils import get_column_letter
-from app.core.config import COLUNAS  # Importa de config
+from app.core.config import COLUNAS
 
 def configurar_largura_colunas(ws, colunas_largura):
     """

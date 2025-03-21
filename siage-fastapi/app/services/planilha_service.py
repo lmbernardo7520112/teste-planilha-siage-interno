@@ -1,15 +1,14 @@
 import os
+import logging
 from pathlib import Path
-from openpyxl import Workbook
-from openpyxl.drawing.image import Image
 from openpyxl.styles import Font, Alignment
 from openpyxl.utils import get_column_letter
+from openpyxl import Workbook
+from openpyxl.drawing.image import Image
 from app.utils.excel_utils import configurar_largura_colunas
-from app.core.config import COLUNAS, DISCIPLINAS  # Importa de config
+from app.core.config import COLUNAS, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS
 
 
-# Caminho da imagem (usando pathlib para garantir o caminho correto)
-CAMINHO_IMAGEM = Path(__file__).parent.parent.parent / "app" / "core" / "static" / "images" / "siage_interno.png"
 
 def criar_aba_em_branco(wb, titulo, img):
     """
@@ -71,11 +70,8 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
     # Adiciona o cabeçalho (nomes das colunas) na linha 12
     ws.append(COLUNAS)
     
-    # Configura a largura das colunas específicas
-    configurar_largura_colunas(ws, {
-        "Nome do Aluno": 10,  # 10 cm
-        "SITUAÇÃO DO ALUNO": 4.5  # 4.5 cm
-    })
+    # Usa LARGURAS_COLUNAS em vez do dicionário hardcoded
+    configurar_largura_colunas(ws, LARGURAS_COLUNAS)
     
     # Adiciona os números de 1 a 35 na coluna "Nº" (a partir da linha 13)
     for i in range(1, 36):
@@ -103,41 +99,29 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
     
     return ws
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 def criar_planilha():
-    """
-    Função principal para criar a planilha de notas.
-    """
-    # Cria um arquivo Excel usando openpyxl
+    logger.info("Iniciando criação da planilha")
     wb = Workbook()
-
-    # Remove a sheet padrão criada automaticamente
     wb.remove(wb.active)
 
-    # Verifica se a imagem existe
     if not CAMINHO_IMAGEM.exists():
         raise FileNotFoundError(f"A imagem não foi encontrada no caminho: {CAMINHO_IMAGEM}")
 
-    # Cria a aba "SEC" (Secretaria Escolar) em branco
-    img = Image(str(CAMINHO_IMAGEM))  # Converte o caminho para string
+    img = Image(str(CAMINHO_IMAGEM))
     criar_aba_em_branco(wb, "SEC", img)
 
-    # Cria uma sheet para cada disciplina (com cabeçalho e fórmulas)
-    contador_imagem = 1  # Contador para garantir nomes únicos para as imagens
+    contador_imagem = 1
     for disciplina in DISCIPLINAS:
         criar_aba_disciplina(wb, disciplina, str(CAMINHO_IMAGEM), contador_imagem)
         contador_imagem += 1
 
-    # Cria as abas adicionais em branco
     abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
     for aba in abas_adicionais:
         criar_aba_em_branco(wb, aba, img)
 
-    # Define o caminho onde o arquivo será salvo
-    caminho_padrao = "/mnt/c/Users/lmbernardo/Downloads"  # Caminho no WSL2 para a pasta Downloads do Windows
-    nome_arquivo = "planilha_notas_complexa.xlsx"
-    caminho_completo = os.path.join(caminho_padrao, nome_arquivo)
-
-    # Salva o arquivo Excel
+    caminho_completo = os.path.join(CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO)
     wb.save(caminho_completo)
-
+    logger.info(f"Planilha salva em: {caminho_completo}")
     return caminho_completo
