@@ -1,6 +1,7 @@
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.drawing.image import Image
 import os
 
 # Lista de disciplinas
@@ -24,19 +25,40 @@ wb = Workbook()
 # Remove a sheet padrão criada automaticamente
 wb.remove(wb.active)
 
+# Caminho da imagem
+caminho_imagem = os.path.expanduser("~/teste-planilha-siage-interno/siage_interno.png")
+
+# Verifica se a imagem existe
+if not os.path.exists(caminho_imagem):
+    raise FileNotFoundError(f"A imagem não foi encontrada no caminho: {caminho_imagem}")
+
+# Carrega a imagem
+img = Image(caminho_imagem)
+
+# Ajusta o tamanho da imagem para caber na célula A1
+img.width = 100  # Largura da imagem (em pixels)
+img.height = 100  # Altura da imagem (em pixels)
+
 # Cria a aba "SEC" (Secretaria Escolar) em branco
 ws_sec = wb.create_sheet(title="SEC")
+
+# Adiciona a imagem na célula A1 da aba "SEC"
+ws_sec.add_image(img, 'A1')
 
 # Cria uma sheet para cada disciplina
 for disciplina in disciplinas:
     ws = wb.create_sheet(title=disciplina)
     
-    # Adiciona o cabeçalho ao arquivo Excel
+    # Adiciona a imagem na célula A1 da aba da disciplina
+    ws.add_image(img, 'A1')
+    
+    # Desloca o cabeçalho 10 células para baixo
     for r in dataframe_to_rows(df, index=False, header=True):
+        ws.append([None] * 10)  # Adiciona 10 linhas em branco
         ws.append(r)
     
     # Adiciona fórmulas para calcular as médias e situações
-    for row in range(2, 37):  # 35 alunos (linhas 2 a 36)
+    for row in range(12, 47):  # 35 alunos (linhas 12 a 46, devido ao deslocamento)
         # Fórmula para Nota Final (NF) - Média dos 4 bimestres
         ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
         
@@ -58,7 +80,10 @@ for disciplina in disciplinas:
 # Cria as abas adicionais em branco
 abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
 for aba in abas_adicionais:
-    wb.create_sheet(title=aba)  # Cria a aba sem adicionar dados ou fórmulas
+    ws = wb.create_sheet(title=aba)
+    
+    # Adiciona a imagem na célula A1 da aba adicional
+    ws.add_image(img, 'A1')
 
 # Define o caminho onde o arquivo será salvo
 caminho_padrao = "/mnt/c/Users/lmbernardo/Downloads"  # Caminho no WSL2 para a pasta Downloads do Windows
