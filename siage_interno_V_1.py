@@ -64,15 +64,15 @@ def criar_aba_disciplina(wb, titulo, img):
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = Alignment(horizontal='center', vertical='center')
     
-    # Desloca o cabeçalho 10 células para baixo (linha 11)
-    for _ in range(10):  # Adiciona 10 linhas em branco
-        ws.append([])
-    
-    # Adiciona o cabeçalho (nomes das colunas) na linha 11
+    # Adiciona o cabeçalho (nomes das colunas) na linha 2
     ws.append(COLUNAS)
     
+    # Adiciona os números de 1 a 35 na coluna "Nº" (a partir da linha 3)
+    for i in range(1, 36):
+        ws[f'A{i + 2}'] = i  # Linha 3 em diante
+    
     # Adiciona fórmulas para calcular as médias e situações
-    for row in range(12, 47):  # 35 alunos (linhas 12 a 46, devido ao deslocamento)
+    for row in range(3, 38):  # 35 alunos (linhas 3 a 37)
         # Fórmula para Nota Final (NF) - Média dos 4 bimestres
         ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
         
