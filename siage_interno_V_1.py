@@ -16,11 +16,36 @@ COLUNAS = [
 # Caminho da imagem
 CAMINHO_IMAGEM = os.path.expanduser("~/teste-planilha-siage-interno/siage_interno.png")
 
-# Função para criar uma aba com cabeçalho e imagem
-def criar_aba(wb, titulo, img):
+# Função para criar uma aba em branco (sem cabeçalho ou fórmulas)
+def criar_aba_em_branco(wb, titulo, img):
     """
     Cria uma nova aba no Workbook com o título especificado,
-    adiciona a imagem, o título e o cabeçalho.
+    adiciona a imagem e o título, mas sem cabeçalho ou fórmulas.
+    """
+    ws = wb.create_sheet(title=titulo)
+    
+    # Mescla as células da primeira linha de A a J
+    ws.merge_cells('A1:J1')
+    
+    # Ajusta a altura da linha mesclada para caber a imagem
+    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
+    
+    # Adiciona a imagem na célula mesclada
+    ws.add_image(img, 'A1')
+    
+    # Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
+    cell = ws['A1']
+    cell.value = "COMPOSITOR LUIS RAMALHO"
+    cell.font = Font(name='Arial', size=26, bold=True)
+    cell.alignment = Alignment(horizontal='center', vertical='center')
+    
+    return ws
+
+# Função para criar uma aba de disciplina (com cabeçalho e fórmulas)
+def criar_aba_disciplina(wb, titulo, img):
+    """
+    Cria uma nova aba no Workbook com o título especificado,
+    adiciona a imagem, o título, o cabeçalho e as fórmulas.
     """
     ws = wb.create_sheet(title=titulo)
     
@@ -46,13 +71,7 @@ def criar_aba(wb, titulo, img):
     # Adiciona o cabeçalho (nomes das colunas) na linha 11
     ws.append(COLUNAS)
     
-    return ws
-
-# Função para adicionar fórmulas nas células
-def adicionar_formulas(ws):
-    """
-    Adiciona fórmulas para calcular as médias e situações nas células.
-    """
+    # Adiciona fórmulas para calcular as médias e situações
     for row in range(12, 47):  # 35 alunos (linhas 12 a 46, devido ao deslocamento)
         # Fórmula para Nota Final (NF) - Média dos 4 bimestres
         ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
@@ -71,6 +90,8 @@ def adicionar_formulas(ws):
         
         # Fórmula para Situação Final (SF)
         ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
+    
+    return ws
 
 # Função principal
 def criar_planilha():
@@ -100,18 +121,17 @@ def criar_planilha():
     img.width = int(img.width * 0.5)  # Nova largura: 540 pixels
     img.height = int(img.height * 0.5)  # Nova altura: 106 pixels
 
-    # Cria a aba "SEC" (Secretaria Escolar)
-    ws_sec = criar_aba(wb, "SEC", img)
+    # Cria a aba "SEC" (Secretaria Escolar) em branco
+    criar_aba_em_branco(wb, "SEC", img)
 
-    # Cria uma sheet para cada disciplina
+    # Cria uma sheet para cada disciplina (com cabeçalho e fórmulas)
     for disciplina in DISCIPLINAS:
-        ws = criar_aba(wb, disciplina, img)
-        adicionar_formulas(ws)
+        criar_aba_disciplina(wb, disciplina, img)
 
     # Cria as abas adicionais em branco
     abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
     for aba in abas_adicionais:
-        criar_aba(wb, aba, img)
+        criar_aba_em_branco(wb, aba, img)
 
     # Define o caminho onde o arquivo será salvo
     caminho_padrao = "/mnt/c/Users/lmbernardo/Downloads"  # Caminho no WSL2 para a pasta Downloads do Windows
