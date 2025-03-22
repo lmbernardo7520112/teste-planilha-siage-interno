@@ -1,12 +1,16 @@
 import os
+import json
 import logging
 from pathlib import Path
-from openpyxl.styles import Font, Alignment, Border, Side  # Adicionado Border e Side
+from openpyxl.styles import Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from app.utils.excel_utils import configurar_largura_colunas
 from app.core.config import COLUNAS, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS
+
+# Caminho do arquivo JSON (assumindo que está no diretório raiz do projeto)
+CAMINHO_JSON = Path(__file__).parent.parent.parent / "turmas_alunos.json"
 
 def criar_aba_em_branco(wb, titulo, img):
     """
@@ -15,16 +19,10 @@ def criar_aba_em_branco(wb, titulo, img):
     """
     ws = wb.create_sheet(title=titulo)
     
-    # Mescla as células da primeira linha de A a J
     ws.merge_cells('A1:J1')
-    
-    # Ajusta a altura da linha mesclada para caber a imagem
-    ws.row_dimensions[1].height = img.height * 0.75  # Ajusta a altura da linha (em pontos)
-    
-    # Adiciona a imagem na célula mesclada
+    ws.row_dimensions[1].height = img.height * 0.75
     ws.add_image(img, 'A1')
     
-    # Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
@@ -32,46 +30,27 @@ def criar_aba_em_branco(wb, titulo, img):
     
     return ws
 
-def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
+def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
     """
-    Cria uma nova aba no Workbook com o título especificado,
-    adiciona a imagem, o título, o cabeçalho, as fórmulas e bordas na tabela.
+    Cria uma aba para a disciplina com uma tabela para cada turma,
+    populada com os alunos de cada turma, com 15 linhas de espaço entre tabelas.
     """
     ws = wb.create_sheet(title=titulo)
     
-    # Mescla as células da primeira linha de A a J
+    # Cabeçalho superior com imagem
     ws.merge_cells('A1:J1')
-    
-    # Ajusta a altura da linha mesclada para caber a imagem
-    ws.row_dimensions[1].height = 80  # Ajusta a altura da linha (em pontos)
-    
-    # Carrega a imagem a partir do caminho
+    ws.row_dimensions[1].height = 80
     img = Image(caminho_imagem)
-    
-    # Reduz a imagem em 50%
-    img.width = int(img.width * 0.5)  # Nova largura: 50% do original
-    img.height = int(img.height * 0.5)  # Nova altura: 50% do original
-    
-    # Adiciona a imagem na célula mesclada
+    img.width = int(img.width * 0.5)
+    img.height = int(img.height * 0.5)
     ws.add_image(img, 'A1')
     
-    # Adiciona o texto "COMPOSITOR LUIS RAMALHO" na célula mesclada
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = Alignment(horizontal='center', vertical='center')
     
-    # Desloca o cabeçalho para a linha 12
-    for _ in range(10):  # Adiciona 10 linhas em branco
-        ws.append([])
-    
-    # Adiciona o cabeçalho (nomes das colunas) na linha 12
-    ws.append(COLUNAS)
-    
-    # Usa LARGURAS_COLUNAS em vez do dicionário hardcoded
-    configurar_largura_colunas(ws, LARGURAS_COLUNAS)
-    
-    # Define o estilo de contorno
+    # Estilo de borda
     border = Border(
         left=Side(style='thin'),
         right=Side(style='thin'),
@@ -79,35 +58,53 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
         bottom=Side(style='thin')
     )
     
-    # Adiciona os números de 1 a 35 na coluna "Nº" (a partir da linha 13)
-    for i in range(1, 36):
-        ws[f'A{i + 12}'] = i  # Linha 13 em diante
+    # Espaçamento inicial
+    linha_atual = 2  # Começa após o cabeçalho
     
-    # Adiciona fórmulas para calcular as médias e situações
-    for row in range(13, 48):  # 35 alunos (linhas 13 a 47)
-        # Fórmula para Nota Final (NF) - Média dos 4 bimestres
-        ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
+    # Itera sobre cada turma
+    for turma in turmas:
+        # Adiciona o nome da turma como título
+        ws.merge_cells(f'A{linha_atual}:L{linha_atual}')
+        ws[f'A{linha_atual}'] = turma["nome_turma"]
+        ws[f'A{linha_atual}'].font = Font(name='Arial', size=14, bold=True)
+        ws[f'A{linha_atual}'].alignment = Alignment(horizontal='center')
+        ws.row_dimensions[linha_atual].height = 30
+        linha_atual += 1
         
-        # Fórmula para Média Geral (MG) - Média de todas as disciplinas
-        ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'
-        
-        # Fórmula para Média Final (MF)
-        ws[f'I{row}'] = f'=IF(H{row}<7, (0.6*H{row}) + (0.4*G{row}), "-")'
-        
-        # Fórmula para Situação do Aluno (SITUAÇÃO DO ALUNO)
-        ws[f'J{row}'] = f'=IF(H{row}<2.5, "REPROVADO", IF(H{row}<7, "FINAL", "APROVADO"))'
-        
-        # Fórmula para Prova Final (PF)
-        ws[f'K{row}'] = f'=IF(H{row}<7, (12.5 - (1.5*H{row})), "-")'
-        
-        # Fórmula para Situação Final (SF)
-        ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
-    
-    # Aplica bordas às células da tabela (linhas 12 a 47, colunas A a L)
-    for row in range(12, 48):  # Linha 12 (cabeçalho) até linha 47 (35 alunos)
-        for col in range(1, 13):  # Colunas A (1) até L (12)
-            cell = ws[f'{get_column_letter(col)}{row}']
+        # Adiciona o cabeçalho da tabela
+        for col_idx, col_nome in enumerate(COLUNAS, 1):
+            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+            cell.value = col_nome
             cell.border = border
+        
+        # Configura largura das colunas
+        configurar_largura_colunas(ws, LARGURAS_COLUNAS)
+        
+        # Linha inicial dos dados
+        linha_inicio_dados = linha_atual + 1
+        
+        # Popula os alunos
+        for aluno in turma["alunos"]:
+            ws[f'A{linha_atual + int(aluno["numero"])}'] = int(aluno["numero"])  # Número do aluno
+            ws[f'B{linha_atual + int(aluno["numero"])}'] = aluno["nome"]        # Nome do aluno
+        
+        # Adiciona fórmulas para todas as linhas (até 35, mesmo que a turma tenha menos alunos)
+        for row in range(linha_inicio_dados, linha_inicio_dados + 35):
+            ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'  # NF
+            ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'    # MG
+            ws[f'I{row}'] = f'=IF(H{row}<7, (0.6*H{row}) + (0.4*G{row}), "-")'  # MF
+            ws[f'J{row}'] = f'=IF(H{row}<2.5, "REPROVADO", IF(H{row}<7, "FINAL", "APROVADO"))'  # Situação
+            ws[f'K{row}'] = f'=IF(H{row}<7, (12.5 - (1.5*H{row})), "-")'  # PF
+            ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'  # SF
+        
+        # Aplica bordas à tabela (cabeçalho + 35 linhas)
+        for row in range(linha_atual, linha_atual + 36):
+            for col in range(1, 13):
+                cell = ws[f'{get_column_letter(col)}{row}']
+                cell.border = border
+        
+        # Atualiza a linha atual para a próxima tabela, com 15 linhas de espaço
+        linha_atual += 36 + 15  # 1 linha cabeçalho + 35 linhas de dados + 15 linhas de espaço
     
     return ws
 
@@ -122,13 +119,19 @@ def criar_planilha():
     if not CAMINHO_IMAGEM.exists():
         raise FileNotFoundError(f"A imagem não foi encontrada no caminho: {CAMINHO_IMAGEM}")
 
+    # Carrega os dados do JSON
+    if not CAMINHO_JSON.exists():
+        raise FileNotFoundError(f"O arquivo JSON não foi encontrado em: {CAMINHO_JSON}")
+    with open(CAMINHO_JSON, 'r', encoding='utf-8') as f:
+        dados = json.load(f)
+    turmas = dados["turmas"]
+
     img = Image(str(CAMINHO_IMAGEM))
     criar_aba_em_branco(wb, "SEC", img)
 
-    contador_imagem = 1
+    # Cria uma aba para cada disciplina, com 7 tabelas (uma por turma)
     for disciplina in DISCIPLINAS:
-        criar_aba_disciplina(wb, disciplina, str(CAMINHO_IMAGEM), contador_imagem)
-        contador_imagem += 1
+        criar_aba_disciplina(wb, disciplina, str(CAMINHO_IMAGEM), turmas)
 
     abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
     for aba in abas_adicionais:
