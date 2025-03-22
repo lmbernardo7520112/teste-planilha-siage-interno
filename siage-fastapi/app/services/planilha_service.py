@@ -1,14 +1,12 @@
 import os
 import logging
 from pathlib import Path
-from openpyxl.styles import Font, Alignment
+from openpyxl.styles import Font, Alignment, Border, Side  # Adicionado Border e Side
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from app.utils.excel_utils import configurar_largura_colunas
 from app.core.config import COLUNAS, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS
-
-
 
 def criar_aba_em_branco(wb, titulo, img):
     """
@@ -37,7 +35,7 @@ def criar_aba_em_branco(wb, titulo, img):
 def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
     """
     Cria uma nova aba no Workbook com o título especificado,
-    adiciona a imagem, o título, o cabeçalho e as fórmulas.
+    adiciona a imagem, o título, o cabeçalho, as fórmulas e bordas na tabela.
     """
     ws = wb.create_sheet(title=titulo)
     
@@ -73,6 +71,14 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
     # Usa LARGURAS_COLUNAS em vez do dicionário hardcoded
     configurar_largura_colunas(ws, LARGURAS_COLUNAS)
     
+    # Define o estilo de contorno
+    border = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
+    
     # Adiciona os números de 1 a 35 na coluna "Nº" (a partir da linha 13)
     for i in range(1, 36):
         ws[f'A{i + 12}'] = i  # Linha 13 em diante
@@ -97,10 +103,17 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, contador_imagem):
         # Fórmula para Situação Final (SF)
         ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
     
+    # Aplica bordas às células da tabela (linhas 12 a 47, colunas A a L)
+    for row in range(12, 48):  # Linha 12 (cabeçalho) até linha 47 (35 alunos)
+        for col in range(1, 13):  # Colunas A (1) até L (12)
+            cell = ws[f'{get_column_letter(col)}{row}']
+            cell.border = border
+    
     return ws
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 def criar_planilha():
     logger.info("Iniciando criação da planilha")
     wb = Workbook()
