@@ -6,58 +6,115 @@ from openpyxl.styles import Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
-from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma
+from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma, criar_dashboard_sec_turma, criar_dashboard_sec_geral
 from app.core.config import (
-    COLUNAS, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS,
+    COLUNAS, COLUNAS_SEC, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS,
     COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO, FONTE_TITULO_TURMA
 )
 
-# Caminho do arquivo JSON
+# Configuração do logging no início do arquivo
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 CAMINHO_JSON = Path(__file__).parent.parent.parent / "turmas_alunos.json"
 
 def criar_aba_em_branco(wb, titulo, img):
     ws = wb.create_sheet(title=titulo)
+    ws.sheet_properties.tabColor = COR_ABA
+
     ws.merge_cells('A1:J1')
     ws.row_dimensions[1].height = img.height * 0.75
     ws.add_image(img, 'A1')
-    
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = Alignment(horizontal='center', vertical='center')
-    
+
+    return ws
+
+def criar_aba_sec(wb, turmas, img):
+    ws = wb.create_sheet(title="SEC")
     ws.sheet_properties.tabColor = COR_ABA
-    
+
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+    linha_atual = 1
+    linhas_inicio_tabelas = []
+
+    ws.merge_cells('A1:F1')
+    ws.row_dimensions[1].height = img.height * 0.75
+    ws.add_image(img, 'A1')
+    cell = ws['A1']
+    cell.value = "COMPOSITOR LUIS RAMALHO"
+    cell.font = Font(name='Arial', size=26, bold=True)
+    cell.alignment = Alignment(horizontal='center', vertical='center')
+    linha_atual += 1
+
+    for turma in turmas:
+        ws.merge_cells(f'A{linha_atual}:F{linha_atual}')
+        ws[f'A{linha_atual}'] = turma["nome_turma"]
+        ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
+        ws[f'A{linha_atual}'].alignment = Alignment(horizontal='center')
+        ws.row_dimensions[linha_atual].height = 30
+        linha_atual += 1
+        linhas_inicio_tabelas.append(linha_atual)
+
+        for col_idx, col_nome in enumerate(COLUNAS_SEC, 1):
+            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+            cell.value = col_nome
+            cell.border = border
+            cell.font = Font(bold=True)
+            if col_nome == "Nome do Aluno":
+                cell.fill = FILL_NOME_ALUNO
+            elif col_nome == "SITUAÇÃO DO ALUNO":
+                cell.fill = FILL_SITUACAO
+            elif col_nome in ["ATIVO", "TRANSFERIDO", "DESISTENTE"]:
+                cell.fill = FILL_BIMESTRES
+
+        configurar_largura_colunas(ws, LARGURAS_COLUNAS)
+        linha_inicio_dados = linha_atual + 1
+
+        for aluno in turma["alunos"]:
+            row = linha_atual + int(aluno["numero"])
+            ws[f'A{row}'] = int(aluno["numero"])
+            ws[f'B{row}'] = aluno["nome"]
+            ws[f'C{row}'] = aluno.get("ativo", True)
+            ws[f'D{row}'] = aluno.get("transferido", False)
+            ws[f'E{row}'] = aluno.get("desistente", False)
+            ws[f'F{row}'] = f'=IF(E{row}, "DESISTENTE", IF(D{row}, "TRANSFERIDO", IF(C{row}, "ATIVO", "INDEFINIDO")))'
+
+        for row in range(linha_atual, linha_atual + len(turma["alunos"]) + 1):
+            for col in range(1, 7):
+                cell = ws[f'{get_column_letter(col)}{row}']
+                cell.border = border
+
+        criar_dashboard_sec_turma(ws, linha_atual, linha_inicio_dados, len(turma["alunos"]))
+        linha_atual += len(turma["alunos"]) + 6
+
+    criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, [len(turma["alunos"]) for turma in turmas])
+
     return ws
 
 def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
     ws = wb.create_sheet(title=titulo)
-    
+
     ws.merge_cells('A1:J1')
     ws.row_dimensions[1].height = 80
     img = Image(caminho_imagem)
     img.width = int(img.width * 0.5)
     img.height = int(img.height * 0.5)
     ws.add_image(img, 'A1')
-    
+
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = Alignment(horizontal='center', vertical='center')
-    
+
     ws.sheet_properties.tabColor = COR_ABA
-    
-    border = Border(
-        left=Side(style='thin'),
-        right=Side(style='thin'),
-        top=Side(style='thin'),
-        bottom=Side(style='thin')
-    )
-    
+
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
     linha_atual = 2
-    
+
     for turma in turmas:
-        # Título da turma
         ws.merge_cells(f'A{linha_atual}:L{linha_atual}')
         ws[f'A{linha_atual}'] = turma["nome_turma"]
         ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
@@ -65,7 +122,6 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
         ws.row_dimensions[linha_atual].height = 30
         linha_atual += 1
         
-        # Cabeçalho da tabela
         for col_idx, col_nome in enumerate(COLUNAS, 1):
             cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
             cell.value = col_nome
@@ -81,15 +137,12 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
                 cell.fill = FILL_SITUACAO
         
         configurar_largura_colunas(ws, LARGURAS_COLUNAS)
-        
         linha_inicio_dados = linha_atual + 1
         
-        # Popula os alunos
         for aluno in turma["alunos"]:
             ws[f'A{linha_atual + int(aluno["numero"])}'] = int(aluno["numero"])
             ws[f'B{linha_atual + int(aluno["numero"])}'] = aluno["nome"]
         
-        # Fórmulas da tabela
         for row in range(linha_inicio_dados, linha_inicio_dados + 35):
             ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
             ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'
@@ -98,21 +151,15 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
             ws[f'K{row}'] = f'=IF(H{row}<7, (12.5 - (1.5*H{row})), "-")'
             ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
         
-        # Aplica bordas à tabela
         for row in range(linha_atual, linha_atual + 36):
             for col in range(1, 13):
                 cell = ws[f'{get_column_letter(col)}{row}']
                 cell.border = border
         
-        # Cria o dashboard
         criar_dashboard_turma(ws, linha_atual, linha_inicio_dados)
-        
         linha_atual += 36 + 15
-    
-    return ws
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+    return ws
 
 def criar_planilha():
     logger.info("Iniciando criação da planilha")
@@ -129,7 +176,7 @@ def criar_planilha():
     turmas = dados["turmas"]
 
     img = Image(str(CAMINHO_IMAGEM))
-    criar_aba_em_branco(wb, "SEC", img)
+    criar_aba_sec(wb, turmas, img)
 
     for disciplina in DISCIPLINAS:
         criar_aba_disciplina(wb, disciplina, str(CAMINHO_IMAGEM), turmas)

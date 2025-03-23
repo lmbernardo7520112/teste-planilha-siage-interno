@@ -1,58 +1,38 @@
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Alignment, Border, Side
-from app.core.config import COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES
+from app.core.config import COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES, COLUNAS_SEC, DASHBOARD_SEC_TURMA, DASHBOARD_SEC_GERAL
 
 def configurar_largura_colunas(ws, colunas_largura):
-    """
-    Define a largura das colunas especificadas.
-    :param ws: A worksheet (aba) onde as colunas serão configuradas.
-    :param colunas_largura: Um dicionário onde a chave é o nome da coluna e o valor é a largura em cm.
-    """
     for coluna_nome, largura_cm in colunas_largura.items():
-        coluna_idx = COLUNAS.index(coluna_nome) + 1  # +1 porque as colunas começam em 1 no Excel
+        coluna_idx = (COLUNAS_SEC.index(coluna_nome) if coluna_nome in COLUNAS_SEC else COLUNAS.index(coluna_nome)) + 1
         coluna_letra = get_column_letter(coluna_idx)
         largura_unidades = largura_cm * 3.78
         ws.column_dimensions[coluna_letra].width = largura_unidades
 
 def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
-    """
-    Cria um dashboard ao lado da tabela de turma com indicadores por bimestre.
-    :param ws: Worksheet onde o dashboard será criado.
-    :param linha_inicio_tabela: Linha onde começa o cabeçalho da tabela.
-    :param linha_inicio_dados: Linha onde começam os dados dos alunos.
-    """
-    border = Border(
-        left=Side(style='thin'),
-        right=Side(style='thin'),
-        top=Side(style='thin'),
-        bottom=Side(style='thin')
-    )
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
     
-    # Título do dashboard
     dashboard_linha = linha_inicio_tabela
     ws[f'N{dashboard_linha}'] = "Resumo da Turma"
     ws[f'N{dashboard_linha}'].font = Font(bold=True)
     ws[f'N{dashboard_linha}'].alignment = Alignment(horizontal='center')
     ws.merge_cells(f'N{dashboard_linha}:R{dashboard_linha}')
-    
-    # Cabeçalhos dos bimestres
+
     dashboard_linha += 1
     ws[f'O{dashboard_linha}'] = "1º Bimestre"
     ws[f'P{dashboard_linha}'] = "2º Bimestre"
     ws[f'Q{dashboard_linha}'] = "3º Bimestre"
     ws[f'R{dashboard_linha}'] = "4º Bimestre"
-    for col in range(15, 19):  # O a R
+    for col in range(15, 19):
         cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
         cell.font = Font(bold=True)
         cell.alignment = Alignment(horizontal='center')
         cell.fill = FILL_BIMESTRES
-    
-    # Intervalo de dados
+
     inicio = linha_inicio_dados
     fim = linha_inicio_dados + 34
     bimestre_cols = ['C', 'D', 'E', 'F']
-    
-    # Aplicação dos indicadores
+
     for idx, indicador in enumerate(DASHBOARD_INDICADORES):
         dashboard_linha += 1
         ws[f'N{dashboard_linha}'] = indicador["nome"]
@@ -74,16 +54,94 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
         if indicador["formato"]:
             for col in range(15, 19):
                 ws[f'{get_column_letter(col)}{dashboard_linha}'].number_format = indicador["formato"]
-    
-    # Bordas no dashboard
+
     for row in range(linha_inicio_tabela, dashboard_linha + 1):
-        for col in range(14, 19):  # N a R
+        for col in range(14, 19):
             cell = ws[f'{get_column_letter(col)}{row}']
             cell.border = border
+
+    ws.column_dimensions['N'].width = 25
+    ws.column_dimensions['O'].width = 10
+    ws.column_dimensions['P'].width = 10
+    ws.column_dimensions['Q'].width = 10
+    ws.column_dimensions['R'].width = 10
+
+def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_alunos):
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
     
-    # Ajusta largura das colunas do dashboard
-    ws.column_dimensions['N'].width = 25  # Indicador
-    ws.column_dimensions['O'].width = 10  # 1º Bimestre
-    ws.column_dimensions['P'].width = 10  # 2º Bimestre
-    ws.column_dimensions['Q'].width = 10  # 3º Bimestre
-    ws.column_dimensions['R'].width = 10  # 4º Bimestre
+    dashboard_linha = linha_inicio_tabela
+    ws[f'G{dashboard_linha}'] = "Resumo Parcial por Turma"
+    ws[f'G{dashboard_linha}'].font = Font(bold=True)
+    ws[f'G{dashboard_linha}'].alignment = Alignment(horizontal='center')
+    ws.merge_cells(f'G{dashboard_linha}:I{dashboard_linha}')
+
+    inicio = linha_inicio_dados
+    fim = linha_inicio_dados + num_alunos - 1
+
+    for idx, indicador in enumerate(DASHBOARD_SEC_TURMA):
+        dashboard_linha += 1
+        ws[f'G{dashboard_linha}'] = indicador["nome"]
+        col_ref = 'C' if indicador["nome"] == "ATIVOS" else 'D' if indicador["nome"] == "TRANSFERIDOS" else 'E' if indicador["nome"] == "DESISTENTES" else 'B'
+        ws[f'H{dashboard_linha}'] = indicador["formula"](col_ref, inicio, fim)
+        ws[f'I{dashboard_linha}'] = ws[f'H{dashboard_linha}'].value
+        
+        if indicador["formato"]:
+            ws[f'H{dashboard_linha}'].number_format = indicador["formato"]
+            ws[f'I{dashboard_linha}'].number_format = indicador["formato"]
+
+    for row in range(linha_inicio_tabela, dashboard_linha + 1):
+        for col in range(7, 10):
+            cell = ws[f'{get_column_letter(col)}{row}']
+            cell.border = border
+
+    ws.column_dimensions['G'].width = 20
+    ws.column_dimensions['H'].width = 10
+    ws.column_dimensions['I'].width = 10
+
+def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+    
+    dashboard_linha = linhas_inicio_tabelas[0]
+    ws[f'J{dashboard_linha}'] = "Resumo Geral da Escola"
+    ws[f'J{dashboard_linha}'].font = Font(bold=True)
+    ws[f'J{dashboard_linha}'].alignment = Alignment(horizontal='center')
+    ws.merge_cells(f'J{dashboard_linha}:L{dashboard_linha}')
+
+    matriculas_refs = []
+    ativos_refs = []
+    transferidos_refs = []
+    desistentes_refs = []
+
+    for idx, linha_inicio in enumerate(linhas_inicio_tabelas):
+        matriculas_refs.append(f'H{linha_inicio + 1}')
+        ativos_refs.append(f'H{linha_inicio + 2}')
+        transferidos_refs.append(f'H{linha_inicio + 3}')
+        desistentes_refs.append(f'H{linha_inicio + 4}')
+
+    for idx, indicador in enumerate(DASHBOARD_SEC_GERAL):
+        dashboard_linha += 1
+        ws[f'J{dashboard_linha}'] = indicador["nome"]
+        if indicador["nome"] == "MATRÍCULAS":
+            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(matriculas_refs)})'
+        elif indicador["nome"] == "ATIVOS":
+            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(ativos_refs)})'
+        elif indicador["nome"] == "TRANSFERIDOS":
+            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(transferidos_refs)})'
+        elif indicador["nome"] == "DESISTENTES":
+            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(desistentes_refs)})'
+        elif indicador["nome"] == "Nº ABANDONO(S)":
+            ws[f'K{dashboard_linha}'] = f'=K{dashboard_linha-1}+K{dashboard_linha-2}'
+        elif indicador["nome"] == "PORCENTAGEM DE ABANDONO(S)":
+            ws[f'K{dashboard_linha}'] = f'=K{dashboard_linha-1}/K{dashboard_linha-4}'
+        
+        if indicador["formato"]:
+            ws[f'K{dashboard_linha}'].number_format = indicador["formato"]
+
+    for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
+        for col in range(10, 13):
+            cell = ws[f'{get_column_letter(col)}{row}']
+            cell.border = border
+
+    ws.column_dimensions['J'].width = 25
+    ws.column_dimensions['K'].width = 10
+    ws.column_dimensions['L'].width = 10
