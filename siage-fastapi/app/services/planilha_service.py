@@ -2,17 +2,16 @@ import os
 import json
 import logging
 from pathlib import Path
-from openpyxl.styles import Font, Alignment, Border, Side
+from openpyxl.styles import Font, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma, criar_dashboard_sec_turma, criar_dashboard_sec_geral
 from app.core.config import (
     COLUNAS, COLUNAS_SEC, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS,
-    COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO, FONTE_TITULO_TURMA
+    COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO, FONTE_TITULO_TURMA, ALINHAMENTO_CENTRALIZADO
 )
 
-# Configuração do logging no início do arquivo
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ def criar_aba_em_branco(wb, titulo, img):
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
-    cell.alignment = Alignment(horizontal='center', vertical='center')
+    cell.alignment = ALINHAMENTO_CENTRALIZADO
 
     return ws
 
@@ -46,14 +45,14 @@ def criar_aba_sec(wb, turmas, img):
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
-    cell.alignment = Alignment(horizontal='center', vertical='center')
+    cell.alignment = ALINHAMENTO_CENTRALIZADO
     linha_atual += 1
 
     for turma in turmas:
         ws.merge_cells(f'A{linha_atual}:F{linha_atual}')
         ws[f'A{linha_atual}'] = turma["nome_turma"]
         ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
-        ws[f'A{linha_atual}'].alignment = Alignment(horizontal='center')
+        ws[f'A{linha_atual}'].alignment = ALINHAMENTO_CENTRALIZADO
         ws.row_dimensions[linha_atual].height = 30
         linha_atual += 1
         linhas_inicio_tabelas.append(linha_atual)
@@ -63,6 +62,7 @@ def criar_aba_sec(wb, turmas, img):
             cell.value = col_nome
             cell.border = border
             cell.font = Font(bold=True)
+            cell.alignment = ALINHAMENTO_CENTRALIZADO
             if col_nome == "Nome do Aluno":
                 cell.fill = FILL_NOME_ALUNO
             elif col_nome == "SITUAÇÃO DO ALUNO":
@@ -76,11 +76,17 @@ def criar_aba_sec(wb, turmas, img):
         for aluno in turma["alunos"]:
             row = linha_atual + int(aluno["numero"])
             ws[f'A{row}'] = int(aluno["numero"])
+            ws[f'A{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'B{row}'] = aluno["nome"]
+            ws[f'B{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'C{row}'] = aluno.get("ativo", True)
+            ws[f'C{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'D{row}'] = aluno.get("transferido", False)
+            ws[f'D{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'E{row}'] = aluno.get("desistente", False)
+            ws[f'E{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'F{row}'] = f'=IF(E{row}, "DESISTENTE", IF(D{row}, "TRANSFERIDO", IF(C{row}, "ATIVO", "INDEFINIDO")))'
+            ws[f'F{row}'].alignment = ALINHAMENTO_CENTRALIZADO
 
         for row in range(linha_atual, linha_atual + len(turma["alunos"]) + 1):
             for col in range(1, 7):
@@ -107,7 +113,7 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
-    cell.alignment = Alignment(horizontal='center', vertical='center')
+    cell.alignment = ALINHAMENTO_CENTRALIZADO
 
     ws.sheet_properties.tabColor = COR_ABA
 
@@ -118,7 +124,7 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
         ws.merge_cells(f'A{linha_atual}:L{linha_atual}')
         ws[f'A{linha_atual}'] = turma["nome_turma"]
         ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
-        ws[f'A{linha_atual}'].alignment = Alignment(horizontal='center')
+        ws[f'A{linha_atual}'].alignment = ALINHAMENTO_CENTRALIZADO
         ws.row_dimensions[linha_atual].height = 30
         linha_atual += 1
         
@@ -127,6 +133,7 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
             cell.value = col_nome
             cell.border = border
             cell.font = Font(bold=True)
+            cell.alignment = ALINHAMENTO_CENTRALIZADO
             if col_nome == "Nome do Aluno":
                 cell.fill = FILL_NOME_ALUNO
             elif col_nome in ["1º BIM", "2º BIM", "3º BIM", "4º BIM"]:
@@ -141,15 +148,23 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
         
         for aluno in turma["alunos"]:
             ws[f'A{linha_atual + int(aluno["numero"])}'] = int(aluno["numero"])
+            ws[f'A{linha_atual + int(aluno["numero"])}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'B{linha_atual + int(aluno["numero"])}'] = aluno["nome"]
+            ws[f'B{linha_atual + int(aluno["numero"])}'].alignment = ALINHAMENTO_CENTRALIZADO
         
         for row in range(linha_inicio_dados, linha_inicio_dados + 35):
             ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
+            ws[f'G{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'
+            ws[f'H{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'I{row}'] = f'=IF(H{row}<7, (0.6*H{row}) + (0.4*G{row}), "-")'
+            ws[f'I{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'J{row}'] = f'=IF(H{row}<2.5, "REPROVADO", IF(H{row}<7, "FINAL", "APROVADO"))'
+            ws[f'J{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'K{row}'] = f'=IF(H{row}<7, (12.5 - (1.5*H{row})), "-")'
+            ws[f'K{row}'].alignment = ALINHAMENTO_CENTRALIZADO
             ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
+            ws[f'L{row}'].alignment = ALINHAMENTO_CENTRALIZADO
         
         for row in range(linha_atual, linha_atual + 36):
             for col in range(1, 13):

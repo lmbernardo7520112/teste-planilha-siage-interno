@@ -1,6 +1,6 @@
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Font, Alignment, Border, Side
-from app.core.config import COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES, COLUNAS_SEC, DASHBOARD_SEC_TURMA, DASHBOARD_SEC_GERAL
+from openpyxl.styles import Font, Border, Side
+from app.core.config import COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES, COLUNAS_SEC, DASHBOARD_SEC_TURMA, DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO
 
 def configurar_largura_colunas(ws, colunas_largura):
     for coluna_nome, largura_cm in colunas_largura.items():
@@ -15,7 +15,7 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     dashboard_linha = linha_inicio_tabela
     ws[f'N{dashboard_linha}'] = "Resumo da Turma"
     ws[f'N{dashboard_linha}'].font = Font(bold=True)
-    ws[f'N{dashboard_linha}'].alignment = Alignment(horizontal='center')
+    ws[f'N{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
     ws.merge_cells(f'N{dashboard_linha}:R{dashboard_linha}')
 
     dashboard_linha += 1
@@ -26,7 +26,7 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     for col in range(15, 19):
         cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
         cell.font = Font(bold=True)
-        cell.alignment = Alignment(horizontal='center')
+        cell.alignment = ALINHAMENTO_CENTRALIZADO
         cell.fill = FILL_BIMESTRES
 
     inicio = linha_inicio_dados
@@ -36,6 +36,7 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     for idx, indicador in enumerate(DASHBOARD_INDICADORES):
         dashboard_linha += 1
         ws[f'N{dashboard_linha}'] = indicador["nome"]
+        ws[f'N{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         
         if indicador["nome"] == "MATRÍCULAS":
             ws[f'O{dashboard_linha}'] = f'=O{linha_inicio_tabela + 2}+O{linha_inicio_tabela + 3}'
@@ -51,8 +52,9 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
             for col_idx, bimestre_col in enumerate(bimestre_cols):
                 ws[f'{get_column_letter(15 + col_idx)}{dashboard_linha}'] = indicador["formula"](bimestre_col, inicio, fim)
         
-        if indicador["formato"]:
-            for col in range(15, 19):
+        for col in range(15, 19):
+            ws[f'{get_column_letter(col)}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+            if indicador["formato"]:
                 ws[f'{get_column_letter(col)}{dashboard_linha}'].number_format = indicador["formato"]
 
     for row in range(linha_inicio_tabela, dashboard_linha + 1):
@@ -72,7 +74,7 @@ def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_a
     dashboard_linha = linha_inicio_tabela
     ws[f'G{dashboard_linha}'] = "Resumo Parcial por Turma"
     ws[f'G{dashboard_linha}'].font = Font(bold=True)
-    ws[f'G{dashboard_linha}'].alignment = Alignment(horizontal='center')
+    ws[f'G{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
     ws.merge_cells(f'G{dashboard_linha}:I{dashboard_linha}')
 
     inicio = linha_inicio_dados
@@ -81,9 +83,12 @@ def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_a
     for idx, indicador in enumerate(DASHBOARD_SEC_TURMA):
         dashboard_linha += 1
         ws[f'G{dashboard_linha}'] = indicador["nome"]
+        ws[f'G{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         col_ref = 'C' if indicador["nome"] == "ATIVOS" else 'D' if indicador["nome"] == "TRANSFERIDOS" else 'E' if indicador["nome"] == "DESISTENTES" else 'B'
         ws[f'H{dashboard_linha}'] = indicador["formula"](col_ref, inicio, fim)
+        ws[f'H{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         ws[f'I{dashboard_linha}'] = ws[f'H{dashboard_linha}'].value
+        ws[f'I{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         
         if indicador["formato"]:
             ws[f'H{dashboard_linha}'].number_format = indicador["formato"]
@@ -104,36 +109,32 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
     dashboard_linha = linhas_inicio_tabelas[0]
     ws[f'J{dashboard_linha}'] = "Resumo Geral da Escola"
     ws[f'J{dashboard_linha}'].font = Font(bold=True)
-    ws[f'J{dashboard_linha}'].alignment = Alignment(horizontal='center')
+    ws[f'J{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
     ws.merge_cells(f'J{dashboard_linha}:L{dashboard_linha}')
 
-    matriculas_refs = []
-    ativos_refs = []
-    transferidos_refs = []
-    desistentes_refs = []
+    matriculas_refs = [f'H{linha_inicio + 1}' for linha_inicio in linhas_inicio_tabelas]
+    ativos_refs = [f'H{linha_inicio + 2}' for linha_inicio in linhas_inicio_tabelas]
+    transferidos_refs = [f'H{linha_inicio + 3}' for linha_inicio in linhas_inicio_tabelas]
+    desistentes_refs = [f'H{linha_inicio + 4}' for linha_inicio in linhas_inicio_tabelas]
 
-    for idx, linha_inicio in enumerate(linhas_inicio_tabelas):
-        matriculas_refs.append(f'H{linha_inicio + 1}')
-        ativos_refs.append(f'H{linha_inicio + 2}')
-        transferidos_refs.append(f'H{linha_inicio + 3}')
-        desistentes_refs.append(f'H{linha_inicio + 4}')
+    refs_por_indicador = {
+        "MATRÍCULAS": matriculas_refs,
+        "ATIVOS": ativos_refs,
+        "TRANSFERIDOS": transferidos_refs,
+        "DESISTENTES": desistentes_refs
+    }
 
     for idx, indicador in enumerate(DASHBOARD_SEC_GERAL):
         dashboard_linha += 1
         ws[f'J{dashboard_linha}'] = indicador["nome"]
-        if indicador["nome"] == "MATRÍCULAS":
-            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(matriculas_refs)})'
-        elif indicador["nome"] == "ATIVOS":
-            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(ativos_refs)})'
-        elif indicador["nome"] == "TRANSFERIDOS":
-            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(transferidos_refs)})'
-        elif indicador["nome"] == "DESISTENTES":
-            ws[f'K{dashboard_linha}'] = f'=SUM({",".join(desistentes_refs)})'
-        elif indicador["nome"] == "Nº ABANDONO(S)":
-            ws[f'K{dashboard_linha}'] = f'=K{dashboard_linha-1}+K{dashboard_linha-2}'
-        elif indicador["nome"] == "PORCENTAGEM DE ABANDONO(S)":
-            ws[f'K{dashboard_linha}'] = f'=K{dashboard_linha-1}/K{dashboard_linha-4}'
+        ws[f'J{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         
+        if indicador["nome"] in refs_por_indicador:
+            ws[f'K{dashboard_linha}'] = indicador["formula"](refs_por_indicador[indicador["nome"]])
+        else:
+            ws[f'K{dashboard_linha}'] = indicador["formula"](dashboard_linha)
+        
+        ws[f'K{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         if indicador["formato"]:
             ws[f'K{dashboard_linha}'].number_format = indicador["formato"]
 
