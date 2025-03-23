@@ -6,7 +6,7 @@ from openpyxl.styles import Font, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
-from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma, criar_dashboard_sec_turma, criar_dashboard_sec_geral
+from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma, criar_dashboard_sec_turma, criar_dashboard_sec_geral, criar_dashboard_sec_aprovacao
 from app.core.config import (
     COLUNAS, COLUNAS_SEC, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS,
     COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO, FONTE_TITULO_TURMA, ALINHAMENTO_CENTRALIZADO
@@ -97,6 +97,7 @@ def criar_aba_sec(wb, turmas, img):
         linha_atual += len(turma["alunos"]) + 6
 
     criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, [len(turma["alunos"]) for turma in turmas])
+    criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas)
 
     return ws
 

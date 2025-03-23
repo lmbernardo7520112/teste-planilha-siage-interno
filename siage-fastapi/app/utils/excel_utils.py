@@ -1,6 +1,9 @@
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side
-from app.core.config import COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES, COLUNAS_SEC, DASHBOARD_SEC_TURMA, DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO
+from app.core.config import (
+    COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES, COLUNAS_SEC, DASHBOARD_SEC_TURMA,
+    DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO, DASHBOARD_SEC_APROVACAO, DISCIPLINAS
+)
 
 def configurar_largura_colunas(ws, colunas_largura):
     for coluna_nome, largura_cm in colunas_largura.items():
@@ -146,3 +149,82 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
     ws.column_dimensions['J'].width = 25
     ws.column_dimensions['K'].width = 10
     ws.column_dimensions['L'].width = 10
+
+def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+    
+    dashboard_linha = linhas_inicio_tabelas[0]
+    ws[f'M{dashboard_linha}'] = "TAXA DE APROVAÇÃO BIMESTRAL"
+    ws[f'M{dashboard_linha}'].font = Font(bold=True)
+    ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+    ws.merge_cells(f'M{dashboard_linha}:Q{dashboard_linha}')
+
+    dashboard_linha += 1
+    ws[f'M{dashboard_linha}'] = "TURMA"
+    ws[f'N{dashboard_linha}'] = "B1"
+    ws[f'O{dashboard_linha}'] = "B2"
+    ws[f'P{dashboard_linha}'] = "B3"
+    ws[f'Q{dashboard_linha}'] = "B4"
+    for col in range(13, 18):
+        cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
+        cell.font = Font(bold=True)
+        cell.alignment = ALINHAMENTO_CENTRALIZADO
+        cell.fill = FILL_BIMESTRES
+
+    # Referências para as notas dos alunos por disciplina e bimestre
+    refs_por_turma = {}
+    for idx, turma in enumerate(turmas):
+        refs_por_turma[turma["nome_turma"]] = []
+        for disciplina in DISCIPLINAS:
+            # Cada aba de disciplina tem as turmas listadas, com 36 linhas por turma (2 de cabeçalho + 34 de dados)
+            linha_inicio_dados = 3 + (idx * 51)  # 51 linhas por turma (36 dados + 15 dashboard)
+            refs_por_turma[turma["nome_turma"]].append({
+                "B1": f"'{disciplina}'!C{linha_inicio_dados}:C{linha_inicio_dados + 34}",
+                "B2": f"'{disciplina}'!D{linha_inicio_dados}:D{linha_inicio_dados + 34}",
+                "B3": f"'{disciplina}'!E{linha_inicio_dados}:E{linha_inicio_dados + 34}",
+                "B4": f"'{disciplina}'!F{linha_inicio_dados}:F{linha_inicio_dados + 34}"
+            })
+
+    # Preenchendo as taxas de aprovação por turma
+    taxas_por_bimestre = {"B1": [], "B2": [], "B3": [], "B4": []}
+    for idx, turma in enumerate(turmas):
+        dashboard_linha += 1
+        ws[f'M{dashboard_linha}'] = turma["nome_turma"]
+        ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+
+        for bimestre, col in zip(["B1", "B2", "B3", "B4"], ['N', 'O', 'P', 'Q']):
+            refs = [ref[bimestre] for ref in refs_por_turma[turma["nome_turma"]]]
+            # Construindo a fórmula sem barras invertidas dentro da f-string
+            sub_formulas = [f"COUNTIF({ref}, \">=7\")/COUNTA({ref})" for ref in refs]
+            formula = f"=AVERAGE({','.join(sub_formulas)})"
+            ws[f'{col}{dashboard_linha}'] = formula
+            ws[f'{col}{dashboard_linha}'].number_format = '0.00'
+            ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+            taxas_por_bimestre[bimestre].append(f'{col}{dashboard_linha}')
+
+    # Preenchendo as taxas gerais (aprovação e reprovação)
+    for indicador in DASHBOARD_SEC_APROVACAO:
+        dashboard_linha += 1
+        ws[f'M{dashboard_linha}'] = indicador["nome"]
+        ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+
+        for bimestre, col in zip(["B1", "B2", "B3", "B4"], ['N', 'O', 'P', 'Q']):
+            inicio = taxas_por_bimestre[bimestre][0]
+            fim = taxas_por_bimestre[bimestre][-1]
+            ws[f'{col}{dashboard_linha}'] = indicador["formula"](col, inicio, fim)
+            ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+            if indicador["formato"]:
+                ws[f'{col}{dashboard_linha}'].number_format = indicador["formato"]
+
+    # Aplicando bordas
+    for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
+        for col in range(13, 18):
+            cell = ws[f'{get_column_letter(col)}{row}']
+            cell.border = border
+
+    # Ajustando larguras das colunas
+    ws.column_dimensions['M'].width = 15
+    ws.column_dimensions['N'].width = 10
+    ws.column_dimensions['O'].width = 10
+    ws.column_dimensions['P'].width = 10
+    ws.column_dimensions['Q'].width = 10

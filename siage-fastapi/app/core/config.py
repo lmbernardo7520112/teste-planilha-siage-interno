@@ -39,7 +39,7 @@ FILL_BIMESTRES = PatternFill(start_color="FFA500", end_color="FFA500", fill_type
 FILL_NOTA_FINAL = PatternFill(start_color="FF4500", end_color="FF4500", fill_type="solid")
 FILL_SITUACAO = PatternFill(start_color="FFFACD", end_color="FFFACD", fill_type="solid")
 FONTE_TITULO_TURMA = Font(name='Arial', size=14, bold=True, color="8B4513")
-ALINHAMENTO_CENTRALIZADO = Alignment(horizontal='center', vertical='center')  # Nova constante
+ALINHAMENTO_CENTRALIZADO = Alignment(horizontal='center', vertical='center')
 
 # Definição dos indicadores do dashboard principal
 DASHBOARD_INDICADORES = [
@@ -67,6 +67,12 @@ DASHBOARD_SEC_GERAL = [
     {"nome": "ATIVOS", "formula": lambda refs: f'=SUM({",".join(refs)})', "formato": None},
     {"nome": "TRANSFERIDOS", "formula": lambda refs: f'=SUM({",".join(refs)})', "formato": None},
     {"nome": "DESISTENTES", "formula": lambda refs: f'=SUM({",".join(refs)})', "formato": None},
-    {"nome": "Nº ABANDONO(S)", "formula": lambda linha_atual: f'=K{linha_atual-1}+K{linha_atual-2}', "formato": None},
-    {"nome": "ABANDONO(S) (%)", "formula": lambda linha_atual: f'=K{linha_atual-1}/K{linha_atual-4}', "formato": '0.00%'}
+    {"nome": "Nº ABANDONO(S)", "formula": lambda linha_atual: f'=K{linha_atual-1}', "formato": None},
+    {"nome": "PORCENTAGEM DE ABANDONO(S)", "formula": lambda linha_atual: f'=K{linha_atual-1}/K{linha_atual-4}', "formato": '0.00%'}
+]
+
+# Definição do novo dashboard de taxa de aprovação (Taxa de Aprovação Bimestral)
+DASHBOARD_SEC_APROVACAO = [
+    {"nome": "TAXA DE APROVAÇÃO %", "formula": lambda col, inicio, fim: f'=AVERAGE({col}{inicio}:{col}{fim})', "formato": '0.00'},
+    {"nome": "TAXA DE REPROVAÇÃO %", "formula": lambda col, inicio, fim: f'=1-{col}{inicio}', "formato": '0.00'}
 ]
