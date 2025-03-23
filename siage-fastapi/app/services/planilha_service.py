@@ -6,7 +6,7 @@ from openpyxl.styles import Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
-from app.utils.excel_utils import configurar_largura_colunas
+from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma
 from app.core.config import (
     COLUNAS, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS,
     COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO, FONTE_TITULO_TURMA
@@ -26,7 +26,6 @@ def criar_aba_em_branco(wb, titulo, img):
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = Alignment(horizontal='center', vertical='center')
     
-    # Cor da aba
     ws.sheet_properties.tabColor = COR_ABA
     
     return ws
@@ -34,7 +33,6 @@ def criar_aba_em_branco(wb, titulo, img):
 def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
     ws = wb.create_sheet(title=titulo)
     
-    # Cabeçalho superior com imagem
     ws.merge_cells('A1:J1')
     ws.row_dimensions[1].height = 80
     img = Image(caminho_imagem)
@@ -47,10 +45,8 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = Alignment(horizontal='center', vertical='center')
     
-    # Cor da aba
     ws.sheet_properties.tabColor = COR_ABA
     
-    # Estilo de borda
     border = Border(
         left=Side(style='thin'),
         right=Side(style='thin'),
@@ -58,10 +54,8 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
         bottom=Side(style='thin')
     )
     
-    # Espaçamento inicial
     linha_atual = 2
     
-    # Itera sobre cada turma
     for turma in turmas:
         # Título da turma
         ws.merge_cells(f'A{linha_atual}:L{linha_atual}')
@@ -71,13 +65,12 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
         ws.row_dimensions[linha_atual].height = 30
         linha_atual += 1
         
-        # Adiciona o cabeçalho da tabela com cores
+        # Cabeçalho da tabela
         for col_idx, col_nome in enumerate(COLUNAS, 1):
             cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
             cell.value = col_nome
             cell.border = border
             cell.font = Font(bold=True)
-            # Aplica cores específicas
             if col_nome == "Nome do Aluno":
                 cell.fill = FILL_NOME_ALUNO
             elif col_nome in ["1º BIM", "2º BIM", "3º BIM", "4º BIM"]:
@@ -87,10 +80,8 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
             elif col_nome == "SITUAÇÃO DO ALUNO":
                 cell.fill = FILL_SITUACAO
         
-        # Configura largura das colunas
         configurar_largura_colunas(ws, LARGURAS_COLUNAS)
         
-        # Linha inicial dos dados
         linha_inicio_dados = linha_atual + 1
         
         # Popula os alunos
@@ -98,7 +89,7 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
             ws[f'A{linha_atual + int(aluno["numero"])}'] = int(aluno["numero"])
             ws[f'B{linha_atual + int(aluno["numero"])}'] = aluno["nome"]
         
-        # Adiciona fórmulas e bordas
+        # Fórmulas da tabela
         for row in range(linha_inicio_dados, linha_inicio_dados + 35):
             ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
             ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'
@@ -113,7 +104,9 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
                 cell = ws[f'{get_column_letter(col)}{row}']
                 cell.border = border
         
-        # Espaço de 15 linhas entre tabelas
+        # Cria o dashboard
+        criar_dashboard_turma(ws, linha_atual, linha_inicio_dados)
+        
         linha_atual += 36 + 15
     
     return ws
