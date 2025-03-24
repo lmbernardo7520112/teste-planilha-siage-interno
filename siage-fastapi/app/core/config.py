@@ -1,28 +1,23 @@
 from pathlib import Path
 from openpyxl.styles import PatternFill, Font, Alignment
 
-# Lista de disciplinas
-DISCIPLINAS = ["BIO", "MAT", "FIS", "QUI", "GEO", "SOC", "HIST", "FIL", "ESP", "POR", "ART", "ADF", "ING"]
+DISCIPLINAS = ["BIO", "MAT", "FIS", "QUI", "GEO", "SOC", "HIS", "FIL", "ESP", "POR", "ART", "EDF", "ING"]
 
-# Colunas da planilha principal
 COLUNAS = [
     "Nº", "Nome do Aluno", "1º BIM", "2º BIM", "3º BIM", "4º BIM",
     "NF", "MG", "MF", "SITUAÇÃO DO ALUNO", "PF", "SF"
 ]
 
-# Colunas da aba SEC
 COLUNAS_SEC = [
     "Nº", "Nome do Aluno", "ATIVO", "TRANSFERIDO", "DESISTENTE", "SITUAÇÃO DO ALUNO"
 ]
 
-# Caminho da imagem
-CAMINHO_IMAGEM = Path(__file__).parent / "static" / "images" / "siage_interno.png"
+CAMINHO_IMAGEM = Path("/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi/app/core/static/images/siage_interno.png")
 
-# Configurações de salvamento
-CAMINHO_PADRAO = "/mnt/c/Users/lmbernardo/Downloads"
+CAMINHO_PADRAO = "/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi"
 NOME_ARQUIVO_PADRAO = "planilha_notas_complexa.xlsx"
 
-# Larguras das colunas (em cm)
+
 LARGURAS_COLUNAS = {
     "Nº": 1,
     "Nome do Aluno": 10,
@@ -32,7 +27,21 @@ LARGURAS_COLUNAS = {
     "DESISTENTE": 4.5
 }
 
-# Definições de cores e alinhamento
+LARGURAS_COLUNAS_ABAS_DISC = {
+    "Nº": 1,
+    "Nome do Aluno": 15,
+    "1º BIM": 3,
+    "2º BIM": 3,
+    "3º BIM": 3,
+    "4º BIM": 3,
+    "NF": 3,
+    "MG": 3,
+    "MF": 3,
+    "SITUAÇÃO DO ALUNO": 10,
+    "PF": 3,
+    "SF": 3
+}
+
 COR_ABA = "FFDAB9"
 FILL_NOME_ALUNO = PatternFill(start_color="FF6347", end_color="FF6347", fill_type="solid")
 FILL_BIMESTRES = PatternFill(start_color="FFA500", end_color="FFA500", fill_type="solid")
@@ -41,7 +50,6 @@ FILL_SITUACAO = PatternFill(start_color="FFFACD", end_color="FFFACD", fill_type=
 FONTE_TITULO_TURMA = Font(name='Arial', size=14, bold=True, color="8B4513")
 ALINHAMENTO_CENTRALIZADO = Alignment(horizontal='center', vertical='center')
 
-# Definição dos indicadores do dashboard principal
 DASHBOARD_INDICADORES = [
     {"nome": "ALUNOS APROVADOS", "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, ">=7")', "formato": None},
     {"nome": "ALUNOS REPROVADOS", "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, "<7")', "formato": None},
@@ -53,7 +61,6 @@ DASHBOARD_INDICADORES = [
     {"nome": "TAXA DE APROVAÇÃO (%)", "formula": None, "formato": '0.00%'}
 ]
 
-# Definição dos indicadores do dashboard da aba SEC (Resumo Parcial por Turma)
 DASHBOARD_SEC_TURMA = [
     {"nome": "MATRÍCULAS", "formula": lambda col, inicio, fim: f'=COUNTA({col}{inicio}:{col}{fim})', "formato": None},
     {"nome": "ATIVOS", "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, TRUE)', "formato": None},
@@ -61,18 +68,16 @@ DASHBOARD_SEC_TURMA = [
     {"nome": "DESISTENTES", "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, TRUE)', "formato": None}
 ]
 
-# Definição do dashboard geral da escola (Resumo Geral da Escola)
 DASHBOARD_SEC_GERAL = [
     {"nome": "MATRÍCULAS", "formula": lambda refs: f'=SUM({",".join(refs)})', "formato": None},
     {"nome": "ATIVOS", "formula": lambda refs: f'=SUM({",".join(refs)})', "formato": None},
     {"nome": "TRANSFERIDOS", "formula": lambda refs: f'=SUM({",".join(refs)})', "formato": None},
     {"nome": "DESISTENTES", "formula": lambda refs: f'=SUM({",".join(refs)})', "formato": None},
     {"nome": "Nº ABANDONO(S)", "formula": lambda linha_atual: f'=K{linha_atual-1}', "formato": None},
-    {"nome": "PORCENTAGEM DE ABANDONO(S)", "formula": lambda linha_atual: f'=K{linha_atual-1}/K{linha_atual-4}', "formato": '0.00%'}
+    {"nome": "ABANDONO(S) (%)", "formula": lambda linha_atual: f'=K{linha_atual-1}/K{linha_atual-4}', "formato": '0.00%'}
 ]
 
-# Definição do novo dashboard de taxa de aprovação (Taxa de Aprovação Bimestral)
 DASHBOARD_SEC_APROVACAO = [
-    {"nome": "TAXA DE APROVAÇÃO %", "formula": lambda col, inicio, fim: f'=AVERAGE({col}{inicio}:{col}{fim})', "formato": '0.00'},
-    {"nome": "TAXA DE REPROVAÇÃO %", "formula": lambda col, inicio, fim: f'=1-{col}{inicio}', "formato": '0.00'}
+    {"nome": "TX APROVAÇÃO %", "formula": lambda col, inicio, fim: f'=AVERAGE({col}{inicio}:{col}{fim})', "formato": '0.00%'},
+    {"nome": "TX REPROVAÇÃO %", "formula": lambda col, inicio, fim: f'=1-{col}{inicio-1}', "formato": '0.00%'}
 ]

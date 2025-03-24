@@ -1,13 +1,16 @@
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side
+from openpyxl.chart import BarChart, Reference, Series
+from openpyxl.chart.axis import ChartLines
 from app.core.config import (
     COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES, COLUNAS_SEC, DASHBOARD_SEC_TURMA,
-    DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO, DASHBOARD_SEC_APROVACAO, DISCIPLINAS
+    DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO, DASHBOARD_SEC_APROVACAO, DISCIPLINAS,
+    LARGURAS_COLUNAS, LARGURAS_COLUNAS_ABAS_DISC
 )
 
-def configurar_largura_colunas(ws, colunas_largura):
+def configurar_largura_colunas(ws, colunas_largura, colunas_ref):
     for coluna_nome, largura_cm in colunas_largura.items():
-        coluna_idx = (COLUNAS_SEC.index(coluna_nome) if coluna_nome in COLUNAS_SEC else COLUNAS.index(coluna_nome)) + 1
+        coluna_idx = colunas_ref.index(coluna_nome) + 1
         coluna_letra = get_column_letter(coluna_idx)
         largura_unidades = largura_cm * 3.78
         ws.column_dimensions[coluna_letra].width = largura_unidades
@@ -171,60 +174,79 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
         cell.alignment = ALINHAMENTO_CENTRALIZADO
         cell.fill = FILL_BIMESTRES
 
-    # Referências para as notas dos alunos por disciplina e bimestre
-    refs_por_turma = {}
-    for idx, turma in enumerate(turmas):
-        refs_por_turma[turma["nome_turma"]] = []
-        for disciplina in DISCIPLINAS:
-            # Cada aba de disciplina tem as turmas listadas, com 36 linhas por turma (2 de cabeçalho + 34 de dados)
-            linha_inicio_dados = 3 + (idx * 51)  # 51 linhas por turma (36 dados + 15 dashboard)
-            refs_por_turma[turma["nome_turma"]].append({
-                "B1": f"'{disciplina}'!C{linha_inicio_dados}:C{linha_inicio_dados + 34}",
-                "B2": f"'{disciplina}'!D{linha_inicio_dados}:D{linha_inicio_dados + 34}",
-                "B3": f"'{disciplina}'!E{linha_inicio_dados}:E{linha_inicio_dados + 34}",
-                "B4": f"'{disciplina}'!F{linha_inicio_dados}:F{linha_inicio_dados + 34}"
-            })
-
-    # Preenchendo as taxas de aprovação por turma
-    taxas_por_bimestre = {"B1": [], "B2": [], "B3": [], "B4": []}
     for idx, turma in enumerate(turmas):
         dashboard_linha += 1
         ws[f'M{dashboard_linha}'] = turma["nome_turma"]
         ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
 
-        for bimestre, col in zip(["B1", "B2", "B3", "B4"], ['N', 'O', 'P', 'Q']):
-            refs = [ref[bimestre] for ref in refs_por_turma[turma["nome_turma"]]]
-            # Construindo a fórmula sem barras invertidas dentro da f-string
-            sub_formulas = [f"COUNTIF({ref}, \">=7\")/COUNTA({ref})" for ref in refs]
-            formula = f"=AVERAGE({','.join(sub_formulas)})"
-            ws[f'{col}{dashboard_linha}'] = formula
-            ws[f'{col}{dashboard_linha}'].number_format = '0.00'
-            ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
-            taxas_por_bimestre[bimestre].append(f'{col}{dashboard_linha}')
+        # Ajustar linha_ref para corresponder ao espaçamento real (53 linhas por turma)
+        linha_ref = 12 + (idx * 53)
+        
+        # Referenciar as taxas de aprovação diretamente da aba BIO
+        # Coluna O para B1, P para B2, Q para B3, R para B4
+        ws[f'N{dashboard_linha}'] = f"=IFERROR(BIO!O{linha_ref}, 0)"
+        ws[f'O{dashboard_linha}'] = f"=IFERROR(BIO!P{linha_ref}, 0)"
+        ws[f'P{dashboard_linha}'] = f"=IFERROR(BIO!Q{linha_ref}, 0)"
+        ws[f'Q{dashboard_linha}'] = f"=IFERROR(BIO!R{linha_ref}, 0)"
+        
+        for col in range(13, 18):
+            cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
+            cell.number_format = '0.00%'
+            cell.alignment = ALINHAMENTO_CENTRALIZADO
 
-    # Preenchendo as taxas gerais (aprovação e reprovação)
+    linha_inicio_turmas = linhas_inicio_tabelas[0] + 2
+    linha_fim_turmas = linha_inicio_turmas + len(turmas) - 1
+    
     for indicador in DASHBOARD_SEC_APROVACAO:
         dashboard_linha += 1
         ws[f'M{dashboard_linha}'] = indicador["nome"]
+        ws[f'M{dashboard_linha}'].font = Font(size=10)
         ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
 
-        for bimestre, col in zip(["B1", "B2", "B3", "B4"], ['N', 'O', 'P', 'Q']):
-            inicio = taxas_por_bimestre[bimestre][0]
-            fim = taxas_por_bimestre[bimestre][-1]
-            ws[f'{col}{dashboard_linha}'] = indicador["formula"](col, inicio, fim)
+        for col in ['N', 'O', 'P', 'Q']:
+            if indicador["nome"] == "TX APROVAÇÃO %":
+                ws[f'{col}{dashboard_linha}'] = f"=AVERAGE({col}{linha_inicio_turmas}:{col}{linha_fim_turmas})"
+            else:  # TX REPROVAÇÃO %
+                ws[f'{col}{dashboard_linha}'] = f"=1-{col}{dashboard_linha-1}"
+            
+            ws[f'{col}{dashboard_linha}'].font = Font(size=10)
+            ws[f'{col}{dashboard_linha}'].number_format = '0.00%'
             ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
-            if indicador["formato"]:
-                ws[f'{col}{dashboard_linha}'].number_format = indicador["formato"]
 
-    # Aplicando bordas
     for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
         for col in range(13, 18):
             cell = ws[f'{get_column_letter(col)}{row}']
             cell.border = border
 
-    # Ajustando larguras das colunas
     ws.column_dimensions['M'].width = 15
     ws.column_dimensions['N'].width = 10
     ws.column_dimensions['O'].width = 10
     ws.column_dimensions['P'].width = 10
     ws.column_dimensions['Q'].width = 10
+
+    chart = BarChart()
+    chart.type = "col"
+    chart.style = 10
+    chart.title = "TAXA DE APROVAÇÃO"
+    chart.y_axis.title = "Taxa de Aprovação (%)"
+    chart.x_axis.title = "Turma"
+    chart.height = 15
+    chart.width = 20
+
+    # Dados apenas para B1 (coluna N)
+    data = Reference(ws, min_col=14, min_row=linhas_inicio_tabelas[0] + 2, max_col=14, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
+    cats = Reference(ws, min_col=13, min_row=linhas_inicio_tabelas[0] + 2, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
+    chart.add_data(data, titles_from_data=True)
+    chart.set_categories(cats)
+
+    series_colors = ["4F81BD"]  # Apenas para B1
+    for idx, series in enumerate(chart.series):
+        series.graphicalProperties.solidFill = series_colors[idx]
+
+    chart.y_axis.scaling.min = 0
+    chart.y_axis.scaling.max = 1
+    chart.y_axis.number_format = '0%'
+
+    chart.y_axis.majorGridlines = ChartLines()
+
+    ws.add_chart(chart, f"M{dashboard_linha + 2}")

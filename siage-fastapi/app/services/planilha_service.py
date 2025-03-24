@@ -8,7 +8,7 @@ from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma, criar_dashboard_sec_turma, criar_dashboard_sec_geral, criar_dashboard_sec_aprovacao
 from app.core.config import (
-    COLUNAS, COLUNAS_SEC, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS,
+    COLUNAS, COLUNAS_SEC, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS, LARGURAS_COLUNAS_ABAS_DISC,
     COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO, FONTE_TITULO_TURMA, ALINHAMENTO_CENTRALIZADO
 )
 
@@ -17,10 +17,10 @@ logger = logging.getLogger(__name__)
 
 CAMINHO_JSON = Path(__file__).parent.parent.parent / "turmas_alunos.json"
 
-def criar_aba_em_branco(wb, titulo, img):
+def criar_aba_em_branco(wb, titulo):
     ws = wb.create_sheet(title=titulo)
     ws.sheet_properties.tabColor = COR_ABA
-
+    img = Image(str(CAMINHO_IMAGEM))
     ws.merge_cells('A1:J1')
     ws.row_dimensions[1].height = img.height * 0.75
     ws.add_image(img, 'A1')
@@ -28,13 +28,12 @@ def criar_aba_em_branco(wb, titulo, img):
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = ALINHAMENTO_CENTRALIZADO
-
     return ws
 
-def criar_aba_sec(wb, turmas, img):
+def criar_aba_sec(wb, turmas):
     ws = wb.create_sheet(title="SEC")
     ws.sheet_properties.tabColor = COR_ABA
-
+    img = Image(str(CAMINHO_IMAGEM))
     border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
     linha_atual = 1
     linhas_inicio_tabelas = []
@@ -70,7 +69,7 @@ def criar_aba_sec(wb, turmas, img):
             elif col_nome in ["ATIVO", "TRANSFERIDO", "DESISTENTE"]:
                 cell.fill = FILL_BIMESTRES
 
-        configurar_largura_colunas(ws, LARGURAS_COLUNAS)
+        configurar_largura_colunas(ws, LARGURAS_COLUNAS, COLUNAS_SEC)
         linha_inicio_dados = linha_atual + 1
 
         for aluno in turma["alunos"]:
@@ -101,21 +100,16 @@ def criar_aba_sec(wb, turmas, img):
 
     return ws
 
-def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
+def criar_aba_disciplina(wb, titulo, turmas):
     ws = wb.create_sheet(title=titulo)
-
+    img = Image(str(CAMINHO_IMAGEM))
     ws.merge_cells('A1:J1')
-    ws.row_dimensions[1].height = 80
-    img = Image(caminho_imagem)
-    img.width = int(img.width * 0.5)
-    img.height = int(img.height * 0.5)
+    ws.row_dimensions[1].height = img.height * 0.75
     ws.add_image(img, 'A1')
-
     cell = ws['A1']
     cell.value = "COMPOSITOR LUIS RAMALHO"
     cell.font = Font(name='Arial', size=26, bold=True)
     cell.alignment = ALINHAMENTO_CENTRALIZADO
-
     ws.sheet_properties.tabColor = COR_ABA
 
     border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
@@ -144,7 +138,7 @@ def criar_aba_disciplina(wb, titulo, caminho_imagem, turmas):
             elif col_nome == "SITUAÇÃO DO ALUNO":
                 cell.fill = FILL_SITUACAO
         
-        configurar_largura_colunas(ws, LARGURAS_COLUNAS)
+        configurar_largura_colunas(ws, LARGURAS_COLUNAS_ABAS_DISC, COLUNAS)
         linha_inicio_dados = linha_atual + 1
         
         for aluno in turma["alunos"]:
@@ -184,22 +178,19 @@ def criar_planilha():
 
     if not CAMINHO_IMAGEM.exists():
         raise FileNotFoundError(f"A imagem não foi encontrada no caminho: {CAMINHO_IMAGEM}")
-
     if not CAMINHO_JSON.exists():
         raise FileNotFoundError(f"O arquivo JSON não foi encontrado em: {CAMINHO_JSON}")
     with open(CAMINHO_JSON, 'r', encoding='utf-8') as f:
         dados = json.load(f)
     turmas = dados["turmas"]
 
-    img = Image(str(CAMINHO_IMAGEM))
-    criar_aba_sec(wb, turmas, img)
-
+    criar_aba_sec(wb, turmas)
     for disciplina in DISCIPLINAS:
-        criar_aba_disciplina(wb, disciplina, str(CAMINHO_IMAGEM), turmas)
+        criar_aba_disciplina(wb, disciplina, turmas)
 
     abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
     for aba in abas_adicionais:
-        criar_aba_em_branco(wb, aba, img)
+        criar_aba_em_branco(wb, aba)
 
     caminho_completo = os.path.join(CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO)
     wb.save(caminho_completo)
