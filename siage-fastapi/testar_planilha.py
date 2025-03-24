@@ -5,6 +5,7 @@ from app.core.config import DISCIPLINAS, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO
 import json
 from pathlib import Path
 import os
+import random  # Importa o módulo random
 
 # Configurações
 URL_ENDPOINT = "http://localhost:8000/api/v1/gerar-planilha"
@@ -31,47 +32,43 @@ def carregar_turmas():
     return dados["turmas"]
 
 def popular_dados_ficticios(wb, turmas):
-    """Popula a planilha com dados fictícios para o B1 em todas as disciplinas."""
-    for idx, turma in enumerate(turmas):
-        # Linha inicial para dados da turma (após cabeçalhos e título da turma)
-        linha_base = 4 + (idx * 53)  # 53 linhas por turma (1 cabeçalho + 1 título + 35 dados + 15 dashboard)
-        num_alunos = len(turma["alunos"])
-        
-        for disciplina in DISCIPLINAS:
-            ws = wb[disciplina]
-            for aluno in turma["alunos"]:
-                row = linha_base + int(aluno["numero"]) - 1  # Ajusta para a linha correta do aluno
-                # Notas fictícias para B1 (coluna C)
-                if "A" in turma["nome_turma"]:
-                    ws[f"C{row}"] = 8 if int(aluno["numero"]) <= num_alunos * 0.8 else 6
-                else:
-                    ws[f"C{row}"] = 8 if int(aluno["numero"]) <= num_alunos * 0.2 else 6
-                
-                # Calcula MG (média geral) para consistência
+    """Popula a planilha com notas aleatórias no 1º bimestre,
+    baseando-se nos nomes dos alunos já presentes na coluna "Nome do Aluno".
+    """
+    for disciplina in DISCIPLINAS:
+        ws = wb[disciplina]
+        # Itera sobre as linhas da planilha, começando da linha 4
+        # (onde os dados dos alunos começam) e indo até a linha 400 (um limite razoável)
+        for row in range(4, 400):
+            # Obtém o nome do aluno na coluna "Nome do Aluno" (coluna B)
+            nome_aluno = ws[f"B{row}"].value
+            # Se a célula "Nome do Aluno" estiver preenchida
+            if nome_aluno:
+                # Gera uma nota aleatória entre 1 e 10
+                nota = random.randint(1, 10)
+                # Atribui a nota gerada à coluna do 1º Bimestre (coluna C)
+                ws[f"C{row}"] = nota
+                # Recalcula a média geral
                 ws[f"H{row}"] = f"=SUM(C{row}:F{row})/4"
-            
-            # Taxa de aprovação (ajustado para a linha correta do dashboard)
-            linha_taxa = 12 + (idx * 53)
-            ws[f"O{linha_taxa}"] = f"=COUNTIF(C{linha_base}:C{linha_base + num_alunos - 1}, \">=7\")/COUNTA(C{linha_base}:C{linha_base + num_alunos - 1})"
 
 def gerar_planilha_teste():
     """Gera a planilha de teste populada com dashboards e gráfico."""
     chamar_endpoint()
-    
+
     wb = openpyxl.load_workbook(CAMINHO_PLANILHA_BASE)
     turmas = carregar_turmas()
-    
+
     popular_dados_ficticios(wb, turmas)
-    
+
     # Calcular a linha inicial do dashboard na aba SEC
     # Cada turma ocupa 40 linhas (1 título + 1 cabeçalho + 35 dados + 3 dashboard)
     # Há 7 turmas, então a última linha usada é 1 + (40 * 7) = 281
     # Começar o dashboard na linha 283 para evitar sobreposição
     LINHAS_INICIO_TABELAS = [1 + (40 * len(turmas)) + 2]
-    
+
     ws_sec = wb["SEC"]
     criar_dashboard_sec_aprovacao(ws_sec, turmas, LINHAS_INICIO_TABELAS)
-    
+
     wb.save(CAMINHO_PLANILHA_TESTE)
     print(f"Planilha de teste gerada em: {CAMINHO_PLANILHA_TESTE}")
 
