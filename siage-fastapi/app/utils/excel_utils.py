@@ -15,6 +15,7 @@ def configurar_largura_colunas(ws, colunas_largura, colunas_ref):
         largura_unidades = largura_cm * 3.78
         ws.column_dimensions[coluna_letra].width = largura_unidades
 
+# Em excel_utils.py
 def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
     
@@ -29,45 +30,39 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     ws[f'P{dashboard_linha}'] = "2º Bimestre"
     ws[f'Q{dashboard_linha}'] = "3º Bimestre"
     ws[f'R{dashboard_linha}'] = "4º Bimestre"
-    for col in range(15, 19):
+    for col in range(15, 19):  # Colunas O, P, Q, R
         cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
         cell.font = Font(bold=True)
         cell.alignment = ALINHAMENTO_CENTRALIZADO
         cell.fill = FILL_BIMESTRES
 
     inicio = linha_inicio_dados
-    fim = linha_inicio_dados + 34
-    bimestre_cols = ['C', 'D', 'E', 'F']
+    fim = linha_inicio_dados + 34  # 35 linhas de dados por turma
+    bimestre_cols = ['C', 'D', 'E', 'F']  # Colunas dos bimestres
 
     for idx, indicador in enumerate(DASHBOARD_INDICADORES):
         dashboard_linha += 1
         ws[f'N{dashboard_linha}'] = indicador["nome"]
         ws[f'N{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         
-        if indicador["nome"] == "MATRÍCULAS":
-            ws[f'O{dashboard_linha}'] = f'=O{linha_inicio_tabela + 2}+O{linha_inicio_tabela + 3}'
-            ws[f'P{dashboard_linha}'] = f'=P{linha_inicio_tabela + 2}+P{linha_inicio_tabela + 3}'
-            ws[f'Q{dashboard_linha}'] = f'=Q{linha_inicio_tabela + 2}+Q{linha_inicio_tabela + 3}'
-            ws[f'R{dashboard_linha}'] = f'=R{linha_inicio_tabela + 2}+R{linha_inicio_tabela + 3}'
-        elif indicador["nome"] == "TAXA DE APROVAÇÃO (%)":
-            ws[f'O{dashboard_linha}'] = f'=IF(O{linha_inicio_tabela + 7}=0, 0, O{linha_inicio_tabela + 2}/O{linha_inicio_tabela + 7})'
-            ws[f'P{dashboard_linha}'] = f'=IF(P{linha_inicio_tabela + 7}=0, 0, P{linha_inicio_tabela + 2}/P{linha_inicio_tabela + 7})'
-            ws[f'Q{dashboard_linha}'] = f'=IF(Q{linha_inicio_tabela + 7}=0, 0, Q{linha_inicio_tabela + 2}/Q{linha_inicio_tabela + 7})'
-            ws[f'R{dashboard_linha}'] = f'=IF(R{linha_inicio_tabela + 7}=0, 0, R{linha_inicio_tabela + 2}/R{linha_inicio_tabela + 7})'
-        else:
+        # Aplica a fórmula para cada bimestre, se existir
+        if indicador["formula"]:
             for col_idx, bimestre_col in enumerate(bimestre_cols):
                 ws[f'{get_column_letter(15 + col_idx)}{dashboard_linha}'] = indicador["formula"](bimestre_col, inicio, fim)
         
-        for col in range(15, 19):
+        # Aplica formato, se definido
+        for col in range(15, 19):  # Colunas O, P, Q, R
             ws[f'{get_column_letter(col)}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
             if indicador["formato"]:
                 ws[f'{get_column_letter(col)}{dashboard_linha}'].number_format = indicador["formato"]
 
+    # Aplica bordas
     for row in range(linha_inicio_tabela, dashboard_linha + 1):
-        for col in range(14, 19):
+        for col in range(14, 19):  # Colunas N, O, P, Q, R
             cell = ws[f'{get_column_letter(col)}{row}']
             cell.border = border
 
+    # Define larguras das colunas
     ws.column_dimensions['N'].width = 25
     ws.column_dimensions['O'].width = 10
     ws.column_dimensions['P'].width = 10

@@ -57,8 +57,8 @@ DASHBOARD_INDICADORES = [
     {"nome": "Nº ALUNOS QUE NÃO ATINGIRAM MÉDIA > 8,0", "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, "<8")', "formato": None},
     {"nome": "PERCENTUAL DE MÉDIAS > 5,0", "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, ">=5")/COUNTA({col}{inicio}:{col}{fim})', "formato": '0.00%'},
     {"nome": "PERCENTUAL DE MÉDIAS < 5,0", "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, "<5")/COUNTA({col}{inicio}:{col}{fim})', "formato": '0.00%'},
-    {"nome": "MATRÍCULAS", "formula": None, "formato": None},
-    {"nome": "TAXA DE APROVAÇÃO (%)", "formula": None, "formato": '0.00%'}
+    {"nome": "MATRÍCULAS", "formula": lambda col, inicio, fim: f'=COUNTA({col}{inicio}:{col}{fim})', "formato": None},
+    {"nome": "TAXA DE APROVAÇÃO (%)", "formula": lambda col, inicio, fim: f'=IF(COUNTA({col}{inicio}:{col}{fim})=0, 0, COUNTIF({col}{inicio}:{col}{fim}, ">=7")/COUNTA({col}{inicio}:{col}{fim}))', "formato": '0.00%'}
 ]
 
 DASHBOARD_SEC_TURMA = [
