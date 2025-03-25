@@ -15,7 +15,6 @@ def configurar_largura_colunas(ws, colunas_largura, colunas_ref):
         largura_unidades = largura_cm * 3.78
         ws.column_dimensions[coluna_letra].width = largura_unidades
 
-# Em excel_utils.py
 def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
     
@@ -204,7 +203,8 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
 
         for col in ['N', 'O', 'P', 'Q']:
             if indicador["nome"] == "TX APROVAÇÃO %":
-                ws[f'{col}{dashboard_linha}'] = f'=AVERAGE(IFERROR({col}{linha_inicio_turmas}:{col}{linha_fim_turmas},0))'
+                # Fórmula simplificada para calcular a média das taxas de aprovação
+                ws[f'{col}{dashboard_linha}'] = f'=AVERAGE({col}{linha_inicio_turmas}:{col}{linha_fim_turmas})'
             else:  # TX REPROVAÇÃO %
                 ws[f'{col}{dashboard_linha}'] = f'=IFERROR(1-{col}{dashboard_linha-1},0)'
             

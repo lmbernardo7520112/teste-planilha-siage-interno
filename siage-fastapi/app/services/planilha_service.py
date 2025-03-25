@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import random  # Adicionado para gerar notas aleatórias
 from pathlib import Path
 from openpyxl.styles import Font, Border, Side
 from openpyxl.utils import get_column_letter
@@ -142,10 +143,16 @@ def criar_aba_disciplina(wb, titulo, turmas):
         linha_inicio_dados = linha_atual + 1
         
         for aluno in turma["alunos"]:
-            ws[f'A{linha_atual + int(aluno["numero"])}'] = int(aluno["numero"])
-            ws[f'A{linha_atual + int(aluno["numero"])}'].alignment = ALINHAMENTO_CENTRALIZADO
-            ws[f'B{linha_atual + int(aluno["numero"])}'] = aluno["nome"]
-            ws[f'B{linha_atual + int(aluno["numero"])}'].alignment = ALINHAMENTO_CENTRALIZADO
+            linha_dados = linha_atual + int(aluno["numero"])
+            ws[f'A{linha_dados}'] = int(aluno["numero"])
+            ws[f'A{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+            ws[f'B{linha_dados}'] = aluno["nome"]
+            ws[f'B{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+
+            # Verificar se há aluno (coluna B preenchida) e atribuir nota aleatória para o 1º bimestre
+            if ws[f'B{linha_dados}'].value:  # Se a célula não estiver vazia
+                ws[f'C{linha_dados}'] = random.uniform(1, 10)  # Nota aleatória entre 1 e 10 para o 1º bimestre
+                ws[f'C{linha_dados}'].number_format = '0.00'  # Formato com 2 casas decimais
         
         for row in range(linha_inicio_dados, linha_inicio_dados + 35):
             ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'

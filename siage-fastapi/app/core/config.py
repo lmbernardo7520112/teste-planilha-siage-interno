@@ -17,7 +17,6 @@ CAMINHO_IMAGEM = Path("/home/lmbernardo/teste-planilha-siage-interno/siage-fasta
 CAMINHO_PADRAO = "/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi"
 NOME_ARQUIVO_PADRAO = "planilha_notas_complexa.xlsx"
 
-
 LARGURAS_COLUNAS = {
     "Nº": 1,
     "Nome do Aluno": 10,
