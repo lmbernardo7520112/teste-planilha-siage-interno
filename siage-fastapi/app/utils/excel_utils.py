@@ -163,28 +163,32 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
     ws[f'O{dashboard_linha}'] = "B2"
     ws[f'P{dashboard_linha}'] = "B3"
     ws[f'Q{dashboard_linha}'] = "B4"
-    for col in range(13, 18):
+    for col in range(13, 18):  # Colunas M a Q
         cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
         cell.font = Font(bold=True)
         cell.alignment = ALINHAMENTO_CENTRALIZADO
         cell.fill = FILL_BIMESTRES
 
+    # Para cada turma, calcular a média das taxas de aprovação de todas as disciplinas
     for idx, turma in enumerate(turmas):
         dashboard_linha += 1
         ws[f'M{dashboard_linha}'] = turma["nome_turma"]
         ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
 
-        # Ajustar linha_ref para corresponder ao espaçamento real (53 linhas por turma)
-        linha_ref = 12 + (idx * 53)
-        
-        # Referenciar as taxas de aprovação diretamente da aba BIO
-        # Coluna O para B1, P para B2, Q para B3, R para B4
-        ws[f'N{dashboard_linha}'] = f"=IFERROR(BIO!O{linha_ref}, 0)"
-        ws[f'O{dashboard_linha}'] = f"=IFERROR(BIO!P{linha_ref}, 0)"
-        ws[f'P{dashboard_linha}'] = f"=IFERROR(BIO!Q{linha_ref}, 0)"
-        ws[f'Q{dashboard_linha}'] = f"=IFERROR(BIO!R{linha_ref}, 0)"
-        
-        for col in range(13, 18):
+        # Linha base do dashboard na aba de disciplina
+        linha_ref_base = 12  # Ajustado para alinhar com a linha 12 para 1º ANO A
+        linha_ref = linha_ref_base + (idx * 52)  # Ajuste para cada turma (52 linhas por turma)
+
+        # Log para depuração
+        print(f"Turma: {turma['nome_turma']}, idx: {idx}, linha_ref: {linha_ref}")
+
+        # Fórmulas para cada bimestre (média das taxas de todas as disciplinas com tratamento de erro)
+        ws[f'N{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!O{linha_ref},0)" for disc in DISCIPLINAS])})'
+        ws[f'O{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!P{linha_ref},0)" for disc in DISCIPLINAS])})'
+        ws[f'P{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!Q{linha_ref},0)" for disc in DISCIPLINAS])})'
+        ws[f'Q{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!R{linha_ref},0)" for disc in DISCIPLINAS])})'
+
+        for col in range(13, 18):  # Colunas M a Q
             cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
             cell.number_format = '0.00%'
             cell.alignment = ALINHAMENTO_CENTRALIZADO
@@ -200,16 +204,16 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
 
         for col in ['N', 'O', 'P', 'Q']:
             if indicador["nome"] == "TX APROVAÇÃO %":
-                ws[f'{col}{dashboard_linha}'] = f"=AVERAGE({col}{linha_inicio_turmas}:{col}{linha_fim_turmas})"
+                ws[f'{col}{dashboard_linha}'] = f'=AVERAGE(IFERROR({col}{linha_inicio_turmas}:{col}{linha_fim_turmas},0))'
             else:  # TX REPROVAÇÃO %
-                ws[f'{col}{dashboard_linha}'] = f"=1-{col}{dashboard_linha-1}"
+                ws[f'{col}{dashboard_linha}'] = f'=IFERROR(1-{col}{dashboard_linha-1},0)'
             
             ws[f'{col}{dashboard_linha}'].font = Font(size=10)
             ws[f'{col}{dashboard_linha}'].number_format = '0.00%'
             ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
 
     for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
-        for col in range(13, 18):
+        for col in range(13, 18):  # Colunas M a Q
             cell = ws[f'{get_column_letter(col)}{row}']
             cell.border = border
 
@@ -219,6 +223,7 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
     ws.column_dimensions['P'].width = 10
     ws.column_dimensions['Q'].width = 10
 
+    # Criar o gráfico (apenas uma vez)
     chart = BarChart()
     chart.type = "col"
     chart.style = 10
