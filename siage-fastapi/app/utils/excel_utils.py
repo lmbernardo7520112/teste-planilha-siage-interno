@@ -39,6 +39,15 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     fim = linha_inicio_dados + 34  # 35 linhas de dados por turma
     bimestre_cols = ['C', 'D', 'E', 'F']  # Colunas dos bimestres
 
+    # Lista de indicadores que devem ser números inteiros
+    indicadores_inteiros = [
+        "ALUNOS APROVADOS",
+        "ALUNOS REPROVADOS",
+        "Nº ALUNOS COM MÉDIA > 8,0",
+        "Nº ALUNOS QUE NÃO ATINGIRAM MÉDIA > 8,0",
+        "MATRÍCULAS"
+    ]
+
     for idx, indicador in enumerate(DASHBOARD_INDICADORES):
         dashboard_linha += 1
         ws[f'N{dashboard_linha}'] = indicador["nome"]
@@ -49,11 +58,16 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
             for col_idx, bimestre_col in enumerate(bimestre_cols):
                 ws[f'{get_column_letter(15 + col_idx)}{dashboard_linha}'] = indicador["formula"](bimestre_col, inicio, fim)
         
-        # Aplica formato, se definido
+        # Aplica formato: 0 para números inteiros, 0.00 para outros números, ou formato definido (ex.: 0.00% para porcentagens)
         for col in range(15, 19):  # Colunas O, P, Q, R
-            ws[f'{get_column_letter(col)}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+            cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
+            cell.alignment = ALINHAMENTO_CENTRALIZADO
             if indicador["formato"]:
-                ws[f'{get_column_letter(col)}{dashboard_linha}'].number_format = indicador["formato"]
+                cell.number_format = indicador["formato"]  # Mantém 0.00% para porcentagens
+            elif indicador["nome"] in indicadores_inteiros:
+                cell.number_format = '0'  # Formato inteiro para os indicadores especificados
+            else:
+                cell.number_format = '0.00'  # Formato 0.00 para outros números
 
     # Aplica bordas
     for row in range(linha_inicio_tabela, dashboard_linha + 1):
@@ -80,6 +94,9 @@ def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_a
     inicio = linha_inicio_dados
     fim = linha_inicio_dados + num_alunos - 1
 
+    # Lista de indicadores que devem ser números inteiros
+    indicadores_inteiros = ["MATRÍCULAS", "ATIVOS", "TRANSFERIDOS", "DESISTENTES"]
+
     for idx, indicador in enumerate(DASHBOARD_SEC_TURMA):
         dashboard_linha += 1
         ws[f'G{dashboard_linha}'] = indicador["nome"]
@@ -90,9 +107,10 @@ def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_a
         ws[f'I{dashboard_linha}'] = ws[f'H{dashboard_linha}'].value
         ws[f'I{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         
-        if indicador["formato"]:
-            ws[f'H{dashboard_linha}'].number_format = indicador["formato"]
-            ws[f'I{dashboard_linha}'].number_format = indicador["formato"]
+        # Aplica formato: 0 para todos os indicadores (MATRÍCULAS, ATIVOS, TRANSFERIDOS, DESISTENTES)
+        if indicador["nome"] in indicadores_inteiros:
+            ws[f'H{dashboard_linha}'].number_format = '0'
+            ws[f'I{dashboard_linha}'].number_format = '0'
 
     for row in range(linha_inicio_tabela, dashboard_linha + 1):
         for col in range(7, 10):
@@ -124,6 +142,9 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
         "DESISTENTES": desistentes_refs
     }
 
+    # Lista de indicadores que devem ser números inteiros
+    indicadores_inteiros = ["MATRÍCULAS", "ATIVOS", "TRANSFERIDOS", "DESISTENTES", "Nº ABANDONO(S)"]
+
     for idx, indicador in enumerate(DASHBOARD_SEC_GERAL):
         dashboard_linha += 1
         ws[f'J{dashboard_linha}'] = indicador["nome"]
@@ -135,8 +156,13 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
             ws[f'K{dashboard_linha}'] = indicador["formula"](dashboard_linha)
         
         ws[f'K{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+        # Aplica formato: 0 para números inteiros, 0.00 para outros números, ou formato definido (ex.: 0.00% para porcentagens)
         if indicador["formato"]:
-            ws[f'K{dashboard_linha}'].number_format = indicador["formato"]
+            ws[f'K{dashboard_linha}'].number_format = indicador["formato"]  # Mantém 0.00% para "ABANDONO(S) (%)"
+        elif indicador["nome"] in indicadores_inteiros:
+            ws[f'K{dashboard_linha}'].number_format = '0'  # Formato inteiro para os indicadores especificados
+        else:
+            ws[f'K{dashboard_linha}'].number_format = '0.00'  # Formato 0.00 para outros números
 
     for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
         for col in range(10, 13):
@@ -189,7 +215,7 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
 
         for col in range(13, 18):  # Colunas M a Q
             cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
-            cell.number_format = '0.00%'
+            cell.number_format = '0.00%'  # Já está correto para porcentagens
             cell.alignment = ALINHAMENTO_CENTRALIZADO
 
     linha_inicio_turmas = linhas_inicio_tabelas[0] + 2
@@ -203,13 +229,12 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
 
         for col in ['N', 'O', 'P', 'Q']:
             if indicador["nome"] == "TX APROVAÇÃO %":
-                # Fórmula simplificada para calcular a média das taxas de aprovação
                 ws[f'{col}{dashboard_linha}'] = f'=AVERAGE({col}{linha_inicio_turmas}:{col}{linha_fim_turmas})'
             else:  # TX REPROVAÇÃO %
                 ws[f'{col}{dashboard_linha}'] = f'=IFERROR(1-{col}{dashboard_linha-1},0)'
             
             ws[f'{col}{dashboard_linha}'].font = Font(size=10)
-            ws[f'{col}{dashboard_linha}'].number_format = '0.00%'
+            ws[f'{col}{dashboard_linha}'].number_format = '0.00%'  # Já está correto para porcentagens
             ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
 
     for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):

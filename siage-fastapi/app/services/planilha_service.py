@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-import random  # Necessário para gerar notas aleatórias
+import random
 from pathlib import Path
 from openpyxl.styles import Font, Border, Side
 from openpyxl.utils import get_column_letter
@@ -164,16 +164,28 @@ def criar_aba_disciplina(wb, titulo, turmas):
         for row in range(linha_inicio_dados, linha_inicio_dados + 35):
             ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
             ws[f'G{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+            ws[f'G{row}'].number_format = '0.00'  # Formato com 2 casas decimais para NF
+
             ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'
             ws[f'H{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+            ws[f'H{row}'].number_format = '0.00'  # Formato com 2 casas decimais para MG
+
             ws[f'I{row}'] = f'=IF(H{row}<7, (0.6*H{row}) + (0.4*G{row}), "-")'
             ws[f'I{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+            ws[f'I{row}'].number_format = '0.00'  # Formato com 2 casas decimais para MF
+
             ws[f'J{row}'] = f'=IF(H{row}<2.5, "REPROVADO", IF(H{row}<7, "FINAL", "APROVADO"))'
             ws[f'J{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+            # J é texto (SITUAÇÃO DO ALUNO), não precisa de formato numérico
+
             ws[f'K{row}'] = f'=IF(H{row}<7, (12.5 - (1.5*H{row})), "-")'
             ws[f'K{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+            ws[f'K{row}'].number_format = '0.00'  # Formato com 2 casas decimais para PF
+
             ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
             ws[f'L{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+            # L é texto (SF), mas pode conter números; vamos formatar como 0.00 para consistência
+            ws[f'L{row}'].number_format = '0.00'
         
         for row in range(linha_atual, linha_atual + 36):
             for col in range(1, 13):
