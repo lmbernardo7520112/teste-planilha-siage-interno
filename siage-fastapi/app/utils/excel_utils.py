@@ -223,7 +223,7 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
     ws.column_dimensions['P'].width = 10
     ws.column_dimensions['Q'].width = 10
 
-    # Criar o gráfico (apenas uma vez)
+    # Criar o gráfico
     chart = BarChart()
     chart.type = "col"
     chart.style = 10
@@ -233,15 +233,19 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
     chart.height = 15
     chart.width = 20
 
-    # Dados apenas para B1 (coluna N)
-    data = Reference(ws, min_col=14, min_row=linhas_inicio_tabelas[0] + 2, max_col=14, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
+    # Dados para todos os bimestres (colunas N, O, P, Q)
+    data = Reference(ws, min_col=14, min_row=linhas_inicio_tabelas[0] + 1, max_col=17, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
     cats = Reference(ws, min_col=13, min_row=linhas_inicio_tabelas[0] + 2, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
     chart.add_data(data, titles_from_data=True)
     chart.set_categories(cats)
 
-    series_colors = ["4F81BD"]  # Apenas para B1
+    # Definir cores diferentes para cada bimestre (B1, B2, B3, B4)
+    series_colors = ["DAA520", "CD853F", "F4A460", "DEB887"]  # Dourado, Pêssego escuro, Areia, Bege dourado
     for idx, series in enumerate(chart.series):
         series.graphicalProperties.solidFill = series_colors[idx]
+
+    # Reduzir a largura das barras
+    chart.gapWidth = 50  # 50% do espaço entre barras (padrão é 150)
 
     chart.y_axis.scaling.min = 0
     chart.y_axis.scaling.max = 1
