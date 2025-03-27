@@ -69,13 +69,37 @@ def criar_aba_boletim(wb, turmas):
         ws.row_dimensions[linha_atual].height = 30
         linha_atual += 1
 
-        # Adicionar os cabeçalhos para a turma
+        # Adicionar a linha com os nomes das disciplinas (acima do cabeçalho)
+        col_idx = 1
+        # Preencher as primeiras duas colunas (Nº e ALUNO) como vazias
+        for i in range(1, 3):
+            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+            cell.border = border
+            col_idx += 1
+
+        # Para cada disciplina, mesclar 6 colunas e adicionar o nome da disciplina
+        for disciplina in DISCIPLINAS:
+            # Cada disciplina ocupa 6 colunas (B1, B2, B3, B4, NF, MG)
+            inicio_col = get_column_letter(col_idx)
+            fim_col = get_column_letter(col_idx + 5)  # 6 colunas no total
+            ws.merge_cells(f'{inicio_col}{linha_atual}:{fim_col}{linha_atual}')
+            cell = ws[f'{inicio_col}{linha_atual}']
+            cell.value = disciplina
+            cell.font = Font(bold=True, size=6)  # Ajuste do tamanho da fonte para 6
+            cell.alignment = ALINHAMENTO_CENTRALIZADO
+            cell.fill = FILL_BIMESTRES  # Usar o mesmo preenchimento das notas para consistência
+            cell.border = border
+            col_idx += 6
+
+        linha_atual += 1
+
+        # Adicionar os cabeçalhos para a turma (Nº, ALUNO, BIO B1, etc.)
         col_idx = 1
         for header in headers:
             cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
             cell.value = header
             cell.border = border
-            cell.font = Font(bold=True)
+            cell.font = Font(bold=True, size=6)  # Ajuste do tamanho da fonte para 6
             cell.alignment = ALINHAMENTO_CENTRALIZADO
             if header == "ALUNO":
                 cell.fill = FILL_NOME_ALUNO
