@@ -31,6 +31,130 @@ def criar_aba_em_branco(wb, titulo):
     cell.alignment = ALINHAMENTO_CENTRALIZADO
     return ws
 
+def criar_aba_boletim(wb, turmas):
+    # Criar uma única aba "BOLETIM"
+    ws = wb.create_sheet(title="BOLETIM")
+    ws.sheet_properties.tabColor = COR_ABA
+
+    # Adicionar o logotipo e o título
+    img = Image(str(CAMINHO_IMAGEM))
+    ws.merge_cells('A1:AZ1')  # Ajustar o merge para cobrir todas as colunas necessárias
+    ws.row_dimensions[1].height = img.height * 0.75
+    ws.add_image(img, 'A1')
+    cell = ws['A1']
+    cell.value = "COMPOSITOR LUIS RAMALHO"
+    cell.font = Font(name='Arial', size=26, bold=True)
+    cell.alignment = ALINHAMENTO_CENTRALIZADO
+
+    linha_atual = 2
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+    # Definir os cabeçalhos uma vez para referência de colunas
+    headers = ["Nº", "ALUNO"]
+    for disciplina in DISCIPLINAS:
+        headers.extend([f"{disciplina} B1", f"{disciplina} B2", f"{disciplina} B3", f"{disciplina} B4", f"{disciplina} NF", f"{disciplina} MG"])
+    
+    # Definir larguras das colunas (aplicadas uma vez para toda a aba)
+    ws.column_dimensions['A'].width = 5  # Nº
+    ws.column_dimensions['B'].width = 20  # ALUNO
+    for col in range(3, len(headers) + 1):
+        ws.column_dimensions[get_column_letter(col)].width = 5  # Colunas de notas
+
+    for turma in turmas:
+        # Adicionar o nome da turma
+        ws.merge_cells(f'A{linha_atual}:AZ{linha_atual}')
+        ws[f'A{linha_atual}'] = f"{turma['nome_turma']} - BOLETIM"
+        ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
+        ws[f'A{linha_atual}'].alignment = ALINHAMENTO_CENTRALIZADO
+        ws.row_dimensions[linha_atual].height = 30
+        linha_atual += 1
+
+        # Adicionar os cabeçalhos para a turma
+        col_idx = 1
+        for header in headers:
+            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+            cell.value = header
+            cell.border = border
+            cell.font = Font(bold=True)
+            cell.alignment = ALINHAMENTO_CENTRALIZADO
+            if header == "ALUNO":
+                cell.fill = FILL_NOME_ALUNO
+            elif "B1" in header or "B2" in header or "B3" in header or "B4" in header:
+                cell.fill = FILL_BIMESTRES
+            elif "NF" in header or "MG" in header:
+                cell.fill = FILL_NOTA_FINAL
+            col_idx += 1
+
+        linha_inicio_dados = linha_atual + 1
+
+        # Preencher os dados dos alunos
+        for aluno in turma["alunos"]:
+            linha_dados = linha_atual + int(aluno["numero"])
+            ws[f'A{linha_dados}'] = int(aluno["numero"])
+            ws[f'A{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+            ws[f'B{linha_dados}'] = aluno["nome"]
+            ws[f'B{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+
+            # Buscar notas de cada disciplina pelo nome do aluno
+            col_idx = 3  # Começar após Nº e ALUNO
+            for disciplina in DISCIPLINAS:
+                # Acessar a aba da disciplina
+                ws_disciplina = wb[disciplina]
+                # Determinar o intervalo de linhas para a turma atual
+                idx_turma = turmas.index(turma)
+                linha_base = 4 + (idx_turma * (36 + 15))  # 36 linhas de dados + 15 de espaço
+                linha_fim = linha_base + 35  # Até 35 alunos por turma
+
+                # Procurar o aluno pelo nome na coluna B
+                linha_ref = None
+                for row in range(linha_base, linha_fim + 1):
+                    cell_nome = ws_disciplina[f'B{row}'].value
+                    if cell_nome == aluno["nome"]:
+                        linha_ref = row
+                        break
+
+                if linha_ref is None:
+                    logger.warning(f"Aluno {aluno['nome']} não encontrado na aba {disciplina} para a turma {turma['nome_turma']}")
+                    # Preencher com 0.00 se o aluno não for encontrado
+                    for _ in range(6):  # 4 bimestres + NF + MG
+                        cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+                        cell.value = 0.00
+                        cell.number_format = '0.00'
+                        cell.alignment = ALINHAMENTO_CENTRALIZADO
+                        col_idx += 1
+                    continue
+
+                # Copiar as notas (B1, B2, B3, B4, NF, MG)
+                for bimestre in ['C', 'D', 'E', 'F']:  # B1, B2, B3, B4
+                    cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+                    cell.value = f"='{disciplina}'!{bimestre}{linha_ref}"
+                    cell.number_format = '0.00'
+                    cell.alignment = ALINHAMENTO_CENTRALIZADO
+                    col_idx += 1
+                # NF
+                cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+                cell.value = f"='{disciplina}'!G{linha_ref}"
+                cell.number_format = '0.00'
+                cell.alignment = ALINHAMENTO_CENTRALIZADO
+                col_idx += 1
+                # MG
+                cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+                cell.value = f"='{disciplina}'!H{linha_ref}"
+                cell.number_format = '0.00'
+                cell.alignment = ALINHAMENTO_CENTRALIZADO
+                col_idx += 1
+
+        # Aplicar bordas às linhas de dados
+        for row in range(linha_inicio_dados, linha_inicio_dados + len(turma["alunos"])):
+            for col in range(1, len(headers) + 1):
+                cell = ws[f'{get_column_letter(col)}{row}']
+                cell.border = border
+
+        # Adicionar espaço entre turmas
+        linha_atual += len(turma["alunos"]) + 3  # 2 linhas de espaço após os dados
+
+    return ws
+
 def criar_aba_sec(wb, turmas):
     ws = wb.create_sheet(title="SEC")
     ws.sheet_properties.tabColor = COR_ABA
@@ -149,13 +273,11 @@ def criar_aba_disciplina(wb, titulo, turmas):
             ws[f'B{linha_dados}'] = aluno["nome"]
             ws[f'B{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
 
-            # Verificar se há aluno (coluna B preenchida) e atribuir notas aleatórias para todos os bimestres
-            if ws[f'B{linha_dados}'].value:  # Se a célula não estiver vazia
-                ws[f'C{linha_dados}'] = random.uniform(1, 10)  # 1º bimestre
-                ws[f'D{linha_dados}'] = random.uniform(1, 10)  # 2º bimestre
-                ws[f'E{linha_dados}'] = random.uniform(1, 10)  # 3º bimestre
-                ws[f'F{linha_dados}'] = random.uniform(1, 10)  # 4º bimestre
-                # Formatar as notas com 2 casas decimais
+            if ws[f'B{linha_dados}'].value:
+                ws[f'C{linha_dados}'] = random.uniform(1, 10)
+                ws[f'D{linha_dados}'] = random.uniform(1, 10)
+                ws[f'E{linha_dados}'] = random.uniform(1, 10)
+                ws[f'F{linha_dados}'] = random.uniform(1, 10)
                 ws[f'C{linha_dados}'].number_format = '0.00'
                 ws[f'D{linha_dados}'].number_format = '0.00'
                 ws[f'E{linha_dados}'].number_format = '0.00'
@@ -164,27 +286,25 @@ def criar_aba_disciplina(wb, titulo, turmas):
         for row in range(linha_inicio_dados, linha_inicio_dados + 35):
             ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
             ws[f'G{row}'].alignment = ALINHAMENTO_CENTRALIZADO
-            ws[f'G{row}'].number_format = '0.00'  # Formato com 2 casas decimais para NF
+            ws[f'G{row}'].number_format = '0.00'
 
             ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'
             ws[f'H{row}'].alignment = ALINHAMENTO_CENTRALIZADO
-            ws[f'H{row}'].number_format = '0.00'  # Formato com 2 casas decimais para MG
+            ws[f'H{row}'].number_format = '0.00'
 
             ws[f'I{row}'] = f'=IF(H{row}<7, (0.6*H{row}) + (0.4*G{row}), "-")'
             ws[f'I{row}'].alignment = ALINHAMENTO_CENTRALIZADO
-            ws[f'I{row}'].number_format = '0.00'  # Formato com 2 casas decimais para MF
+            ws[f'I{row}'].number_format = '0.00'
 
             ws[f'J{row}'] = f'=IF(H{row}<2.5, "REPROVADO", IF(H{row}<7, "FINAL", "APROVADO"))'
             ws[f'J{row}'].alignment = ALINHAMENTO_CENTRALIZADO
-            # J é texto (SITUAÇÃO DO ALUNO), não precisa de formato numérico
 
             ws[f'K{row}'] = f'=IF(H{row}<7, (12.5 - (1.5*H{row})), "-")'
             ws[f'K{row}'].alignment = ALINHAMENTO_CENTRALIZADO
-            ws[f'K{row}'].number_format = '0.00'  # Formato com 2 casas decimais para PF
+            ws[f'K{row}'].number_format = '0.00'
 
             ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
             ws[f'L{row}'].alignment = ALINHAMENTO_CENTRALIZADO
-            # L é texto (SF), mas pode conter números; vamos formatar como 0.00 para consistência
             ws[f'L{row}'].number_format = '0.00'
         
         for row in range(linha_atual, linha_atual + 36):
@@ -214,7 +334,9 @@ def criar_planilha():
     for disciplina in DISCIPLINAS:
         criar_aba_disciplina(wb, disciplina, turmas)
 
-    abas_adicionais = ["INDIVIDUAL", "BOLETIM", "BOL", "RESULTADO", "FREQUÊNCIA"]
+    criar_aba_boletim(wb, turmas)
+
+    abas_adicionais = ["INDIVIDUAL", "BOL", "RESULTADO", "FREQUÊNCIA"]
     for aba in abas_adicionais:
         criar_aba_em_branco(wb, aba)
 

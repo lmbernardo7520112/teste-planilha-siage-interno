@@ -29,17 +29,16 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
     ws[f'P{dashboard_linha}'] = "2º Bimestre"
     ws[f'Q{dashboard_linha}'] = "3º Bimestre"
     ws[f'R{dashboard_linha}'] = "4º Bimestre"
-    for col in range(15, 19):  # Colunas O, P, Q, R
+    for col in range(15, 19):
         cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
         cell.font = Font(bold=True)
         cell.alignment = ALINHAMENTO_CENTRALIZADO
         cell.fill = FILL_BIMESTRES
 
     inicio = linha_inicio_dados
-    fim = linha_inicio_dados + 34  # 35 linhas de dados por turma
-    bimestre_cols = ['C', 'D', 'E', 'F']  # Colunas dos bimestres
+    fim = linha_inicio_dados + 34
+    bimestre_cols = ['C', 'D', 'E', 'F']
 
-    # Lista de indicadores que devem ser números inteiros
     indicadores_inteiros = [
         "ALUNOS APROVADOS",
         "ALUNOS REPROVADOS",
@@ -53,29 +52,25 @@ def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
         ws[f'N{dashboard_linha}'] = indicador["nome"]
         ws[f'N{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         
-        # Aplica a fórmula para cada bimestre, se existir
         if indicador["formula"]:
             for col_idx, bimestre_col in enumerate(bimestre_cols):
                 ws[f'{get_column_letter(15 + col_idx)}{dashboard_linha}'] = indicador["formula"](bimestre_col, inicio, fim)
         
-        # Aplica formato: 0 para números inteiros, 0.00 para outros números, ou formato definido (ex.: 0.00% para porcentagens)
-        for col in range(15, 19):  # Colunas O, P, Q, R
+        for col in range(15, 19):
             cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
             cell.alignment = ALINHAMENTO_CENTRALIZADO
             if indicador["formato"]:
-                cell.number_format = indicador["formato"]  # Mantém 0.00% para porcentagens
+                cell.number_format = indicador["formato"]
             elif indicador["nome"] in indicadores_inteiros:
-                cell.number_format = '0'  # Formato inteiro para os indicadores especificados
+                cell.number_format = '0'
             else:
-                cell.number_format = '0.00'  # Formato 0.00 para outros números
+                cell.number_format = '0.00'
 
-    # Aplica bordas
     for row in range(linha_inicio_tabela, dashboard_linha + 1):
-        for col in range(14, 19):  # Colunas N, O, P, Q, R
+        for col in range(14, 19):
             cell = ws[f'{get_column_letter(col)}{row}']
             cell.border = border
 
-    # Define larguras das colunas
     ws.column_dimensions['N'].width = 25
     ws.column_dimensions['O'].width = 10
     ws.column_dimensions['P'].width = 10
@@ -94,7 +89,6 @@ def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_a
     inicio = linha_inicio_dados
     fim = linha_inicio_dados + num_alunos - 1
 
-    # Lista de indicadores que devem ser números inteiros
     indicadores_inteiros = ["MATRÍCULAS", "ATIVOS", "TRANSFERIDOS", "DESISTENTES"]
 
     for idx, indicador in enumerate(DASHBOARD_SEC_TURMA):
@@ -107,7 +101,6 @@ def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_a
         ws[f'I{dashboard_linha}'] = ws[f'H{dashboard_linha}'].value
         ws[f'I{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
         
-        # Aplica formato: 0 para todos os indicadores (MATRÍCULAS, ATIVOS, TRANSFERIDOS, DESISTENTES)
         if indicador["nome"] in indicadores_inteiros:
             ws[f'H{dashboard_linha}'].number_format = '0'
             ws[f'I{dashboard_linha}'].number_format = '0'
@@ -142,7 +135,6 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
         "DESISTENTES": desistentes_refs
     }
 
-    # Lista de indicadores que devem ser números inteiros
     indicadores_inteiros = ["MATRÍCULAS", "ATIVOS", "TRANSFERIDOS", "DESISTENTES", "Nº ABANDONO(S)"]
 
     for idx, indicador in enumerate(DASHBOARD_SEC_GERAL):
@@ -156,13 +148,12 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
             ws[f'K{dashboard_linha}'] = indicador["formula"](dashboard_linha)
         
         ws[f'K{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
-        # Aplica formato: 0 para números inteiros, 0.00 para outros números, ou formato definido (ex.: 0.00% para porcentagens)
         if indicador["formato"]:
-            ws[f'K{dashboard_linha}'].number_format = indicador["formato"]  # Mantém 0.00% para "ABANDONO(S) (%)"
+            ws[f'K{dashboard_linha}'].number_format = indicador["formato"]
         elif indicador["nome"] in indicadores_inteiros:
-            ws[f'K{dashboard_linha}'].number_format = '0'  # Formato inteiro para os indicadores especificados
+            ws[f'K{dashboard_linha}'].number_format = '0'
         else:
-            ws[f'K{dashboard_linha}'].number_format = '0.00'  # Formato 0.00 para outros números
+            ws[f'K{dashboard_linha}'].number_format = '0.00'
 
     for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
         for col in range(10, 13):
@@ -188,34 +179,28 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
     ws[f'O{dashboard_linha}'] = "B2"
     ws[f'P{dashboard_linha}'] = "B3"
     ws[f'Q{dashboard_linha}'] = "B4"
-    for col in range(13, 18):  # Colunas M a Q
+    for col in range(13, 18):
         cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
         cell.font = Font(bold=True)
         cell.alignment = ALINHAMENTO_CENTRALIZADO
         cell.fill = FILL_BIMESTRES
 
-    # Para cada turma, calcular a média das taxas de aprovação de todas as disciplinas
     for idx, turma in enumerate(turmas):
         dashboard_linha += 1
         ws[f'M{dashboard_linha}'] = turma["nome_turma"]
         ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
 
-        # Linha base do dashboard na aba de disciplina
-        linha_ref_base = 12  # Ajustado para alinhar com a linha 12 para 1º ANO A
-        linha_ref = linha_ref_base + (idx * 52)  # Ajuste para cada turma (52 linhas por turma)
+        linha_ref_base = 12
+        linha_ref = linha_ref_base + (idx * 52)
 
-        # Log para depuração
-        print(f"Turma: {turma['nome_turma']}, idx: {idx}, linha_ref: {linha_ref}")
-
-        # Fórmulas para cada bimestre (média das taxas de todas as disciplinas com tratamento de erro)
         ws[f'N{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!O{linha_ref},0)" for disc in DISCIPLINAS])})'
         ws[f'O{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!P{linha_ref},0)" for disc in DISCIPLINAS])})'
         ws[f'P{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!Q{linha_ref},0)" for disc in DISCIPLINAS])})'
         ws[f'Q{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!R{linha_ref},0)" for disc in DISCIPLINAS])})'
 
-        for col in range(13, 18):  # Colunas M a Q
+        for col in range(13, 18):
             cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
-            cell.number_format = '0.00%'  # Já está correto para porcentagens
+            cell.number_format = '0.00%'
             cell.alignment = ALINHAMENTO_CENTRALIZADO
 
     linha_inicio_turmas = linhas_inicio_tabelas[0] + 2
@@ -230,15 +215,15 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
         for col in ['N', 'O', 'P', 'Q']:
             if indicador["nome"] == "TX APROVAÇÃO %":
                 ws[f'{col}{dashboard_linha}'] = f'=AVERAGE({col}{linha_inicio_turmas}:{col}{linha_fim_turmas})'
-            else:  # TX REPROVAÇÃO %
+            else:
                 ws[f'{col}{dashboard_linha}'] = f'=IFERROR(1-{col}{dashboard_linha-1},0)'
             
             ws[f'{col}{dashboard_linha}'].font = Font(size=10)
-            ws[f'{col}{dashboard_linha}'].number_format = '0.00%'  # Já está correto para porcentagens
+            ws[f'{col}{dashboard_linha}'].number_format = '0.00%'
             ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
 
     for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
-        for col in range(13, 18):  # Colunas M a Q
+        for col in range(13, 18):
             cell = ws[f'{get_column_letter(col)}{row}']
             cell.border = border
 
@@ -248,7 +233,6 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
     ws.column_dimensions['P'].width = 10
     ws.column_dimensions['Q'].width = 10
 
-    # Criar o gráfico
     chart = BarChart()
     chart.type = "col"
     chart.style = 10
@@ -258,20 +242,16 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
     chart.height = 15
     chart.width = 20
 
-    # Dados para todos os bimestres (colunas N, O, P, Q)
     data = Reference(ws, min_col=14, min_row=linhas_inicio_tabelas[0] + 1, max_col=17, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
     cats = Reference(ws, min_col=13, min_row=linhas_inicio_tabelas[0] + 2, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
     chart.add_data(data, titles_from_data=True)
     chart.set_categories(cats)
 
-    # Definir cores diferentes para cada bimestre (B1, B2, B3, B4)
-    series_colors = ["DAA520", "CD853F", "F4A460", "DEB887"]  # Dourado, Pêssego escuro, Areia, Bege dourado
+    series_colors = ["DAA520", "CD853F", "F4A460", "DEB887"]
     for idx, series in enumerate(chart.series):
         series.graphicalProperties.solidFill = series_colors[idx]
 
-    # Reduzir a largura das barras
-    chart.gapWidth = 50  # 50% do espaço entre barras (padrão é 150)
-
+    chart.gapWidth = 50
     chart.y_axis.scaling.min = 0
     chart.y_axis.scaling.max = 1
     chart.y_axis.number_format = '0%'
