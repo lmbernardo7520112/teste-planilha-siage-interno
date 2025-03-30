@@ -2,7 +2,7 @@
 
 ![SIAGE Logo](app/core/static/images/siage_interno.png)
 
-O SIAGE é um sistema avançado para geração automatizada de planilhas de notas e relatórios escolares, desenvolvido para otimizar o trabalho de instituições educacionais. Este projeto demonstra habilidades avançadas em Python, manipulação de planilhas Excel com OpenPyXL, e criação de dashboards analíticos.
+O SIAGE INTERNO ECI LUIS RAMALHO é um sistema avançado para geração automatizada de planilhas de notas e relatórios escolares, desenvolvido para otimizar o trabalho de instituições educacionais. Este projeto demonstra habilidades avançadas em Python, manipulação de planilhas Excel com OpenPyXL, e criação de dashboards analíticos.
 
 ## ✨ Recursos Principais
 
