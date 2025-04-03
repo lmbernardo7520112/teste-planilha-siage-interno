@@ -122,14 +122,14 @@ def criar_dashboard_sec_turma(ws, linha_inicio_tabela_header, linha_inicio_dados
         for col in range(dashboard_col_start_idx, dashboard_col_end_idx + 1):
             ws.cell(row=row, column=col).border = BORDER_THIN
 
-def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_turma):
+def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_turma, start_col='L', start_row=4):
     """Cria o dashboard geral e o GRÁFICO DE STATUS na aba SEC."""
     if not linhas_inicio_tabelas_headers:
         logger.warning("Sem dados para dashboard SEC GERAL.")
         return
-    dashboard_col_start_idx = 10
-    dashboard_col_end_idx = 11
-    dashboard_linha_ref = linhas_inicio_tabelas_headers[0] + 1
+    dashboard_col_start_idx = column_index_from_string(start_col)
+    dashboard_col_end_idx = dashboard_col_start_idx + 1
+    dashboard_linha_ref = start_row
     cell_titulo = ws.cell(row=dashboard_linha_ref, column=dashboard_col_start_idx, value="Resumo Geral Escola")
     cell_titulo.font = Font(bold=True, size=12)
     cell_titulo.alignment = ALINHAMENTO_CENTRALIZADO
@@ -216,7 +216,7 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_
             series.dLbls.showVal = True
             series.dLbls.numFmt = '0'
             chart_status.y_axis.majorGridlines = None
-            chart_anchor = f"R{linhas_inicio_tabelas_headers[0] + 2}"
+            chart_anchor = f"{get_column_letter(dashboard_col_start_idx + 3)}{dashboard_linha_ref}"
             ws.add_chart(chart_status, chart_anchor)
             logger.info(f"Gráfico status GERAL add {chart_anchor}")
         else:
@@ -224,15 +224,15 @@ def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_
     except Exception as chart_err:
         logger.error(f"Erro gráfico status GERAL: {chart_err}")
 
-def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas_headers):
+def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas_headers, start_col='R', start_row=4):
     """Cria o dashboard de aprovação e o GRÁFICO na aba SEC."""
     if not linhas_inicio_tabelas_headers or not turmas:
         logger.warning("Dados insuficientes para dash SEC APROVAÇÃO.")
         return
-    dashboard_col_start_idx = 13
+    dashboard_col_start_idx = column_index_from_string(start_col)
     num_bimestres = 4
     max_col_idx = dashboard_col_start_idx + num_bimestres
-    dashboard_linha_ref = linhas_inicio_tabelas_headers[0] + 1
+    dashboard_linha_ref = start_row
     cell_titulo = ws.cell(row=dashboard_linha_ref, column=dashboard_col_start_idx, value="TAXA MÉDIA APROVAÇÃO BIMESTRAL")
     cell_titulo.font = Font(bold=True, size=12)
     cell_titulo.alignment = ALINHAMENTO_CENTRALIZADO
@@ -318,7 +318,7 @@ def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas_headers):
             chart_aprov.y_axis.number_format = '0%'
             chart_aprov.y_axis.majorGridlines = ChartLines()
             chart_aprov.y_axis.majorGridlines.graphicalProperties.line.solidFill = "D9D9D9"
-            chart_anchor = f"{get_column_letter(dashboard_col_start_idx)}{max_row_aprov + 2}"
+            chart_anchor = f"{get_column_letter(dashboard_col_start_idx + 6)}{dashboard_linha_ref}"
             ws.add_chart(chart_aprov, chart_anchor)
             logger.info(f"Gráfico aprovação add {chart_anchor}")
         else:

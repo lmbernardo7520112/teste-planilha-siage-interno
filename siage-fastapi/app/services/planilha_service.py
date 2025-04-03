@@ -129,7 +129,6 @@ def criar_aba_sec(wb, turmas):
         linha_header_turma_atual = linha_atual
         linhas_inicio_tabelas_headers.append(linha_header_turma_atual)
 
-        # Cabeçalho da Tabela de Alunos
         for col_idx, col_nome in enumerate(COLUNAS_SEC, 1):
             cell = ws.cell(row=linha_atual, column=col_idx, value=col_nome)
             cell.border = BORDER_THIN
@@ -144,7 +143,6 @@ def criar_aba_sec(wb, turmas):
 
         linha_inicio_dados = linha_atual + 1
 
-        # Dados Alunos Reais
         alunos_processados = set()
         if alunos:
             for aluno in alunos:
@@ -164,7 +162,6 @@ def criar_aba_sec(wb, turmas):
                     logger.error(f"Erro aluno {aluno.get('nome')} (SEC): {e}")
                     continue
 
-        # Formatação Linhas Restantes
         for i in range(max_linhas_tabela):
             linha_formatar = linha_inicio_dados + i
             num_linha_atual = i + 1
@@ -178,22 +175,20 @@ def criar_aba_sec(wb, turmas):
             for col_idx in range(1, len(COLUNAS_SEC) + 1):
                 ws.cell(row=linha_formatar, column=col_idx).border = BORDER_THIN
 
-        # Dash Turma
         try:
             criar_dashboard_sec_turma(ws, linha_header_turma_atual, linha_inicio_dados, num_alunos_turma)
         except Exception as e:
             logger.error(f"Erro dash SEC turma {nome_turma}: {e}")
 
-    # Dashboards Gerais
     if linhas_inicio_tabelas_headers:
         try:
-            logger.info("Criando dashboard SEC Geral...")
-            criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_turma)
+            logger.info("Criando dashboard SEC Geral em L4...")
+            criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_turma, start_col='L', start_row=4)
         except Exception as e:
             logger.error(f"Erro dash SEC Geral: {e}")
         try:
-            logger.info("Criando dashboard SEC Aprovação...")
-            criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas_headers)
+            logger.info("Criando dashboard SEC Aprovação em R4...")
+            criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas_headers, start_col='R', start_row=4)
         except Exception as e:
             logger.error(f"Erro dash SEC Aprovação: {e}")
     return ws
@@ -440,13 +435,12 @@ def _get_student_row_in_discipline_sheet(ws_disciplina, turma_nome, aluno_nome_l
         logger.error(f"Lookup: Erro {aluno_nome_limpo}/{turma_nome}: {e}")
         return None
 
-def criar_aba_dashboard_powerpivot(wb, turmas_list):
-    logger.info("Criando aba DASHBOARD para Power Pivot")
-    ws = wb.create_sheet(title="DASHBOARD")
-    ws.sheet_properties.tabColor = "ADD8E6"
+def criar_tabelas_powerpivot(wb, turmas_list):
+    """Cria abas separadas para cada tabela do Power Pivot."""
     turmas_data, alunos_data, disciplinas_data, notas_data = [], [], [], []
     turma_id_map, aluno_id_map = {}, {}
     current_turma_id, current_aluno_id, current_nota_id = 1, 1, 1
+
     turmas_headers = ["TurmaID", "NomeTurma", "GradeLevel", "ClassLetter"]
     for turma in turmas_list:
         nome_turma = turma["nome_turma"]
@@ -458,6 +452,7 @@ def criar_aba_dashboard_powerpivot(wb, turmas_list):
         if match:
             grade_level, class_letter = match.group(1), match.group(2).upper()
         turmas_data.append([turma_id, nome_turma, grade_level, class_letter])
+
     alunos_headers = ["StudentID", "Name", "Status", "TurmaID"]
     for turma in turmas_list:
         nome_turma = turma["nome_turma"]
@@ -473,10 +468,12 @@ def criar_aba_dashboard_powerpivot(wb, turmas_list):
                 status = "ATIVO"
                 alunos_data.append([student_id, nome_aluno_limpo, status, turma_id])
             except Exception as e:
-                logger.error(f"Erro Tabela Alunos (Dash) {aluno.get('nome')}: {e}")
+                logger.error(f"Erro Tabela Alunos (Power Pivot) {aluno.get('nome')}: {e}")
+
     disciplinas_headers = ["DisciplineCode", "DisciplineName"]
     for code in DISCIPLINAS:
         disciplinas_data.append([code, DISCIPLINAS_NOMES.get(code, code)])
+
     notas_headers = ["NotaID", "StudentID", "DisciplineCode", "BIM1Grade", "BIM2Grade", "BIM3Grade", "BIM4Grade", "NF", "MG", "MF", "Situation"]
     col_map_disc_to_notas = {'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9, 'J': 10}
     for turma in turmas_list:
@@ -519,51 +516,60 @@ def criar_aba_dashboard_powerpivot(wb, turmas_list):
                             notas_data.append(nota_row)
                             current_nota_id += 1
                     except Exception as read_err:
-                        logger.error(f"Erro leitura notas (Dash) {nome_aluno_limpo}/{discipline_code}: {read_err}")
-    current_row = 1
-    table_style = TableStyleInfo(name="TableStyleMedium2", showFirstColumn=False, showLastColumn=False, showRowStripes=True, showColumnStripes=False)
-    def write_table(ws_target, start_row, headers, data, table_name, style_info):
-        ws_target.cell(row=start_row, column=1, value=table_name.replace("tbl", "Tabela ")).font = Font(bold=True, size=12)
-        current_r = start_row + 1
-        ws_target.append(headers)
-        header_row = current_r
-        current_r += 1
+                        logger.error(f"Erro leitura notas (Power Pivot) {nome_aluno_limpo}/{discipline_code}: {read_err}")
+
+    def create_table_sheet(wb, title, headers, data, table_name):
+        ws = wb.create_sheet(title=title)
+        ws.sheet_properties.tabColor = "ADD8E6"
+        current_row = 2  # Começar em A2 para evitar sobreposição com o cabeçalho
+        ws.append(headers)
+        header_row = current_row
+        current_row += 1
         if not data:
-            ws_target.cell(row=current_r, column=1, value="Nenhum dado disponível.")
-            current_r += 1
+            logger.warning(f"Sem dados para tabela '{table_name}'.")
         else:
             for row_data in data:
                 try:
                     safe_row = [re.sub(r'[\x00-\x1F\x7F]', '', str(item)) if isinstance(item, str) else (item if item is not None else "") for item in row_data]
-                    ws_target.append(safe_row)
-                    current_r += 1
+                    ws.append(safe_row)
+                    current_row += 1
                 except Exception as write_err:
-                    logger.error(f"Erro escrita {table_name}: {row_data} -> {write_err}.")
-        data_end_row = current_r - 1
+                    logger.error(f"Erro escrita {table_name}: {row_data} -> {write_err}")
+        data_end_row = current_row - 1
         if data_end_row >= header_row:
             table_ref = f"A{header_row}:{get_column_letter(len(headers))}{data_end_row}"
+            logger.info(f"Tentando criar tabela '{table_name}' com intervalo {table_ref}")
             try:
-                excel_table = Table(displayName=table_name, ref=table_ref)
-                excel_table.tableStyleInfo = style_info
-                ws_target.add_table(excel_table)
-                logger.info(f"Tabela '{table_name}' criada: {table_ref}")
+                table = Table(displayName=table_name, ref=table_ref)
+                table.tableStyleInfo = TableStyleInfo(name="TableStyleMedium2", showFirstColumn=False, showLastColumn=False, showRowStripes=True, showColumnStripes=False)
+                ws.add_table(table)
+                logger.info(f"Tabela '{table_name}' criada em aba '{title}': {table_ref}")
             except Exception as table_err:
-                logger.error(f"Erro add tabela '{table_name}' ref '{table_ref}': {table_err}")
+                logger.error(f"Erro ao adicionar tabela '{table_name}' ref '{table_ref}': {table_err}")
         else:
-            logger.warning(f"Tabela '{table_name}' não criada (sem dados).")
-        ws_target.column_dimensions['A'].width = 15
-        ws_target.column_dimensions['B'].width = 35
-        return current_r + 1
-    logger.info("Escrevendo tabelas na aba DASHBOARD...")
-    current_row = write_table(ws, current_row, turmas_headers, turmas_data, TBL_TURMAS_NAME, table_style)
-    current_row = write_table(ws, current_row, alunos_headers, alunos_data, TBL_ALUNOS_NAME, table_style)
-    current_row = write_table(ws, current_row, disciplinas_headers, disciplinas_data, TBL_DISCIPLINAS_NAME, table_style)
-    current_row = write_table(ws, current_row, notas_headers, notas_data, TBL_NOTAS_NAME, table_style)
-    for col_letter in ['D', 'E', 'F', 'G', 'H', 'I']:
-        ws.column_dimensions[col_letter].width = 10
-    ws.column_dimensions['K'].width = 18
-    logger.info("Aba DASHBOARD criada.")
-    return ws
+            logger.warning(f"Tabela '{table_name}' não criada (sem dados ou intervalo inválido).")
+        # Ajustar larguras das colunas
+        ws.column_dimensions['A'].width = 15
+        ws.column_dimensions['B'].width = 35
+        if table_name == TBL_NOTAS_NAME:
+            for col_letter in ['D', 'E', 'F', 'G', 'H', 'I']:
+                ws.column_dimensions[col_letter].width = 10
+            ws.column_dimensions['K'].width = 18
+        # Limpar células fora do intervalo da tabela
+        for row in ws.iter_rows(min_row=1, max_row=1):  # Limpar linha 1
+            for cell in row:
+                cell.value = None
+        for row in ws.iter_rows(min_row=data_end_row + 1, max_row=ws.max_row):
+            for cell in row:
+                cell.value = None
+        for col in ws.iter_cols(min_col=len(headers) + 1, max_col=ws.max_column):
+            for cell in col:
+                cell.value = None
+
+    create_table_sheet(wb, TBL_TURMAS_NAME, turmas_headers, turmas_data, TBL_TURMAS_NAME)
+    create_table_sheet(wb, TBL_ALUNOS_NAME, alunos_headers, alunos_data, TBL_ALUNOS_NAME)
+    create_table_sheet(wb, TBL_DISCIPLINAS_NAME, disciplinas_headers, disciplinas_data, TBL_DISCIPLINAS_NAME)
+    create_table_sheet(wb, TBL_NOTAS_NAME, notas_headers, notas_data, TBL_NOTAS_NAME)
 
 def criar_planilha():
     logger.info("="*45)
@@ -593,8 +599,10 @@ def criar_planilha():
         criar_aba_disciplina(wb, disciplina, turmas)
     logger.info("-> Criando aba BOLETIM...")
     criar_aba_boletim(wb, turmas)
-    logger.info("-> Criando aba DASHBOARD...")
-    criar_aba_dashboard_powerpivot(wb, turmas)
+    logger.info("-> Criando abas Power Pivot...")
+    criar_tabelas_powerpivot(wb, turmas)
+    logger.info("-> Criando aba DASHBOARD (em branco)...")
+    criar_aba_em_branco(wb, "DASHBOARD")
     abas_adicionais = ["INDIVIDUAL", "BOL", "RESULTADO", "FREQUÊNCIA"]
     logger.info(f"-> Criando abas em branco: {', '.join(abas_adicionais)}")
     for aba in abas_adicionais:
