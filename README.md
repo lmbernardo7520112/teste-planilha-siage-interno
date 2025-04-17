@@ -41,7 +41,7 @@ Este projeto demonstra a aplicação prática de Python para automação de tare
 <!-- Exemplo: -->
 <!-- ![Dashboard Exemplo](link/para/sua/imagem_dashboard.png) -->
 <!-- ![Planilha Disciplina](link/para/sua/imagem_planilha.png) -->
-*Adicione aqui capturas de tela mostrando as diferentes abas da planilha, os dashboards e a formatação.*
+*Adicione aqui capturas de tela mostrando as diferentes abas da planilha, os dashboards e a formatação.* (work in progress...
 
 ## 📊 Estrutura da Planilha Gerada
 
