@@ -135,7 +135,7 @@ Distribuído sob a licença MIT License. Veja `LICENSE` para mais informações.
 <!-- CONTATOS -->
 ## 📧 Contato
 
- - [@seu_github](https://github.com/lmbernardo7520112) - lmbernardo752011@gmail.com
+ - [https://github.com/lmbernardo7520112](https://github.com/lmbernardo7520112) - lmbernardo752011@gmail.com
 
 Link do Projeto: [https://github.com/lmbernardo7520112/teste-planilha-siage-interno](https://github.com/lmbernardo7520112/teste-planilha-siage-interno)
 
