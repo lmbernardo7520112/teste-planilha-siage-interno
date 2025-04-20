@@ -1,163 +1,158 @@
-SIAGE INTERNO ECI LUIS RAMALHO - Sistema Integrado de Análise e Gestão Escolar
+# SIAGE INTERNO ECI LUIS RAMALHO - Sistema Integrado de Análise e Gestão Escolar
 
+[![License][License-shield]][License-url]
+[![Contributors][Contributors-shield]][Contributors-url]
+[![Forks][Forks-shield]][Forks-url]
+[![Stargazers][Stars-shield]][Stars-url]
+[![Issues][Issues-shield]][Issues-url]
+
+[![Python][Python-shield]][Python-url]
+[![OpenPyXL][OpenPyXL-shield]][OpenPyXL-url]
 
 Sistema avançado para geração automatizada de planilhas de notas e relatórios escolares detalhados, projetado para otimizar processos e análises em instituições educacionais como a ECI Luis Ramalho.
-✨ Sobre o Projeto
-O SIAGE INTERNO foi desenvolvido para simplificar e automatizar a complexa tarefa de compilar notas, calcular médias, analisar o desempenho dos alunos e gerar relatórios consolidados. Utilizando Python e a biblioteca OpenPyXL, o sistema processa dados de entrada (no formato JSON) e produz uma planilha Excel rica em informações e visualizações, pronta para uso pela gestão escolar.
+
+## ✨ Sobre o Projeto
+
+O SIAGE INTERNO foi desenvolvido para simplificar e automatizar a complexa tarefa de compilar notas, calcular médias, analisar o desempenho dos alunos e gerar relatórios consolidados. Utilizando Python e a biblioteca OpenPyXL, o sistema processa dados de entrada (presumivelmente em JSON) e produz uma planilha Excel rica em informações e visualizações, pronta para uso pela gestão escolar.
+
 Este projeto demonstra a aplicação prática de Python para automação de tarefas administrativas e análise de dados no contexto educacional.
-🚀 Recursos Principais
 
-📄 Geração Automatizada: Cria planilhas de notas completas por disciplina e turma.
-📊 Dashboards Integrados: Visualização de dados educacionais diretamente nas planilhas (desempenho, aprovação, evasão).
-📈 Análise de Desempenho: Métricas por turma, disciplina e aluno individualmente.
-🚦 Controle de Situação Acadêmica: Monitoramento de alunos (Ativos, Transferidos, Desistentes).
-⚙️ Cálculos Automáticos: Médias bimestrais/finais, taxas de aprovação/reprovação, e outros indicadores educacionais.
-🎨 Formatação Profissional: Planilhas com layout claro, cores padronizadas, e logotipo institucional.
-🔧 Alta Configurabilidade: Definição de disciplinas, estilos, fórmulas e estruturas via arquivos de configuração (config.py e JSON).
+## 🚀 Recursos Principais
 
-🛠️ Tecnologias Utilizadas
+-   📄 **Geração Automatizada:** Cria planilhas de notas completas por disciplina e turma.
+-   📊 **Dashboards Integrados:** Visualização de dados educacionais diretamente nas planilhas (desempenho, aprovação, evasão).
+-   📈 **Análise de Desempenho:** Métricas por turma, disciplina e aluno individualmente.
+-   🚦 **Controle de Situação Acadêmica:** Monitoramento de alunos (Ativos, Transferidos, Desistentes).
+-   ⚙️ **Cálculos Automáticos:** Médias bimestrais/finais, taxas de aprovação/reprovação, e outros indicadores educacionais.
+-   🎨 **Formatação Profissional:** Planilhas com layout claro, cores padronizadas, e logotipo institucional.
+-   🔧 **Alta Configurabilidade:** Definição de disciplinas, estilos, fórmulas e estruturas via arquivos de configuração (`config.py` e JSON).
 
- (versão 3.8 ou superior recomendada)
+## 🛠️ Tecnologias Utilizadas
 
-Módulo logging (Python Standard Library)
-Módulo pathlib (Python Standard Library)
-Módulo json (Python Standard Library)
+*   [![Python][Python-shield]][Python-url]
+*   [![OpenPyXL][OpenPyXL-shield]][OpenPyXL-url]
+*   Módulo `logging` (Python Standard Library)
+*   Módulo `pathlib` (Python Standard Library)
+*   Módulo `json` (Python Standard Library)
 
-🖼️ Screenshots / Demonstração
+## 🖼️ Screenshots / Demonstração
 
+<!-- IMPORTANTE: Adicione aqui screenshots das planilhas geradas! -->
+<!-- Exemplo: -->
+<!-- ![Dashboard Exemplo](link/para/sua/imagem_dashboard.png) -->
+<!-- ![Planilha Disciplina](link/para/sua/imagem_planilha.png) -->
+*Adicione aqui capturas de tela mostrando as diferentes abas da planilha, os dashboards e a formatação.* (work in progress...
 
+## 📊 Estrutura da Planilha Gerada
 
+O sistema gera um arquivo Excel (`.xlsx`) com uma estrutura organizada em múltiplas abas:
 
-Em breve, serão adicionadas capturas de tela mostrando as diferentes abas da planilha, os dashboards e a formatação. (work in progress...)
-📊 Estrutura da Planilha Gerada
-O sistema gera um arquivo Excel (.xlsx) com uma estrutura organizada em múltiplas abas:
+1.  **Abas por Disciplina:** (ex: Matemática, Português, etc.)
+    *   Lista de alunos da turma.
+    *   Colunas para notas bimestrais.
+    *   Cálculo automático de médias.
+    *   Coluna de Situação Final (Aprovado/Reprovado).
+    *   *Dashboard* visual com gráficos de desempenho da turma na disciplina.
+2.  **Aba SEC (Secretaria):**
+    *   Coluna para Status do Aluno (Ativo, Transferido, Desistente).
+    *   *Dashboards* com análise de evasão e taxas de aprovação gerais da turma.
+3.  **Aba Boletim Consolidado:**
+    *   Visão geral das médias e situação final de cada aluno em *todas* as disciplinas.
+4.  **Abas Adicionais (Opcional/Configurável):**
+    *   Relatórios individuais por aluno.
+    *   Controle de Frequência.
 
-Abas por Disciplina: (ex: Matemática, Português, etc.)
-Lista de alunos da turma.
-Colunas para notas bimestrais (1º ao 4º bimestre).
-Cálculo automático de médias (usando fórmulas Excel).
-Coluna de Situação Final (Aprovado/Reprovado, baseado em média ≥ 7.0, por exemplo).
-Dashboard visual com gráficos de desempenho da turma na disciplina.
+## ⚙️ Configuração
 
-
-Aba SEC (Secretaria):
-Coluna para Status do Aluno (Ativo, Transferido, Desistente).
-Dashboards com análise de evasão e taxas de aprovação gerais da turma.
-
-
-Aba Boletim Consolidado:
-Visão geral das médias e situação final de cada aluno em todas as disciplinas.
-
-
-Abas Adicionais (Opcional/Configurável):
-Relatórios individuais por aluno.
-Controle de Frequência (se configurado no config.py).
-
-
-
-⚙️ Configuração
 A personalização do sistema é feita principalmente através de:
 
-config.py (ou similar):
+1.  **`config.py` (ou similar):**
+    *   Definição da lista de disciplinas.
+    *   Configuração de cores, fontes e estilos visuais.
+    *   Ajuste fino das fórmulas de cálculo (se necessário).
+    *   Definição da estrutura dos relatórios.
+2.  **Arquivos JSON:**
+    *   Armazenamento dos dados de entrada dos alunos (nomes, notas, status, etc.). É necessário preparar esses arquivos antes de executar o sistema.
 
-Lista de Disciplinas: Ex.: DISCIPLINES = ["Matemática", "Português", "Ciências"].
-Estilos Visuais: Cores, fontes e bordas (usando OpenPyXL). Ex.: HEADER_COLOR = "FF0000" (vermelho para cabeçalhos).
-Fórmulas de Cálculo: Critérios de aprovação. Ex.: APPROVAL_THRESHOLD = 7.0.
-Estrutura das Abas: Quais abas incluir (ex.: incluir aba de frequência?).
-Caminho dos Arquivos: Caminho do arquivo JSON de entrada (ex.: INPUT_PATH = "data/dados_turma.json").
+## 📈 Indicadores Calculados
 
-
-Arquivos JSON:
-
-Os dados dos alunos devem ser fornecidos em um arquivo JSON com a seguinte estrutura:{
-  "turma": "9A",
-  "alunos": [
-    {
-      "nome": "João Silva",
-      "status": "Ativo",
-      "notas": {
-        "Matemática": [8.5, 7.0, 9.0, 6.5],
-        "Português": [6.0, 5.5, 7.0, 8.0]
-      }
-    },
-    {
-      "nome": "Maria Oliveira",
-      "status": "Transferido",
-      "notas": {
-        "Matemática": [5.0, 4.5, 6.0, 5.5],
-        "Português": [7.0, 6.5, 8.0, 7.5]
-      }
-    }
-  ]
-}
-
-
-O arquivo deve estar na pasta data/ (ou conforme configurado no config.py).
-Certifique-se de que as disciplinas no JSON correspondem às definidas no config.py.
-
-
-
-📈 Indicadores Calculados
 O sistema fornece automaticamente diversos indicadores chave:
 
-Taxas de Aprovação e Reprovação (por turma e disciplina).
-Médias Bimestrais e Finais (por aluno e disciplina).
-Percentual de alunos com desempenho acima/abaixo da média da turma.
-Índices de Evasão (baseado no status Transferido/Desistente).
-Situação Acadêmica final de cada aluno (Aprovado/Reprovado com base na média configurada).
+*   Taxas de Aprovação e Reprovação (por turma e disciplina).
+*   Médias Bimestrais e Finais.
+*   Percentual de alunos com desempenho acima/abaixo da média.
+*   Índices de Evasão (baseado no status Transferido/Desistente).
+*   Situação Acadêmica final de cada aluno.
 
-🚀 Como Executar
+## 🚀 Como Executar
+
 Siga os passos abaixo para configurar e executar o projeto:
 
-Clone o repositório:git clone https://github.com/lmbernardo7520112/teste-planilha-siage-interno.git
-cd teste-planilha-siage-interno
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/lmbernardo7520112/teste-planilha-siage-interno.git
+    cd teste-planilha-siage-interno
+    ```
+2.  **Crie um ambiente virtual (Recomendado):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # Linux/macOS
+    # venv\Scripts\activate  # Windows
+    ```
+3.  **Instale as dependências:**
+    ```bash
+    pip install openpyxl
+    # Adicione outras dependências se houver um requirements.txt
+    # pip install -r requirements.txt
+    ```
+4.  **Prepare os Dados:**
+    *   Certifique-se de que os arquivos JSON com os dados dos alunos (notas, nomes, status) estão no local esperado pelo script e formatados corretamente.
+    *   Revise e ajuste o arquivo `config.py` (ou similar) conforme necessário (disciplinas, nomes de turmas, etc.).
+5.  **Execute o Script Principal:**
+    ```bash
+    python nome_do_script_principal.py
+    ```
+    *Substitua `nome_do_script_principal.py` pelo nome real do seu script principal.*
 
+O script processará os dados e gerará o arquivo Excel na pasta de saída configurada.
 
-Crie um ambiente virtual (Recomendado):python -m venv venv
-source venv/bin/activate  # Linux/macOS
-venv\Scripts\activate     # Windows
+## 🤝 Contribuição
 
-
-Instale as dependências:pip install openpyxl
-
-Nota: Caso exista um arquivo requirements.txt, use:pip install -r requirements.txt
-
-
-Prepare os Dados:
-Coloque o arquivo JSON de entrada (ex.: dados_turma.json) na pasta data/.
-Edite o arquivo config.py para ajustar:
-Lista de disciplinas.
-Caminho do arquivo de entrada (se diferente de data/dados_turma.json).
-Critérios de aprovação e estilos visuais.
-
-
-
-
-Execute o Script Principal:O script principal é gerar_planilha.py. Execute:python gerar_planilha.py
-
-O script gerará o arquivo Excel na pasta output/ (ex.: output/relatorio_turma_9A.xlsx).
-
-Possíveis Erros e Soluções
-
-Erro: "FileNotFoundError: data/dados_turma.json"Verifique se o arquivo JSON está na pasta data/ e se o nome está correto no config.py.
-Erro: "KeyError: 'Matemática'"Certifique-se de que todas as disciplinas no JSON correspondem às definidas em DISCIPLINES no config.py.
-Erro: "ModuleNotFoundError: No module named 'openpyxl'"Instale a biblioteca OpenPyXL com pip install openpyxl.
-
-🤝 Contribuição
 Contribuições são bem-vindas! Se você tem sugestões para melhorar o sistema, sinta-se à vontade para:
 
-Fazer um Fork do projeto.
-Criar uma Branch para sua Feature (git checkout -b feature/FuncionalidadeIncrivel).
-Fazer Commit de suas alterações (git commit -m 'Adiciona FuncionalidadeIncrivel').
-Fazer Push para a Branch (git push origin feature/FuncionalidadeIncrivel).
-Abrir um Pull Request.
+1.  Fazer um Fork do projeto.
+2.  Criar uma Branch para sua Feature (`git checkout -b feature/FuncionalidadeIncrivel`).
+3.  Fazer Commit de suas alterações (`git commit -m 'Adiciona FuncionalidadeIncrivel'`).
+4.  Fazer Push para a Branch (`git push origin feature/FuncionalidadeIncrivel`).
+5.  Abrir um Pull Request.
 
-Por favor, leia o CONTRIBUTING.md (se existir) para mais detalhes sobre o processo.
-📜 Licença
-Distribuído sob a licença MIT License. Veja LICENSE para mais informações.
-📧 Contato
+Por favor, leia o `CONTRIBUTING.md` (se existir) para mais detalhes sobre o processo.
 
-https://github.com/lmbernardo7520112 - lmbernardo752011@gmail.com
+## 📜 Licença
 
-Link do Projeto: https://github.com/lmbernardo7520112/teste-planilha-siage-interno
+Distribuído sob a licença MIT License. Veja `LICENSE` para mais informações.
 
+<!-- CONTATOS -->
+## 📧 Contato
+
+ - [https://github.com/lmbernardo7520112](https://github.com/lmbernardo7520112) - lmbernardo752011@gmail.com
+
+Link do Projeto: [https://github.com/lmbernardo7520112/teste-planilha-siage-interno](https://github.com/lmbernardo7520112/teste-planilha-siage-interno)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- Corrija os links conforme necessário, especialmente para o arquivo LICENSE -->
+[License-shield]: https://img.shields.io/github/license/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+[License-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/blob/main/LICENSE
+[Contributors-shield]: https://img.shields.io/github/contributors/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+[Contributors-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/graphs/contributors
+[Forks-shield]: https://img.shields.io/github/forks/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+[Forks-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/network/members
+[Stars-shield]: https://img.shields.io/github/stars/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+[Stars-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/stargazers
+[Issues-shield]: https://img.shields.io/github/issues/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+[Issues-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/issues
+
+[Python-shield]: https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white
+[Python-url]: https://www.python.org/
+[OpenPyXL-shield]: https://img.shields.io/badge/OpenPyXL-107C41?style=flat-square&logo=python&logoColor=white
+[OpenPyXL-url]: https://openpyxl.readthedocs.io/en/stable/
