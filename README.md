@@ -1,5 +1,4 @@
-SIAGE INTERNO ECI LUIS RAMALHO - Sistema Integrado de Análise e Gestão Escolar
-
+# SIAGE INTERNO ECI LUIS RAMALHO
 
 Sistema avançado para geração automatizada de planilhas de notas e relatórios escolares detalhados, projetado para otimizar processos e análises em instituições educacionais como a ECI Luis Ramalho.
 ✨ Sobre o Projeto
