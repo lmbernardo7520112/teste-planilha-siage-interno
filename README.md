@@ -19,21 +19,21 @@ Este projeto demonstra a aplicação prática de Python para automação de tare
 
 ## 🚀 Recursos Principais
 
--   📄 **Geração Automatizada:** Cria planilhas de notas completas por disciplina e turma.
--   📊 **Dashboards Integrados:** Visualização de dados educacionais diretamente nas planilhas (desempenho, aprovação, evasão).
--   📈 **Análise de Desempenho:** Métricas por turma, disciplina e aluno individualmente.
--   🚦 **Controle de Situação Acadêmica:** Monitoramento de alunos (Ativos, Transferidos, Desistentes).
--   ⚙️ **Cálculos Automáticos:** Médias bimestrais/finais, taxas de aprovação/reprovação, e outros indicadores educacionais.
--   🎨 **Formatação Profissional:** Planilhas com layout claro, cores padronizadas, e logotipo institucional.
--   🔧 **Alta Configurabilidade:** Definição de disciplinas, estilos, fórmulas e estruturas via arquivos de configuração (`config.py` e JSON).
+- 📄 **Geração Automatizada:** Cria planilhas de notas completas por disciplina e turma.
+- 📊 **Dashboards Integrados:** Visualização de dados educacionais diretamente nas planilhas (desempenho, aprovação, evasão).
+- 📈 **Análise de Desempenho:** Métricas por turma, disciplina e aluno individualmente.
+- 🚦 **Controle de Situação Acadêmica:** Monitoramento de alunos (Ativos, Transferidos, Desistentes).
+- ⚙️ **Cálculos Automáticos:** Médias bimestrais/finais, taxas de aprovação/reprovação, e outros indicadores educacionais.
+- 🎨 **Formatação Profissional:** Planilhas com layout claro, cores padronizadas, e logotipo institucional.
+- 🔧 **Alta Configurabilidade:** Definição de disciplinas, estilos, fórmulas e estruturas via arquivos de configuração (`config.py` e JSON).
 
 ## 🛠️ Tecnologias Utilizadas
 
-*   [![Python][Python-shield]][Python-url]
-*   [![OpenPyXL][OpenPyXL-shield]][OpenPyXL-url]
-*   Módulo `logging` (Python Standard Library)
-*   Módulo `pathlib` (Python Standard Library)
-*   Módulo `json` (Python Standard Library)
+* [![Python][Python-shield]][Python-url]
+* [![OpenPyXL][OpenPyXL-shield]][OpenPyXL-url]
+* Módulo `logging` (Python Standard Library)
+* Módulo `pathlib` (Python Standard Library)
+* Módulo `json` (Python Standard Library)
 
 ## 🖼️ Screenshots / Demonstração
 
@@ -41,74 +41,87 @@ Este projeto demonstra a aplicação prática de Python para automação de tare
 <!-- Exemplo: -->
 <!-- ![Dashboard Exemplo](link/para/sua/imagem_dashboard.png) -->
 <!-- ![Planilha Disciplina](link/para/sua/imagem_planilha.png) -->
-*Adicione aqui capturas de tela mostrando as diferentes abas da planilha, os dashboards e a formatação.* (work in progress...
+*Adicione aqui capturas de tela mostrando as diferentes abas da planilha, os dashboards e a formatação.* (work in progress...)
 
 ## 📊 Estrutura da Planilha Gerada
 
 O sistema gera um arquivo Excel (`.xlsx`) com uma estrutura organizada em múltiplas abas:
 
-1.  **Abas por Disciplina:** (ex: Matemática, Português, etc.)
-    *   Lista de alunos da turma.
-    *   Colunas para notas bimestrais.
-    *   Cálculo automático de médias.
-    *   Coluna de Situação Final (Aprovado/Reprovado).
-    *   *Dashboard* visual com gráficos de desempenho da turma na disciplina.
-2.  **Aba SEC (Secretaria):**
-    *   Coluna para Status do Aluno (Ativo, Transferido, Desistente).
-    *   *Dashboards* com análise de evasão e taxas de aprovação gerais da turma.
-3.  **Aba Boletim Consolidado:**
-    *   Visão geral das médias e situação final de cada aluno em *todas* as disciplinas.
-4.  **Abas Adicionais (Opcional/Configurável):**
-    *   Relatórios individuais por aluno.
-    *   Controle de Frequência.
+1. **Abas por Disciplina:** (ex: Matemática, Português, etc.)
+   * Lista de alunos da turma.
+   * Colunas para notas bimestrais.
+   * Cálculo automático de médias.
+   * Coluna de Situação Final (Aprovado/Reprovado).
+   * *Dashboard* visual com gráficos de desempenho da turma na disciplina.
+2. **Aba SEC (Secretaria):**
+   * Coluna para Status do Aluno (Ativo, Transferido, Desistente).
+   * *Dashboards* com análise de evasão e taxas de aprovação gerais da turma.
+3. **Aba Boletim Consolidado:**
+   * Visão geral das médias e situação final de cada aluno em *todas* as disciplinas.
+4. **Abas Adicionais (Opcional/Configurável):**
+   * Relatórios individuais por aluno.
+   * Controle de Frequência.
 
 ## ⚙️ Configuração
 
 A personalização do sistema é feita principalmente através de:
 
-1.  **`config.py` (ou similar):**
-    *   Definição da lista de disciplinas.
-    *   Configuração de cores, fontes e estilos visuais.
-    *   Ajuste fino das fórmulas de cálculo (se necessário).
-    *   Definição da estrutura dos relatórios.
-2.  **Arquivos JSON:**
-    *   Armazenamento dos dados de entrada dos alunos (nomes, notas, status, etc.). É necessário preparar esses arquivos antes de executar o sistema.
+1. **`config.py` (ou similar):**
+   * Definição da lista de disciplinas.
+   * Configuração de cores, fontes e estilos visuais.
+   * Ajuste fino das fórmulas de cálculo (se necessário).
+   * Definição da estrutura dos relatórios.
+2. **Arquivos JSON:**
+   * Armazenamento dos dados de entrada dos alunos (nomes, notas, status, etc.). É necessário preparar esses arquivos antes de executar o sistema.
 
 ## 📈 Indicadores Calculados
 
 O sistema fornece automaticamente diversos indicadores chave:
 
-*   Taxas de Aprovação e Reprovação (por turma e disciplina).
-*   Médias Bimestrais e Finais.
-*   Percentual de alunos com desempenho acima/abaixo da média.
-*   Índices de Evasão (baseado no status Transferido/Desistente).
-*   Situação Acadêmica final de cada aluno.
+* Taxas de Aprovação e Reprovação (por turma e disciplina).
+* Médias Bimestrais e Finais.
+* Percentual de alunos com desempenho acima/abaixo da média.
+* Índices de Evasão (baseado no status Transferido/Desistente).
+* Situação Acadêmica final de cada aluno.
+
+## 🧠 Integração com Sistemas Web (SIAGE PB)
+
+Este projeto está em processo de integração com o sistema online **SIAGE PB** (Sistema de Gestão Escolar da Paraíba), utilizado por professores para inserção de notas, frequências e status acadêmico.
+
+Utilizando automação via **Selenium WebDriver**, foi desenvolvido um protótipo funcional capaz de:
+
+- Selecionar ano letivo e matrícula utilizando campos `autocomplete`.
+- Preencher notas e frequências diretamente no sistema SIAGE via scripts Python automatizados.
+- Lidar com timeouts, carregamentos dinâmicos e navegação por abas com XPath e `WebDriverWait`.
+- Reutilizar dados estruturados da planilha gerada para preencher automaticamente os campos do sistema oficial.
+
+Esta funcionalidade está sendo expandida para permitir **integração total e segura** entre os dados gerados pelo sistema interno e o ambiente oficial da secretaria de educação.
 
 ## 🚀 Como Executar
 
 Siga os passos abaixo para configurar e executar o projeto:
 
-1.  **Clone o repositório:**
+1. **Clone o repositório:**
     ```bash
     git clone https://github.com/lmbernardo7520112/teste-planilha-siage-interno.git
     cd teste-planilha-siage-interno
     ```
-2.  **Crie um ambiente virtual (Recomendado):**
+2. **Crie um ambiente virtual (Recomendado):**
     ```bash
     python -m venv venv
     source venv/bin/activate  # Linux/macOS
     # venv\Scripts\activate  # Windows
     ```
-3.  **Instale as dependências:**
+3. **Instale as dependências:**
     ```bash
     pip install openpyxl
     # Adicione outras dependências se houver um requirements.txt
     # pip install -r requirements.txt
     ```
-4.  **Prepare os Dados:**
-    *   Certifique-se de que os arquivos JSON com os dados dos alunos (notas, nomes, status) estão no local esperado pelo script e formatados corretamente.
-    *   Revise e ajuste o arquivo `config.py` (ou similar) conforme necessário (disciplinas, nomes de turmas, etc.).
-5.  **Execute o Script Principal:**
+4. **Prepare os Dados:**
+   * Certifique-se de que os arquivos JSON com os dados dos alunos (notas, nomes, status) estão no local esperado pelo script e formatados corretamente.
+   * Revise e ajuste o arquivo `config.py` (ou similar) conforme necessário (disciplinas, nomes de turmas, etc.).
+5. **Execute o Script Principal:**
     ```bash
     python nome_do_script_principal.py
     ```
@@ -120,11 +133,11 @@ O script processará os dados e gerará o arquivo Excel na pasta de saída confi
 
 Contribuições são bem-vindas! Se você tem sugestões para melhorar o sistema, sinta-se à vontade para:
 
-1.  Fazer um Fork do projeto.
-2.  Criar uma Branch para sua Feature (`git checkout -b feature/FuncionalidadeIncrivel`).
-3.  Fazer Commit de suas alterações (`git commit -m 'Adiciona FuncionalidadeIncrivel'`).
-4.  Fazer Push para a Branch (`git push origin feature/FuncionalidadeIncrivel`).
-5.  Abrir um Pull Request.
+1. Fazer um Fork do projeto.
+2. Criar uma Branch para sua Feature (`git checkout -b feature/FuncionalidadeIncrivel`).
+3. Fazer Commit de suas alterações (`git commit -m 'Adiciona FuncionalidadeIncrivel'`).
+4. Fazer Push para a Branch (`git push origin feature/FuncionalidadeIncrivel`).
+5. Abrir um Pull Request.
 
 Por favor, leia o `CONTRIBUTING.md` (se existir) para mais detalhes sobre o processo.
 
@@ -135,12 +148,11 @@ Distribuído sob a licença MIT License. Veja `LICENSE` para mais informações.
 <!-- CONTATOS -->
 ## 📧 Contato
 
- - [https://github.com/lmbernardo7520112](https://github.com/lmbernardo7520112) - lmbernardo752011@gmail.com
+- [https://github.com/lmbernardo7520112](https://github.com/lmbernardo7520112) - lmbernardo752011@gmail.com
 
 Link do Projeto: [https://github.com/lmbernardo7520112/teste-planilha-siage-interno](https://github.com/lmbernardo7520112/teste-planilha-siage-interno)
 
 <!-- MARKDOWN LINKS & IMAGES -->
-<!-- Corrija os links conforme necessário, especialmente para o arquivo LICENSE -->
 [License-shield]: https://img.shields.io/github/license/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
 [License-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/blob/main/LICENSE
 [Contributors-shield]: https://img.shields.io/github/contributors/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
