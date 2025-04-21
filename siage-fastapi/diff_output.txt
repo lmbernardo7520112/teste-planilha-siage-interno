@@ -1,0 +1,2148 @@
+diff --git a/LICENSE b/LICENSE
+deleted file mode 100644
+index e2fa71e..0000000
+--- a/LICENSE
++++ /dev/null
+@@ -1,21 +0,0 @@
+-MIT License
+-
+-Copyright (c) 2025 Leonardo Maximino Bernardo
+-
+-Permission is hereby granted, free of charge, to any person obtaining a copy
+-of this software and associated documentation files (the "Software"), to deal
+-in the Software without restriction, including without limitation the rights
+-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-copies of the Software, and to permit persons to whom the Software is
+-furnished to do so, subject to the following conditions:
+-
+-The above copyright notice and this permission notice shall be included in all
+-copies or substantial portions of the Software.
+-
+-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-SOFTWARE.
+diff --git a/README.md b/README.md
+index bac287d..04d9965 100644
+--- a/README.md
++++ b/README.md
+@@ -1,158 +1 @@
+-# SIAGE INTERNO ECI LUIS RAMALHO - Sistema Integrado de Análise e Gestão Escolar
+-
+-[![License][License-shield]][License-url]
+-[![Contributors][Contributors-shield]][Contributors-url]
+-[![Forks][Forks-shield]][Forks-url]
+-[![Stargazers][Stars-shield]][Stars-url]
+-[![Issues][Issues-shield]][Issues-url]
+-
+-[![Python][Python-shield]][Python-url]
+-[![OpenPyXL][OpenPyXL-shield]][OpenPyXL-url]
+-
+-Sistema avançado para geração automatizada de planilhas de notas e relatórios escolares detalhados, projetado para otimizar processos e análises em instituições educacionais como a ECI Luis Ramalho.
+-
+-## ✨ Sobre o Projeto
+-
+-O SIAGE INTERNO foi desenvolvido para simplificar e automatizar a complexa tarefa de compilar notas, calcular médias, analisar o desempenho dos alunos e gerar relatórios consolidados. Utilizando Python e a biblioteca OpenPyXL, o sistema processa dados de entrada (presumivelmente em JSON) e produz uma planilha Excel rica em informações e visualizações, pronta para uso pela gestão escolar.
+-
+-Este projeto demonstra a aplicação prática de Python para automação de tarefas administrativas e análise de dados no contexto educacional.
+-
+-## 🚀 Recursos Principais
+-
+--   📄 **Geração Automatizada:** Cria planilhas de notas completas por disciplina e turma.
+--   📊 **Dashboards Integrados:** Visualização de dados educacionais diretamente nas planilhas (desempenho, aprovação, evasão).
+--   📈 **Análise de Desempenho:** Métricas por turma, disciplina e aluno individualmente.
+--   🚦 **Controle de Situação Acadêmica:** Monitoramento de alunos (Ativos, Transferidos, Desistentes).
+--   ⚙️ **Cálculos Automáticos:** Médias bimestrais/finais, taxas de aprovação/reprovação, e outros indicadores educacionais.
+--   🎨 **Formatação Profissional:** Planilhas com layout claro, cores padronizadas, e logotipo institucional.
+--   🔧 **Alta Configurabilidade:** Definição de disciplinas, estilos, fórmulas e estruturas via arquivos de configuração (`config.py` e JSON).
+-
+-## 🛠️ Tecnologias Utilizadas
+-
+-*   [![Python][Python-shield]][Python-url]
+-*   [![OpenPyXL][OpenPyXL-shield]][OpenPyXL-url]
+-*   Módulo `logging` (Python Standard Library)
+-*   Módulo `pathlib` (Python Standard Library)
+-*   Módulo `json` (Python Standard Library)
+-
+-## 🖼️ Screenshots / Demonstração
+-
+-<!-- IMPORTANTE: Adicione aqui screenshots das planilhas geradas! -->
+-<!-- Exemplo: -->
+-<!-- ![Dashboard Exemplo](link/para/sua/imagem_dashboard.png) -->
+-<!-- ![Planilha Disciplina](link/para/sua/imagem_planilha.png) -->
+-*Adicione aqui capturas de tela mostrando as diferentes abas da planilha, os dashboards e a formatação.* (work in progress...
+-
+-## 📊 Estrutura da Planilha Gerada
+-
+-O sistema gera um arquivo Excel (`.xlsx`) com uma estrutura organizada em múltiplas abas:
+-
+-1.  **Abas por Disciplina:** (ex: Matemática, Português, etc.)
+-    *   Lista de alunos da turma.
+-    *   Colunas para notas bimestrais.
+-    *   Cálculo automático de médias.
+-    *   Coluna de Situação Final (Aprovado/Reprovado).
+-    *   *Dashboard* visual com gráficos de desempenho da turma na disciplina.
+-2.  **Aba SEC (Secretaria):**
+-    *   Coluna para Status do Aluno (Ativo, Transferido, Desistente).
+-    *   *Dashboards* com análise de evasão e taxas de aprovação gerais da turma.
+-3.  **Aba Boletim Consolidado:**
+-    *   Visão geral das médias e situação final de cada aluno em *todas* as disciplinas.
+-4.  **Abas Adicionais (Opcional/Configurável):**
+-    *   Relatórios individuais por aluno.
+-    *   Controle de Frequência.
+-
+-## ⚙️ Configuração
+-
+-A personalização do sistema é feita principalmente através de:
+-
+-1.  **`config.py` (ou similar):**
+-    *   Definição da lista de disciplinas.
+-    *   Configuração de cores, fontes e estilos visuais.
+-    *   Ajuste fino das fórmulas de cálculo (se necessário).
+-    *   Definição da estrutura dos relatórios.
+-2.  **Arquivos JSON:**
+-    *   Armazenamento dos dados de entrada dos alunos (nomes, notas, status, etc.). É necessário preparar esses arquivos antes de executar o sistema.
+-
+-## 📈 Indicadores Calculados
+-
+-O sistema fornece automaticamente diversos indicadores chave:
+-
+-*   Taxas de Aprovação e Reprovação (por turma e disciplina).
+-*   Médias Bimestrais e Finais.
+-*   Percentual de alunos com desempenho acima/abaixo da média.
+-*   Índices de Evasão (baseado no status Transferido/Desistente).
+-*   Situação Acadêmica final de cada aluno.
+-
+-## 🚀 Como Executar
+-
+-Siga os passos abaixo para configurar e executar o projeto:
+-
+-1.  **Clone o repositório:**
+-    ```bash
+-    git clone https://github.com/lmbernardo7520112/teste-planilha-siage-interno.git
+-    cd teste-planilha-siage-interno
+-    ```
+-2.  **Crie um ambiente virtual (Recomendado):**
+-    ```bash
+-    python -m venv venv
+-    source venv/bin/activate  # Linux/macOS
+-    # venv\Scripts\activate  # Windows
+-    ```
+-3.  **Instale as dependências:**
+-    ```bash
+-    pip install openpyxl
+-    # Adicione outras dependências se houver um requirements.txt
+-    # pip install -r requirements.txt
+-    ```
+-4.  **Prepare os Dados:**
+-    *   Certifique-se de que os arquivos JSON com os dados dos alunos (notas, nomes, status) estão no local esperado pelo script e formatados corretamente.
+-    *   Revise e ajuste o arquivo `config.py` (ou similar) conforme necessário (disciplinas, nomes de turmas, etc.).
+-5.  **Execute o Script Principal:**
+-    ```bash
+-    python nome_do_script_principal.py
+-    ```
+-    *Substitua `nome_do_script_principal.py` pelo nome real do seu script principal.*
+-
+-O script processará os dados e gerará o arquivo Excel na pasta de saída configurada.
+-
+-## 🤝 Contribuição
+-
+-Contribuições são bem-vindas! Se você tem sugestões para melhorar o sistema, sinta-se à vontade para:
+-
+-1.  Fazer um Fork do projeto.
+-2.  Criar uma Branch para sua Feature (`git checkout -b feature/FuncionalidadeIncrivel`).
+-3.  Fazer Commit de suas alterações (`git commit -m 'Adiciona FuncionalidadeIncrivel'`).
+-4.  Fazer Push para a Branch (`git push origin feature/FuncionalidadeIncrivel`).
+-5.  Abrir um Pull Request.
+-
+-Por favor, leia o `CONTRIBUTING.md` (se existir) para mais detalhes sobre o processo.
+-
+-## 📜 Licença
+-
+-Distribuído sob a licença MIT License. Veja `LICENSE` para mais informações.
+-
+-<!-- CONTATOS -->
+-## 📧 Contato
+-
+- - [https://github.com/lmbernardo7520112](https://github.com/lmbernardo7520112) - lmbernardo752011@gmail.com
+-
+-Link do Projeto: [https://github.com/lmbernardo7520112/teste-planilha-siage-interno](https://github.com/lmbernardo7520112/teste-planilha-siage-interno)
+-
+-<!-- MARKDOWN LINKS & IMAGES -->
+-<!-- Corrija os links conforme necessário, especialmente para o arquivo LICENSE -->
+-[License-shield]: https://img.shields.io/github/license/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+-[License-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/blob/main/LICENSE
+-[Contributors-shield]: https://img.shields.io/github/contributors/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+-[Contributors-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/graphs/contributors
+-[Forks-shield]: https://img.shields.io/github/forks/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+-[Forks-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/network/members
+-[Stars-shield]: https://img.shields.io/github/stars/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+-[Stars-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/stargazers
+-[Issues-shield]: https://img.shields.io/github/issues/lmbernardo7520112/teste-planilha-siage-interno?style=flat-square&color=informational
+-[Issues-url]: https://github.com/lmbernardo7520112/teste-planilha-siage-interno/issues
+-
+-[Python-shield]: https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white
+-[Python-url]: https://www.python.org/
+-[OpenPyXL-shield]: https://img.shields.io/badge/OpenPyXL-107C41?style=flat-square&logo=python&logoColor=white
+-[OpenPyXL-url]: https://openpyxl.readthedocs.io/en/stable/
++# teste_planilha_siage_interno
+diff --git a/siage-fastapi/app/core/config.py b/siage-fastapi/app/core/config.py
+index e6ca487..d482677 100644
+--- a/siage-fastapi/app/core/config.py
++++ b/siage-fastapi/app/core/config.py
+@@ -1,17 +1,30 @@
+ from pathlib import Path
+-from openpyxl.styles import PatternFill, Font, Alignment
++from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
+ 
+-# Caminhos para arquivos e diretórios
+-CAMINHO_IMAGEM = Path("/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi/app/core/static/images/siage_interno.png")
+-CAMINHO_PADRAO = "/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi"
+-NOME_ARQUIVO_PADRAO = "planilha_notas_complexa.xlsx"
++# --- CAMINHOS ESSENCIAIS ---
++BASE_DIR = Path(__file__).resolve().parent.parent.parent
++CAMINHO_JSON = BASE_DIR / "turmas_alunos.json"
++CAMINHO_IMAGEM = BASE_DIR / "app/core/static/images/siage_interno.png"
++CAMINHO_PADRAO = BASE_DIR
++NOME_ARQUIVO_PADRAO = "planilha_notas_gerada_final_v5.xlsx"
+ 
+-# Lista de disciplinas
++# Constante para número máximo de linhas de alunos a formatar por turma
++MAX_ALUNOS_FORMATAR = 35
++
++# Lista de disciplinas (Códigos)
+ DISCIPLINAS = [
+-    "BIO", "MAT", "FIS", "QUI", "GEO", "SOC", "HIS", 
++    "BIO", "MAT", "FIS", "QUI", "GEO", "SOC", "HIS",
+     "FIL", "ESP", "POR", "ART", "EDF", "ING"
+ ]
+ 
++# Mapeamento Código -> Nome Completo
++DISCIPLINAS_NOMES = {
++    "BIO": "Biologia", "MAT": "Matemática", "FIS": "Física", "QUI": "Química",
++    "GEO": "Geografia", "SOC": "Sociologia", "HIS": "História", "FIL": "Filosofia",
++    "ESP": "Espanhol", "POR": "Português", "ART": "Artes", "EDF": "Educação Física",
++    "ING": "Inglês"
++}
++
+ # Colunas das abas de disciplinas
+ COLUNAS = [
+     "Nº", "Nome do Aluno", "1º BIM", "2º BIM", "3º BIM", "4º BIM",
+@@ -23,153 +36,73 @@ COLUNAS_SEC = [
+     "Nº", "Nome do Aluno", "ATIVO", "TRANSFERIDO", "DESISTENTE", "SITUAÇÃO DO ALUNO"
+ ]
+ 
+-# Configurações de largura das colunas (em centímetros)
+-LARGURAS_COLUNAS = {
+-    "Nº": 1,
+-    "Nome do Aluno": 10,
+-    "SITUAÇÃO DO ALUNO": 10,
+-    "ATIVO": 4.5,
+-    "TRANSFERIDO": 4.5,
+-    "DESISTENTE": 4.5
++# --- LARGURAS DAS COLUNAS POR LETRA ---
++LARGURAS_COLUNAS_SEC_LETRAS = {
++    'A': 5,  # Nº
++    'B': 35, # Nome do Aluno
++    'C': 10, # ATIVO
++    'D': 12, # TRANSFERIDO
++    'E': 12, # DESISTENTE
++    'F': 15  # SITUAÇÃO DO ALUNO
+ }
+ 
+-LARGURAS_COLUNAS_ABAS_DISC = {
+-    "Nº": 1,
+-    "Nome do Aluno": 15,
+-    "1º BIM": 3,
+-    "2º BIM": 3,
+-    "3º BIM": 3,
+-    "4º BIM": 3,
+-    "NF": 3,
+-    "MG": 3,
+-    "MF": 3,
+-    "SITUAÇÃO DO ALUNO": 10,
+-    "PF": 3,
+-    "SF": 3
++LARGURAS_COLUNAS_ABAS_DISC_LETRAS = {
++    'A': 5,  # Nº
++    'B': 35, # Nome do Aluno
++    'C': 8,  # 1º BIM
++    'D': 8,  # 2º BIM
++    'E': 8,  # 3º BIM
++    'F': 8,  # 4º BIM
++    'G': 8,  # NF
++    'H': 8,  # MG
++    'I': 8,  # MF
++    'J': 15, # SITUAÇÃO DO ALUNO
++    'K': 8,  # PF
++    'L': 8   # SF
+ }
+ 
+-# Estilos e formatações
+-COR_ABA = "FFDAB9"  # Cor das abas (PeachPuff)
+-
+-# Preenchimentos (fills) para células
+-FILL_NOME_ALUNO = PatternFill(start_color="FF6347", end_color="FF6347", fill_type="solid")  # Tomato
+-FILL_BIMESTRES = PatternFill(start_color="FFA500", end_color="FFA500", fill_type="solid")   # Orange
+-FILL_NOTA_FINAL = PatternFill(start_color="FF4500", end_color="FF4500", fill_type="solid")  # OrangeRed
+-FILL_SITUACAO = PatternFill(start_color="FFFACD", end_color="FFFACD", fill_type="solid")    # LemonChiffon
+-
+-# Fontes e alinhamentos
+-FONTE_TITULO_TURMA = Font(name='Arial', size=14, bold=True, color="8B4513")  # SaddleBrown
+-ALINHAMENTO_CENTRALIZADO = Alignment(horizontal='center', vertical='center')
++# Estilos
++COR_ABA = "FFDAB9"
++FILL_NOME_ALUNO = PatternFill(start_color="ADD8E6", end_color="ADD8E6", fill_type="solid")
++FILL_BIMESTRES = PatternFill(start_color="FFFFE0", end_color="FFFFE0", fill_type="solid")
++FILL_NOTA_FINAL = PatternFill(start_color="E0FFFF", end_color="E0FFFF", fill_type="solid")
++FILL_SITUACAO = PatternFill(start_color="FFFACD", end_color="FFFACD", fill_type="solid")
++FONTE_TITULO_TURMA = Font(name='Arial', size=14, bold=True, color="000080")
++ALINHAMENTO_CENTRALIZADO = Alignment(horizontal='center', vertical='center', wrap_text=True)
++BORDER_THIN = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+ 
+-# Configurações dos dashboards
++# --- Dashboards Config ---
+ DASHBOARD_INDICADORES = [
+-    {
+-        "nome": "ALUNOS APROVADOS",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, ">=7")',
+-        "formato": None
+-    },
+-    {
+-        "nome": "ALUNOS REPROVADOS",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, "<7")',
+-        "formato": None
+-    },
+-    {
+-        "nome": "Nº ALUNOS COM MÉDIA > 8,0",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, ">=8")',
+-        "formato": None
+-    },
+-    {
+-        "nome": "Nº ALUNOS QUE NÃO ATINGIRAM MÉDIA > 8,0",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, "<8")',
+-        "formato": None
+-    },
+-    {
+-        "nome": "PERCENTUAL DE MÉDIAS > 5,0",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, ">=5")/COUNTA({col}{inicio}:{col}{fim})',
+-        "formato": '0.00%'
+-    },
+-    {
+-        "nome": "PERCENTUAL DE MÉDIAS < 5,0",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, "<5")/COUNTA({col}{inicio}:{col}{fim})',
+-        "formato": '0.00%'
+-    },
+-    {
+-        "nome": "MATRÍCULAS",
+-        "formula": lambda col, inicio, fim: f'=COUNTA({col}{inicio}:{col}{fim})',
+-        "formato": None
+-    },
+-    {
+-        "nome": "TAXA DE APROVAÇÃO (%)",
+-        "formula": lambda col, inicio, fim: f'=IF(COUNTA({col}{inicio}:{col}{fim})=0, 0, COUNTIF({col}{inicio}:{col}{fim}, ">=7")/COUNTA({col}{inicio}:{col}{fim}))',
+-        "formato": '0.00%'
+-    }
++    {"nome": "ALUNOS APROVADOS", "formula": lambda col, inicio, fim, ws_title: f'=COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), ">=7")', "formato": '0'},
++    {"nome": "ALUNOS REPROVADOS", "formula": lambda col, inicio, fim, ws_title: f'=COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), "<7")', "formato": '0'},
++    {"nome": "Nº ALUNOS COM MÉDIA > 8,0", "formula": lambda col, inicio, fim, ws_title: f'=COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), ">=8")', "formato": '0'},
++    {"nome": "Nº ALUNOS QUE NÃO ATINGIRAM MÉDIA > 8,0", "formula": lambda col, inicio, fim, ws_title: f'=COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), "<8")', "formato": '0'},
++    {"nome": "PERCENTUAL DE MÉDIAS > 5,0", "formula": lambda col, inicio, fim, ws_title: f'=IFERROR(COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), ">=5")/MAX(1,COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), "<>")),0)', "formato": '0.00%'},
++    {"nome": "PERCENTUAL DE MÉDIAS < 5,0", "formula": lambda col, inicio, fim, ws_title: f'=IFERROR(COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), "<5")/MAX(1,COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), "<>")),0)', "formato": '0.00%'},
++    {"nome": "MATRÍCULAS", "formula": lambda col, inicio, fim, ws_title: f'=COUNTA(INDIRECT("\'{ws_title}\'!B{inicio}:B{fim}"))', "formato": '0'},
++    {"nome": "TAXA DE APROVAÇÃO (%)", "formula": lambda col, inicio, fim, ws_title: f'=IFERROR(COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), ">=7")/MAX(1,COUNTIF(INDIRECT("\'{ws_title}\'!{col}{inicio}:{col}{fim}"), "<>")),0)', "formato": '0.00%'}
+ ]
+-
+ DASHBOARD_SEC_TURMA = [
+-    {
+-        "nome": "MATRÍCULAS",
+-        "formula": lambda col, inicio, fim: f'=COUNTA({col}{inicio}:{col}{fim})',
+-        "formato": None
+-    },
+-    {
+-        "nome": "ATIVOS",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, TRUE)',
+-        "formato": None
+-    },
+-    {
+-        "nome": "TRANSFERIDOS",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, TRUE)',
+-        "formato": None
+-    },
+-    {
+-        "nome": "DESISTENTES",
+-        "formula": lambda col, inicio, fim: f'=COUNTIF({col}{inicio}:{col}{fim}, TRUE)',
+-        "formato": None
+-    }
++    {"nome": "MATRÍCULAS", "formula": lambda c, i, f: f'=COUNTA(B{i}:B{f})', "formato": '0'},
++    {"nome": "ATIVOS", "formula": lambda c, i, f: f'=COUNTIF(C{i}:C{f}, TRUE)', "formato": '0'},
++    {"nome": "TRANSFERIDOS", "formula": lambda c, i, f: f'=COUNTIF(D{i}:D{f}, TRUE)', "formato": '0'},
++    {"nome": "DESISTENTES", "formula": lambda c, i, f: f'=COUNTIF(E{i}:E{f}, TRUE)', "formato": '0'},
+ ]
+-
+ DASHBOARD_SEC_GERAL = [
+-    {
+-        "nome": "MATRÍCULAS",
+-        "formula": lambda refs: f'=SUM({",".join(refs)})',
+-        "formato": None
+-    },
+-    {
+-        "nome": "ATIVOS",
+-        "formula": lambda refs: f'=SUM({",".join(refs)})',
+-        "formato": None
+-    },
+-    {
+-        "nome": "TRANSFERIDOS",
+-        "formula": lambda refs: f'=SUM({",".join(refs)})',
+-        "formato": None
+-    },
+-    {
+-        "nome": "DESISTENTES",
+-        "formula": lambda refs: f'=SUM({",".join(refs)})',
+-        "formato": None
+-    },
+-    {
+-        "nome": "Nº ABANDONO(S)",
+-        "formula": lambda linha_atual: f'=K{linha_atual-1}',
+-        "formato": None
+-    },
+-    {
+-        "nome": "ABANDONO(S) (%)",
+-        "formula": lambda linha_atual: f'=K{linha_atual-1}/K{linha_atual-4}',
+-        "formato": '0.00%'
+-    }
++    {"nome": "MATRÍCULAS", "formula": lambda r: f'=SUM({",".join(r)})', "formato": '0'},
++    {"nome": "ATIVOS", "formula": lambda r: f'=SUM({",".join(r)})', "formato": '0'},
++    {"nome": "TRANSFERIDOS", "formula": lambda r: f'=SUM({",".join(r)})', "formato": '0'},
++    {"nome": "DESISTENTES", "formula": lambda r: f'=SUM({",".join(r)})', "formato": '0'},
++    {"nome": "Nº ABANDONO(S)", "formula": lambda l, c: f'={c}{l-1}', "formato": '0'},
++    {"nome": "ABANDONO(S) (%)", "formula": lambda l, c: f'=IFERROR({c}{l-1}/MAX(1,{c}{l-4}), 0)', "formato": '0.00%'}
+ ]
+-
+ DASHBOARD_SEC_APROVACAO = [
+-    {
+-        "nome": "TX APROVAÇÃO %",
+-        "formula": lambda col, inicio, fim: f'=AVERAGE({col}{inicio}:{col}{fim})',
+-        "formato": '0.00%'
+-    },
+-    {
+-        "nome": "TX REPROVAÇÃO %",
+-        "formula": lambda col, inicio, fim: f'=1-{col}{inicio-1}',
+-        "formato": '0.00%'
+-    }
+-]
+\ No newline at end of file
++    {"nome": "TX APROVAÇÃO %", "formato": '0.00%'},
++    {"nome": "TX REPROVAÇÃO %", "formato": '0.00%'}
++]
++
++# --- Power Pivot ---
++TBL_TURMAS_NAME = "tblTurmas"
++TBL_ALUNOS_NAME = "tblAlunos"
++TBL_DISCIPLINAS_NAME = "tblDisciplinas"
++TBL_NOTAS_NAME = "tblNotas"
+\ No newline at end of file
+diff --git a/siage-fastapi/app/services/planilha_service.py b/siage-fastapi/app/services/planilha_service.py
+index 10b7df8..bada722 100644
+--- a/siage-fastapi/app/services/planilha_service.py
++++ b/siage-fastapi/app/services/planilha_service.py
+@@ -2,213 +2,136 @@ import os
+ import json
+ import logging
+ import random
++import re
+ from pathlib import Path
+-from openpyxl.styles import Font, Border, Side
+-from openpyxl.utils import get_column_letter
++from openpyxl.styles import Font, Alignment
++from openpyxl.utils import get_column_letter, column_index_from_string
+ from openpyxl import Workbook
+ from openpyxl.drawing.image import Image
+-from app.utils.excel_utils import configurar_largura_colunas, criar_dashboard_turma, criar_dashboard_sec_turma, criar_dashboard_sec_geral, criar_dashboard_sec_aprovacao
+-from app.core.config import (
+-    COLUNAS, COLUNAS_SEC, DISCIPLINAS, CAMINHO_IMAGEM, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS, LARGURAS_COLUNAS_ABAS_DISC,
+-    COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO, FONTE_TITULO_TURMA, ALINHAMENTO_CENTRALIZADO
+-)
+-
+-logging.basicConfig(level=logging.INFO)
++from openpyxl.worksheet.table import Table, TableStyleInfo
++from openpyxl.utils.exceptions import IllegalCharacterError
++
++try:
++    from app.utils.excel_utils import (
++        configurar_largura_colunas, criar_dashboard_turma, criar_dashboard_sec_turma,
++        criar_dashboard_sec_geral, criar_dashboard_sec_aprovacao
++    )
++    from app.core.config import (
++        COLUNAS, COLUNAS_SEC, DISCIPLINAS, DISCIPLINAS_NOMES, CAMINHO_IMAGEM, CAMINHO_PADRAO,
++        NOME_ARQUIVO_PADRAO, LARGURAS_COLUNAS_SEC_LETRAS, LARGURAS_COLUNAS_ABAS_DISC_LETRAS,
++        COR_ABA, FILL_NOME_ALUNO, FILL_BIMESTRES, FILL_NOTA_FINAL, FILL_SITUACAO,
++        FONTE_TITULO_TURMA, ALINHAMENTO_CENTRALIZADO, CAMINHO_JSON,
++        TBL_TURMAS_NAME, TBL_ALUNOS_NAME, TBL_DISCIPLINAS_NAME, TBL_NOTAS_NAME,
++        BORDER_THIN, MAX_ALUNOS_FORMATAR
++    )
++except ImportError as e:
++    print(f"Erro import: {e}. Tentando fallbacks...")
++    try:
++        from ..utils.excel_utils import *
++        from ..core.config import *
++    except ImportError:
++        from utils.excel_utils import *
++        from core.config import *
++
++logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+ logger = logging.getLogger(__name__)
+ 
+-CAMINHO_JSON = Path(__file__).parent.parent.parent / "turmas_alunos.json"
++def get_clean_student_name(name_string):
++    if not isinstance(name_string, str):
++        return str(name_string)
++    return name_string.split('/')[0].strip()
++
++def add_image_safely(ws, img_path, anchor):
++    img_path_obj = Path(img_path)
++    if not img_path_obj.exists():
++        logger.warning(f"Imagem não encontrada: {img_path}.")
++        return False
++    try:
++        img = Image(str(img_path_obj))
++        ws.add_image(img, anchor)
++        return True
++    except Exception as e:
++        logger.error(f"Erro add imagem {img_path}: {e}")
++        return False
+ 
+ def criar_aba_em_branco(wb, titulo):
+     ws = wb.create_sheet(title=titulo)
+     ws.sheet_properties.tabColor = COR_ABA
+-    img = Image(str(CAMINHO_IMAGEM))
+-    ws.merge_cells('A1:J1')
+-    ws.row_dimensions[1].height = img.height * 0.75
+-    ws.add_image(img, 'A1')
+-    cell = ws['A1']
+-    cell.value = "COMPOSITOR LUIS RAMALHO"
+-    cell.font = Font(name='Arial', size=26, bold=True)
+-    cell.alignment = ALINHAMENTO_CENTRALIZADO
+-    return ws
+-
+-def criar_aba_boletim(wb, turmas):
+-    # Criar uma única aba "BOLETIM"
+-    ws = wb.create_sheet(title="BOLETIM")
+-    ws.sheet_properties.tabColor = COR_ABA
+-
+-    # Adicionar o logotipo e o título
+-    img = Image(str(CAMINHO_IMAGEM))
+-    ws.merge_cells('A1:AZ1')  # Ajustar o merge para cobrir todas as colunas necessárias
+-    ws.row_dimensions[1].height = img.height * 0.75
+-    ws.add_image(img, 'A1')
+-    cell = ws['A1']
+-    cell.value = "COMPOSITOR LUIS RAMALHO"
+-    cell.font = Font(name='Arial', size=26, bold=True)
+-    cell.alignment = ALINHAMENTO_CENTRALIZADO
+-
+-    linha_atual = 2
+-    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+-
+-    # Definir os cabeçalhos uma vez para referência de colunas
+-    headers = ["Nº", "ALUNO"]
+-    for disciplina in DISCIPLINAS:
+-        headers.extend([f"{disciplina} B1", f"{disciplina} B2", f"{disciplina} B3", f"{disciplina} B4", f"{disciplina} NF", f"{disciplina} MG"])
+-    
+-    # Definir larguras das colunas (aplicadas uma vez para toda a aba)
+-    ws.column_dimensions['A'].width = 5  # Nº
+-    ws.column_dimensions['B'].width = 20  # ALUNO
+-    for col in range(3, len(headers) + 1):
+-        ws.column_dimensions[get_column_letter(col)].width = 5  # Colunas de notas
+-
+-    for turma in turmas:
+-        # Adicionar o nome da turma
+-        ws.merge_cells(f'A{linha_atual}:AZ{linha_atual}')
+-        ws[f'A{linha_atual}'] = f"{turma['nome_turma']} - BOLETIM"
+-        ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
+-        ws[f'A{linha_atual}'].alignment = ALINHAMENTO_CENTRALIZADO
+-        ws.row_dimensions[linha_atual].height = 30
+-        linha_atual += 1
+-
+-        # Adicionar a linha com os nomes das disciplinas (acima do cabeçalho)
+-        col_idx = 1
+-        # Preencher as primeiras duas colunas (Nº e ALUNO) como vazias
+-        for i in range(1, 3):
+-            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+-            cell.border = border
+-            col_idx += 1
+-
+-        # Para cada disciplina, mesclar 6 colunas e adicionar o nome da disciplina
+-        for disciplina in DISCIPLINAS:
+-            # Cada disciplina ocupa 6 colunas (B1, B2, B3, B4, NF, MG)
+-            inicio_col = get_column_letter(col_idx)
+-            fim_col = get_column_letter(col_idx + 5)  # 6 colunas no total
+-            ws.merge_cells(f'{inicio_col}{linha_atual}:{fim_col}{linha_atual}')
+-            cell = ws[f'{inicio_col}{linha_atual}']
+-            cell.value = disciplina
+-            cell.font = Font(bold=True, size=6)  # Ajuste do tamanho da fonte para 6
+-            cell.alignment = ALINHAMENTO_CENTRALIZADO
+-            cell.fill = FILL_BIMESTRES  # Usar o mesmo preenchimento das notas para consistência
+-            cell.border = border
+-            col_idx += 6
+-
++    linha_atual = 1
++    if add_image_safely(ws, CAMINHO_IMAGEM, 'A1'):
++        try:
++            img = Image(str(CAMINHO_IMAGEM))
++            ws.row_dimensions[linha_atual].height = img.height * 0.75
++        except:
++            ws.row_dimensions[linha_atual].height = 50
++        ws.merge_cells('A1:J1')
++        cell_titulo_principal = ws['A1']
++        cell_titulo_principal.alignment = ALINHAMENTO_CENTRALIZADO
++    else:
++        ws.merge_cells('A1:J1')
++        cell_titulo_principal = ws['A1']
++        cell_titulo_principal.alignment = ALINHAMENTO_CENTRALIZADO
+         linha_atual += 1
+-
+-        # Adicionar os cabeçalhos para a turma (Nº, ALUNO, BIO B1, etc.)
+-        col_idx = 1
+-        for header in headers:
+-            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+-            cell.value = header
+-            cell.border = border
+-            cell.font = Font(bold=True, size=6)  # Ajuste do tamanho da fonte para 6
+-            cell.alignment = ALINHAMENTO_CENTRALIZADO
+-            if header == "ALUNO":
+-                cell.fill = FILL_NOME_ALUNO
+-            elif "B1" in header or "B2" in header or "B3" in header or "B4" in header:
+-                cell.fill = FILL_BIMESTRES
+-            elif "NF" in header or "MG" in header:
+-                cell.fill = FILL_NOTA_FINAL
+-            col_idx += 1
+-
+-        linha_inicio_dados = linha_atual + 1
+-
+-        # Preencher os dados dos alunos
+-        for aluno in turma["alunos"]:
+-            linha_dados = linha_atual + int(aluno["numero"])
+-            ws[f'A{linha_dados}'] = int(aluno["numero"])
+-            ws[f'A{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'B{linha_dados}'] = aluno["nome"]
+-            ws[f'B{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+-
+-            # Buscar notas de cada disciplina pelo nome do aluno
+-            col_idx = 3  # Começar após Nº e ALUNO
+-            for disciplina in DISCIPLINAS:
+-                # Acessar a aba da disciplina
+-                ws_disciplina = wb[disciplina]
+-                # Determinar o intervalo de linhas para a turma atual
+-                idx_turma = turmas.index(turma)
+-                linha_base = 4 + (idx_turma * (36 + 15))  # 36 linhas de dados + 15 de espaço
+-                linha_fim = linha_base + 35  # Até 35 alunos por turma
+-
+-                # Procurar o aluno pelo nome na coluna B
+-                linha_ref = None
+-                for row in range(linha_base, linha_fim + 1):
+-                    cell_nome = ws_disciplina[f'B{row}'].value
+-                    if cell_nome == aluno["nome"]:
+-                        linha_ref = row
+-                        break
+-
+-                if linha_ref is None:
+-                    logger.warning(f"Aluno {aluno['nome']} não encontrado na aba {disciplina} para a turma {turma['nome_turma']}")
+-                    # Preencher com 0.00 se o aluno não for encontrado
+-                    for _ in range(6):  # 4 bimestres + NF + MG
+-                        cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+-                        cell.value = 0.00
+-                        cell.number_format = '0.00'
+-                        cell.alignment = ALINHAMENTO_CENTRALIZADO
+-                        col_idx += 1
+-                    continue
+-
+-                # Copiar as notas (B1, B2, B3, B4, NF, MG)
+-                for bimestre in ['C', 'D', 'E', 'F']:  # B1, B2, B3, B4
+-                    cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+-                    cell.value = f"='{disciplina}'!{bimestre}{linha_ref}"
+-                    cell.number_format = '0.00'
+-                    cell.alignment = ALINHAMENTO_CENTRALIZADO
+-                    col_idx += 1
+-                # NF
+-                cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+-                cell.value = f"='{disciplina}'!G{linha_ref}"
+-                cell.number_format = '0.00'
+-                cell.alignment = ALINHAMENTO_CENTRALIZADO
+-                col_idx += 1
+-                # MG
+-                cell = ws[f'{get_column_letter(col_idx)}{linha_dados}']
+-                cell.value = f"='{disciplina}'!H{linha_ref}"
+-                cell.number_format = '0.00'
+-                cell.alignment = ALINHAMENTO_CENTRALIZADO
+-                col_idx += 1
+-
+-        # Aplicar bordas às linhas de dados
+-        for row in range(linha_inicio_dados, linha_inicio_dados + len(turma["alunos"])):
+-            for col in range(1, len(headers) + 1):
+-                cell = ws[f'{get_column_letter(col)}{row}']
+-                cell.border = border
+-
+-        # Adicionar espaço entre turmas
+-        linha_atual += len(turma["alunos"]) + 3  # 2 linhas de espaço após os dados
+-
++    cell_titulo_principal.value = "ESCOLA COMPOSITOR LUIS RAMALHO"
++    cell_titulo_principal.font = Font(name='Arial', size=22, bold=True, color="000080")
++    linha_atual += 1
++    ws.merge_cells(f'A{linha_atual}:J{linha_atual}')
++    cell_subtitulo = ws[f'A{linha_atual}']
++    cell_subtitulo.value = f"Relatório - {titulo}"
++    cell_subtitulo.font = Font(name='Arial', size=12, italic=True)
++    cell_subtitulo.alignment = ALINHAMENTO_CENTRALIZADO
++    ws.row_dimensions[linha_atual].height = 20
+     return ws
+ 
+ def criar_aba_sec(wb, turmas):
++    """Cria a aba SEC com formatação completa das tabelas."""
+     ws = wb.create_sheet(title="SEC")
+     ws.sheet_properties.tabColor = COR_ABA
+-    img = Image(str(CAMINHO_IMAGEM))
+-    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+     linha_atual = 1
+-    linhas_inicio_tabelas = []
+-
+-    ws.merge_cells('A1:F1')
+-    ws.row_dimensions[1].height = img.height * 0.75
+-    ws.add_image(img, 'A1')
+-    cell = ws['A1']
+-    cell.value = "COMPOSITOR LUIS RAMALHO"
+-    cell.font = Font(name='Arial', size=26, bold=True)
+-    cell.alignment = ALINHAMENTO_CENTRALIZADO
+-    linha_atual += 1
+-
+-    for turma in turmas:
+-        ws.merge_cells(f'A{linha_atual}:F{linha_atual}')
+-        ws[f'A{linha_atual}'] = turma["nome_turma"]
+-        ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
+-        ws[f'A{linha_atual}'].alignment = ALINHAMENTO_CENTRALIZADO
++    max_linhas_tabela = MAX_ALUNOS_FORMATAR
++
++    last_col_sec_letter = get_column_letter(len(COLUNAS_SEC))
++    if add_image_safely(ws, CAMINHO_IMAGEM, 'A1'):
++        try:
++            img = Image(str(CAMINHO_IMAGEM))
++            ws.row_dimensions[linha_atual].height = img.height * 0.75
++        except:
++            ws.row_dimensions[linha_atual].height = 50
++        ws.merge_cells(f'A{linha_atual}:{last_col_sec_letter}{linha_atual}')
++    else:
++        ws.merge_cells(f'A{linha_atual}:{last_col_sec_letter}{linha_atual}')
++    cell_titulo_principal = ws['A1']
++    cell_titulo_principal.alignment = ALINHAMENTO_CENTRALIZADO
++    cell_titulo_principal.value = "ESCOLA COMPOSITOR LUIS RAMALHO - Secretaria"
++    cell_titulo_principal.font = Font(name='Arial', size=18, bold=True, color="000080")
++    linha_atual += 2
++
++    linhas_inicio_tabelas_headers = []
++    num_alunos_por_turma = []
++    colunas_largura_sec_completa = {**LARGURAS_COLUNAS_SEC_LETRAS, 'G': 25, 'H': 10, 'J': 25, 'K': 12, 'M': 20, 'N': 10, 'O': 10, 'P': 10, 'Q': 10, 'R': 15, 'S': 15, 'T': 15}
++    configurar_largura_colunas(ws, colunas_largura_sec_completa)
++    linhas_espaco_entre_turmas = 8
++
++    for idx_turma, turma in enumerate(turmas):
++        nome_turma = turma["nome_turma"]
++        alunos = turma.get("alunos", [])
++        num_alunos_turma = len(alunos)
++        num_alunos_por_turma.append(num_alunos_turma)
++        linha_inicio_bloco = 3 + (idx_turma * (1 + 1 + max_linhas_tabela + linhas_espaco_entre_turmas))
++        linha_atual = linha_inicio_bloco
++
++        cell_titulo_turma = ws.cell(row=linha_atual, column=1, value=nome_turma)
++        cell_titulo_turma.font = FONTE_TITULO_TURMA
++        cell_titulo_turma.alignment = ALINHAMENTO_CENTRALIZADO
++        ws.merge_cells(start_row=linha_atual, start_column=1, end_row=linha_atual, end_column=len(COLUNAS_SEC))
+         ws.row_dimensions[linha_atual].height = 30
+         linha_atual += 1
+-        linhas_inicio_tabelas.append(linha_atual)
++        linha_header_turma_atual = linha_atual
++        linhas_inicio_tabelas_headers.append(linha_header_turma_atual)
+ 
+         for col_idx, col_nome in enumerate(COLUNAS_SEC, 1):
+-            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+-            cell.value = col_nome
+-            cell.border = border
++            cell = ws.cell(row=linha_atual, column=col_idx, value=col_nome)
++            cell.border = BORDER_THIN
+             cell.font = Font(bold=True)
+             cell.alignment = ALINHAMENTO_CENTRALIZADO
+             if col_nome == "Nome do Aluno":
+@@ -218,153 +141,500 @@ def criar_aba_sec(wb, turmas):
+             elif col_nome in ["ATIVO", "TRANSFERIDO", "DESISTENTE"]:
+                 cell.fill = FILL_BIMESTRES
+ 
+-        configurar_largura_colunas(ws, LARGURAS_COLUNAS, COLUNAS_SEC)
+         linha_inicio_dados = linha_atual + 1
+ 
+-        for aluno in turma["alunos"]:
+-            row = linha_atual + int(aluno["numero"])
+-            ws[f'A{row}'] = int(aluno["numero"])
+-            ws[f'A{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'B{row}'] = aluno["nome"]
+-            ws[f'B{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'C{row}'] = aluno.get("ativo", True)
+-            ws[f'C{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'D{row}'] = aluno.get("transferido", False)
+-            ws[f'D{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'E{row}'] = aluno.get("desistente", False)
+-            ws[f'E{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'F{row}'] = f'=IF(E{row}, "DESISTENTE", IF(D{row}, "TRANSFERIDO", IF(C{row}, "ATIVO", "INDEFINIDO")))'
+-            ws[f'F{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-
+-        for row in range(linha_atual, linha_atual + len(turma["alunos"]) + 1):
+-            for col in range(1, 7):
+-                cell = ws[f'{get_column_letter(col)}{row}']
+-                cell.border = border
+-
+-        criar_dashboard_sec_turma(ws, linha_atual, linha_inicio_dados, len(turma["alunos"]))
+-        linha_atual += len(turma["alunos"]) + 6
+-
+-    criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, [len(turma["alunos"]) for turma in turmas])
+-    criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas)
++        alunos_processados = set()
++        if alunos:
++            for aluno in alunos:
++                try:
++                    num_aluno = int(aluno["numero"])
++                    if not (0 < num_aluno <= max_linhas_tabela) or num_aluno in alunos_processados:
++                        continue
++                    alunos_processados.add(num_aluno)
++                    linha_dados_atual = linha_inicio_dados + num_aluno - 1
++                    ws.cell(row=linha_dados_atual, column=1, value=num_aluno).alignment = ALINHAMENTO_CENTRALIZADO
++                    ws.cell(row=linha_dados_atual, column=2, value=aluno["nome"]).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
++                    ws.cell(row=linha_dados_atual, column=3, value=True).alignment = ALINHAMENTO_CENTRALIZADO
++                    ws.cell(row=linha_dados_atual, column=4, value=False).alignment = ALINHAMENTO_CENTRALIZADO
++                    ws.cell(row=linha_dados_atual, column=5, value=False).alignment = ALINHAMENTO_CENTRALIZADO
++                    ws.cell(row=linha_dados_atual, column=6, value=f'=IF(E{linha_dados_atual},"DESISTENTE",IF(D{linha_dados_atual},"TRANSFERIDO",IF(C{linha_dados_atual},"ATIVO","INDEFINIDO")))').alignment = ALINHAMENTO_CENTRALIZADO
++                except Exception as e:
++                    logger.error(f"Erro aluno {aluno.get('nome')} (SEC): {e}")
++                    continue
+ 
++        for i in range(max_linhas_tabela):
++            linha_formatar = linha_inicio_dados + i
++            num_linha_atual = i + 1
++            if num_linha_atual not in alunos_processados:
++                ws.cell(row=linha_formatar, column=1, value=num_linha_atual).alignment = ALINHAMENTO_CENTRALIZADO
++                ws.cell(row=linha_formatar, column=2).value = ""
++                ws.cell(row=linha_formatar, column=3, value=False)
++                ws.cell(row=linha_formatar, column=4, value=False)
++                ws.cell(row=linha_formatar, column=5, value=False)
++                ws.cell(row=linha_formatar, column=6, value=f'=IF(E{linha_formatar},"DESISTENTE",IF(D{linha_formatar},"TRANSFERIDO",IF(C{linha_formatar},"ATIVO","INDEFINIDO")))').alignment = ALINHAMENTO_CENTRALIZADO
++            for col_idx in range(1, len(COLUNAS_SEC) + 1):
++                ws.cell(row=linha_formatar, column=col_idx).border = BORDER_THIN
++
++        try:
++            criar_dashboard_sec_turma(ws, linha_header_turma_atual, linha_inicio_dados, num_alunos_turma)
++        except Exception as e:
++            logger.error(f"Erro dash SEC turma {nome_turma}: {e}")
++
++    if linhas_inicio_tabelas_headers:
++        try:
++            logger.info("Criando dashboard SEC Geral em L4...")
++            criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_turma, start_col='L', start_row=4)
++        except Exception as e:
++            logger.error(f"Erro dash SEC Geral: {e}")
++        try:
++            logger.info("Criando dashboard SEC Aprovação em R4...")
++            criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas_headers, start_col='R', start_row=4)
++        except Exception as e:
++            logger.error(f"Erro dash SEC Aprovação: {e}")
+     return ws
+ 
+-def criar_aba_disciplina(wb, titulo, turmas):
+-    ws = wb.create_sheet(title=titulo)
+-    img = Image(str(CAMINHO_IMAGEM))
+-    ws.merge_cells('A1:J1')
+-    ws.row_dimensions[1].height = img.height * 0.75
+-    ws.add_image(img, 'A1')
+-    cell = ws['A1']
+-    cell.value = "COMPOSITOR LUIS RAMALHO"
+-    cell.font = Font(name='Arial', size=26, bold=True)
+-    cell.alignment = ALINHAMENTO_CENTRALIZADO
++def criar_aba_disciplina(wb, titulo_disciplina, turmas):
++    ws = wb.create_sheet(title=titulo_disciplina)
+     ws.sheet_properties.tabColor = COR_ABA
+-
+-    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+-    linha_atual = 2
+-
+-    for turma in turmas:
+-        ws.merge_cells(f'A{linha_atual}:L{linha_atual}')
+-        ws[f'A{linha_atual}'] = turma["nome_turma"]
+-        ws[f'A{linha_atual}'].font = FONTE_TITULO_TURMA
+-        ws[f'A{linha_atual}'].alignment = ALINHAMENTO_CENTRALIZADO
++    linha_atual = 1
++    max_linhas_tabela = MAX_ALUNOS_FORMATAR
++    last_col_disc_letter = get_column_letter(len(COLUNAS))
++    if add_image_safely(ws, CAMINHO_IMAGEM, 'A1'):
++        try:
++            img = Image(str(CAMINHO_IMAGEM))
++            ws.row_dimensions[linha_atual].height = img.height * 0.75
++        except:
++            ws.row_dimensions[linha_atual].height = 50
++        ws.merge_cells(f'A{linha_atual}:{last_col_disc_letter}{linha_atual}')
++    else:
++        ws.merge_cells(f'A{linha_atual}:{last_col_disc_letter}{linha_atual}')
++    cell_titulo_principal = ws['A1']
++    cell_titulo_principal.alignment = ALINHAMENTO_CENTRALIZADO
++    cell_titulo_principal.value = f"ESCOLA COMPOSITOR LUIS RAMALHO - {titulo_disciplina}"
++    cell_titulo_principal.font = Font(name='Arial', size=18, bold=True, color="000080")
++    linha_atual += 2
++    colunas_largura_disc_completa = {**LARGURAS_COLUNAS_ABAS_DISC_LETRAS, 'N': 30, 'O': 12, 'P': 12, 'Q': 12, 'R': 12}
++    configurar_largura_colunas(ws, colunas_largura_disc_completa)
++    linhas_espaco_entre_turmas_disc = 15
++    linhas_por_bloco_turma_disc = 1 + 1 + max_linhas_tabela + linhas_espaco_entre_turmas_disc
++    for idx_turma, turma in enumerate(turmas):
++        nome_turma = turma["nome_turma"]
++        alunos = turma.get("alunos", [])
++        num_alunos_turma = len(alunos)
++        linha_inicio_bloco = 3 + (idx_turma * linhas_por_bloco_turma_disc)
++        linha_atual = linha_inicio_bloco
++        cell_titulo_turma = ws.cell(row=linha_atual, column=1, value=f"{nome_turma}")
++        cell_titulo_turma.font = FONTE_TITULO_TURMA
++        cell_titulo_turma.alignment = ALINHAMENTO_CENTRALIZADO
++        ws.merge_cells(start_row=linha_atual, start_column=1, end_row=linha_atual, end_column=len(COLUNAS))
+         ws.row_dimensions[linha_atual].height = 30
+         linha_atual += 1
+-        
++        linha_header_tabela = linha_atual
+         for col_idx, col_nome in enumerate(COLUNAS, 1):
+-            cell = ws[f'{get_column_letter(col_idx)}{linha_atual}']
+-            cell.value = col_nome
+-            cell.border = border
++            cell = ws.cell(row=linha_atual, column=col_idx, value=col_nome)
++            cell.border = BORDER_THIN
+             cell.font = Font(bold=True)
+             cell.alignment = ALINHAMENTO_CENTRALIZADO
+             if col_nome == "Nome do Aluno":
+                 cell.fill = FILL_NOME_ALUNO
+-            elif col_nome in ["1º BIM", "2º BIM", "3º BIM", "4º BIM"]:
++            elif "BIM" in col_nome:
+                 cell.fill = FILL_BIMESTRES
+-            elif col_nome == "NF":
++            elif col_nome in ["NF", "MG", "MF", "PF", "SF"]:
+                 cell.fill = FILL_NOTA_FINAL
+             elif col_nome == "SITUAÇÃO DO ALUNO":
+                 cell.fill = FILL_SITUACAO
+-        
+-        configurar_largura_colunas(ws, LARGURAS_COLUNAS_ABAS_DISC, COLUNAS)
+         linha_inicio_dados = linha_atual + 1
+-        
+-        for aluno in turma["alunos"]:
+-            linha_dados = linha_atual + int(aluno["numero"])
+-            ws[f'A{linha_dados}'] = int(aluno["numero"])
+-            ws[f'A{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'B{linha_dados}'] = aluno["nome"]
+-            ws[f'B{linha_dados}'].alignment = ALINHAMENTO_CENTRALIZADO
+-
+-            if ws[f'B{linha_dados}'].value:
+-                ws[f'C{linha_dados}'] = random.uniform(1, 10)
+-                ws[f'D{linha_dados}'] = random.uniform(1, 10)
+-                ws[f'E{linha_dados}'] = random.uniform(1, 10)
+-                ws[f'F{linha_dados}'] = random.uniform(1, 10)
+-                ws[f'C{linha_dados}'].number_format = '0.00'
+-                ws[f'D{linha_dados}'].number_format = '0.00'
+-                ws[f'E{linha_dados}'].number_format = '0.00'
+-                ws[f'F{linha_dados}'].number_format = '0.00'
+-        
+-        for row in range(linha_inicio_dados, linha_inicio_dados + 35):
+-            ws[f'G{row}'] = f'=AVERAGE(C{row}:F{row})'
+-            ws[f'G{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'G{row}'].number_format = '0.00'
+-
+-            ws[f'H{row}'] = f'=SUM(C{row}:F{row})/4'
+-            ws[f'H{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'H{row}'].number_format = '0.00'
+-
+-            ws[f'I{row}'] = f'=IF(H{row}<7, (0.6*H{row}) + (0.4*G{row}), "-")'
+-            ws[f'I{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'I{row}'].number_format = '0.00'
+-
+-            ws[f'J{row}'] = f'=IF(H{row}<2.5, "REPROVADO", IF(H{row}<7, "FINAL", "APROVADO"))'
+-            ws[f'J{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-
+-            ws[f'K{row}'] = f'=IF(H{row}<7, (12.5 - (1.5*H{row})), "-")'
+-            ws[f'K{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'K{row}'].number_format = '0.00'
+-
+-            ws[f'L{row}'] = f'=IF(G{row}>=K{row}, "AF", "-")'
+-            ws[f'L{row}'].alignment = ALINHAMENTO_CENTRALIZADO
+-            ws[f'L{row}'].number_format = '0.00'
+-        
+-        for row in range(linha_atual, linha_atual + 36):
+-            for col in range(1, 13):
+-                cell = ws[f'{get_column_letter(col)}{row}']
+-                cell.border = border
+-        
+-        criar_dashboard_turma(ws, linha_atual, linha_inicio_dados)
+-        linha_atual += 36 + 15
++        alunos_processados_disc = set()
++        if alunos:
++            for aluno in alunos:
++                try:
++                    num_aluno = int(aluno["numero"])
++                    if not (0 < num_aluno <= max_linhas_tabela) or num_aluno in alunos_processados_disc:
++                        continue
++                    alunos_processados_disc.add(num_aluno)
++                    linha_dados_atual = linha_inicio_dados + num_aluno - 1
++                    ws.cell(row=linha_dados_atual, column=1, value=num_aluno).alignment = ALINHAMENTO_CENTRALIZADO
++                    ws.cell(row=linha_dados_atual, column=2, value=aluno["nome"]).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
++                    for col_idx in range(3, 7):
++                        ws.cell(row=linha_dados_atual, column=col_idx, value=round(random.uniform(3.0, 10.0), 2)).number_format = '0.00'
++                        ws.cell(row=linha_dados_atual, column=col_idx).alignment = ALINHAMENTO_CENTRALIZADO
++                except Exception as e:
++                    logger.error(f"Erro aluno {aluno.get('nome')} ({titulo_disciplina}): {e}")
++        for i in range(max_linhas_tabela):
++            row_formula = linha_inicio_dados + i
++            num_linha_atual = i + 1
++            aluno_presente = num_linha_atual in alunos_processados_disc
++            if not aluno_presente:
++                ws.cell(row=row_formula, column=1, value=num_linha_atual).alignment = ALINHAMENTO_CENTRALIZADO
++                ws.cell(row=row_formula, column=2).value = ""
++            for col_idx in range(3, 7):
++                ws.cell(row=row_formula, column=col_idx).value = ""
++            ws.cell(row=row_formula, column=7).value = f'=IF(COUNT(C{row_formula}:F{row_formula})>0, IFERROR(AVERAGE(C{row_formula}:F{row_formula}), ""), "")'
++            ws.cell(row=row_formula, column=8).value = f'=IF(COUNT(C{row_formula}:F{row_formula})>0, IFERROR(SUM(C{row_formula}:F{row_formula})/4, ""), "")'
++            ws.cell(row=row_formula, column=9).value = f'=IF(ISNUMBER(H{row_formula}),IF(H{row_formula}<7, IFERROR((0.6*H{row_formula})+(0.4*G{row_formula}), "-"), "-"),"")'
++            ws.cell(row=row_formula, column=10).value = f'=IF(ISNUMBER(H{row_formula}),IF(H{row_formula}<2.5, "REPROVADO", IF(H{row_formula}<7, "FINAL", "APROVADO")),"")'
++            ws.cell(row=row_formula, column=11).value = f'=IF(ISNUMBER(H{row_formula}),IF(H{row_formula}<7, IFERROR(MAX(0, 12.5-(1.5*H{row_formula})), "-"), "-"),"")'
++            ws.cell(row=row_formula, column=12).value = f'=IF(K{row_formula}="-", IF(J{row_formula}="APROVADO","APROVADO",""), IF(AND(ISNUMBER(K{row_formula}), ISNUMBER(G{row_formula})), IF(G{row_formula}>=K{row_formula}, "APROVADO FINAL", "REPROVADO FINAL"),""))'
++            for col_idx in range(1, len(COLUNAS) + 1):
++                cell = ws.cell(row=row_formula, column=col_idx)
++                cell.border = BORDER_THIN
++                if col_idx >= 7 and col_idx != 10 and col_idx != 12:
++                    cell.number_format = '0.00'
++                if col_idx >= 3:
++                    cell.alignment = ALINHAMENTO_CENTRALIZADO
++        try:
++            criar_dashboard_turma(ws, linha_header_tabela, linha_inicio_dados, num_alunos_turma)
++        except Exception as e:
++            logger.error(f"Erro dash turma {nome_turma} ({titulo_disciplina}): {e}")
++    return ws
+ 
++def criar_aba_boletim(wb, turmas):
++    ws = wb.create_sheet(title="BOLETIM")
++    ws.sheet_properties.tabColor = COR_ABA
++    linha_atual = 1
++    max_linhas_tabela = MAX_ALUNOS_FORMATAR
++    headers = ["Nº", "ALUNO"]
++    col_widths = {'A': 5, 'B': 35}
++    disciplina_start_cols = {}
++    current_col_idx = 3
++    for disciplina in DISCIPLINAS:
++        disciplina_start_cols[disciplina] = current_col_idx
++        headers.extend([f"B1", f"B2", f"B3", f"B4", f"NF", f"MG"])
++        for i in range(6):
++            col_widths[get_column_letter(current_col_idx + i)] = 6
++        current_col_idx += 6
++    last_col_idx = current_col_idx - 1
++    last_col_letter = get_column_letter(last_col_idx)
++    if add_image_safely(ws, CAMINHO_IMAGEM, 'A1'):
++        try:
++            img = Image(str(CAMINHO_IMAGEM))
++            ws.row_dimensions[linha_atual].height = img.height * 0.75
++        except:
++            ws.row_dimensions[linha_atual].height = 50
++        ws.merge_cells(f'A{linha_atual}:{last_col_letter}{linha_atual}')
++    else:
++        ws.merge_cells(f'A{linha_atual}:{last_col_letter}{linha_atual}')
++    cell_titulo_principal = ws['A1']
++    cell_titulo_principal.alignment = ALINHAMENTO_CENTRALIZADO
++    cell_titulo_principal.value = "ESCOLA COMPOSITOR LUIS RAMALHO - BOLETIM GERAL"
++    cell_titulo_principal.font = Font(name='Arial', size=18, bold=True, color="000080")
++    linha_atual += 2
++    configurar_largura_colunas(ws, col_widths)
++    linhas_espaco_entre_turmas_bol = 5
++    for idx_turma, turma in enumerate(turmas):
++        nome_turma = turma["nome_turma"]
++        alunos = turma.get("alunos", [])
++        num_alunos_turma = len(alunos)
++        linha_inicio_bloco = 3 + (idx_turma * (1 + 1 + 1 + max_linhas_tabela + linhas_espaco_entre_turmas_bol))
++        linha_atual = linha_inicio_bloco
++        cell_titulo_turma = ws.cell(row=linha_atual, column=1, value=f"{nome_turma} - BOLETIM")
++        cell_titulo_turma.font = FONTE_TITULO_TURMA
++        cell_titulo_turma.alignment = ALINHAMENTO_CENTRALIZADO
++        ws.merge_cells(f'A{linha_atual}:{last_col_letter}{linha_atual}')
++        ws.row_dimensions[linha_atual].height = 30
++        linha_atual += 1
++        ws.cell(row=linha_atual, column=1).border = BORDER_THIN
++        ws.cell(row=linha_atual, column=2).border = BORDER_THIN
++        for disciplina, start_col in disciplina_start_cols.items():
++            end_col = start_col + 5
++            ws.merge_cells(start_row=linha_atual, start_column=start_col, end_row=linha_atual, end_column=end_col)
++            cell_disc_header = ws.cell(row=linha_atual, column=start_col, value=disciplina)
++            cell_disc_header.font = Font(bold=True, size=8)
++            cell_disc_header.alignment = ALINHAMENTO_CENTRALIZADO
++            cell_disc_header.fill = FILL_BIMESTRES
++            for c_idx in range(start_col, end_col + 1):
++                ws.cell(row=linha_atual, column=c_idx).border = BORDER_THIN
++        linha_atual += 1
++        linha_header_boletim = linha_atual
++        for col_idx, header_text in enumerate(headers, 1):
++            cell = ws.cell(row=linha_atual, column=col_idx, value=header_text)
++            cell.border = BORDER_THIN
++            cell.font = Font(bold=True, size=7)
++            cell.alignment = ALINHAMENTO_CENTRALIZADO
++            if header_text == "ALUNO":
++                cell.fill = FILL_NOME_ALUNO
++            elif "B" in header_text:
++                cell.fill = FILL_BIMESTRES
++            elif header_text in ["NF", "MG"]:
++                cell.fill = FILL_NOTA_FINAL
++        linha_atual += 1
++        linha_inicio_dados = linha_atual
++        alunos_processados_bol = set()
++        if alunos:
++            for aluno in alunos:
++                try:
++                    num_aluno = int(aluno["numero"])
++                    if not (0 < num_aluno <= max_linhas_tabela) or num_aluno in alunos_processados_bol:
++                        continue
++                    alunos_processados_bol.add(num_aluno)
++                    linha_dados_atual = linha_inicio_dados + num_aluno - 1
++                    nome_aluno_completo = aluno["nome"]
++                    nome_aluno_limpo = get_clean_student_name(nome_aluno_completo)
++                    ws.cell(row=linha_dados_atual, column=1, value=num_aluno).alignment = ALINHAMENTO_CENTRALIZADO
++                    ws.cell(row=linha_dados_atual, column=2, value=nome_aluno_completo).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
++                    for disciplina, start_col in disciplina_start_cols.items():
++                        if disciplina not in wb.sheetnames:
++                            logger.error(f"Aba '{disciplina}' não existe (Boletim)")
++                            continue
++                        ws_disciplina = wb[disciplina]
++                        linha_ref = _get_student_row_in_discipline_sheet(ws_disciplina, nome_turma, nome_aluno_limpo, turmas)
++                        col_letters_disc = ['C', 'D', 'E', 'F', 'G', 'H']
++                        for i, col_let_disc in enumerate(col_letters_disc):
++                            cell_boletim = ws.cell(row=linha_dados_atual, column=start_col + i)
++                            if linha_ref:
++                                cell_boletim.value = f"='{disciplina}'!{col_let_disc}{linha_ref}"
++                                cell_boletim.number_format = '0.00'
++                            else:
++                                cell_boletim.value = 0.00
++                                cell_boletim.number_format = '0.00'
++                            cell_boletim.alignment = ALINHAMENTO_CENTRALIZADO
++                except Exception as e:
++                    logger.error(f"Erro aluno {aluno.get('nome')} (Boletim): {e}")
++        for i in range(max_linhas_tabela):
++            linha_formatar = linha_inicio_dados + i
++            num_linha_atual = i + 1
++            if num_linha_atual not in alunos_processados_bol:
++                ws.cell(row=linha_formatar, column=1, value=num_linha_atual).alignment = ALINHAMENTO_CENTRALIZADO
++                ws.cell(row=linha_formatar, column=2).value = ""
++                for disciplina, start_col in disciplina_start_cols.items():
++                    for col_offset in range(6):
++                        ws.cell(row=linha_formatar, column=start_col + col_offset).value = ""
++                for col_idx in range(1, last_col_idx + 1):
++                    ws.cell(row=linha_formatar, column=col_idx).border = BORDER_THIN
+     return ws
+ 
++def _get_student_row_in_discipline_sheet(ws_disciplina, turma_nome, aluno_nome_limpo, turmas_list):
++    try:
++        turma_index = next(i for i, t in enumerate(turmas_list) if t['nome_turma'] == turma_nome)
++        aluno_obj = next(a for a in turmas_list[turma_index]['alunos'] if get_clean_student_name(a['nome']) == aluno_nome_limpo)
++        aluno_numero = int(aluno_obj['numero'])
++        linhas_espaco_entre_turmas_disc = 15
++        linhas_por_bloco_turma_disc = 1 + 1 + MAX_ALUNOS_FORMATAR + linhas_espaco_entre_turmas_disc
++        linha_inicio_bloco = 3 + (turma_index * linhas_por_bloco_turma_disc)
++        linha_header_tabela = linha_inicio_bloco + 1
++        linha_inicio_dados = linha_header_tabela + 1
++        linha_aluno_calculada = linha_inicio_dados + aluno_numero - 1
++        if not (0 < aluno_numero <= MAX_ALUNOS_FORMATAR):
++            return None
++        nome_na_celula = ws_disciplina.cell(row=linha_aluno_calculada, column=2).value
++        if nome_na_celula and get_clean_student_name(str(nome_na_celula)) == aluno_nome_limpo:
++            return linha_aluno_calculada
++        else:
++            logger.warning(f"Lookup: Calc={linha_aluno_calculada} para '{aluno_nome_limpo}', Encont='{get_clean_student_name(str(nome_na_celula))}' em {ws_disciplina.title}/{turma_nome}. Buscando...")
++        for offset in range(-3, 4):
++            row_num_check = linha_aluno_calculada + offset
++            if row_num_check < linha_inicio_dados or row_num_check >= linha_inicio_dados + MAX_ALUNOS_FORMATAR:
++                continue
++            cell_value = ws_disciplina.cell(row=row_num_check, column=2).value
++            if cell_value and get_clean_student_name(str(cell_value)) == aluno_nome_limpo:
++                logger.info(f"Lookup: Aluno {aluno_nome_limpo} linha {row_num_check} (busca).")
++                return row_num_check
++        logger.error(f"Lookup: Aluno {aluno_nome_limpo} NÃO encontrado em {ws_disciplina.title}/{turma_nome}.")
++        return None
++    except Exception as e:
++        logger.error(f"Lookup: Erro {aluno_nome_limpo}/{turma_nome}: {e}")
++        return None
++
++def criar_tabelas_powerpivot(wb, turmas_list):
++    """Cria abas separadas para cada tabela do Power Pivot."""
++    turmas_data, alunos_data, disciplinas_data, notas_data = [], [], [], []
++    turma_id_map, aluno_id_map = {}, {}
++    current_turma_id, current_aluno_id, current_nota_id = 1, 1, 1
++
++    turmas_headers = ["TurmaID", "NomeTurma", "GradeLevel", "ClassLetter"]
++    for turma in turmas_list:
++        nome_turma = turma["nome_turma"]
++        turma_id = f"T{current_turma_id:02d}"
++        turma_id_map[nome_turma] = turma_id
++        current_turma_id += 1
++        grade_level, class_letter = "N/D", "N/D"
++        match = re.match(r"(\d+º)\s*ANO\s*([A-Z])", nome_turma, re.IGNORECASE)
++        if match:
++            grade_level, class_letter = match.group(1), match.group(2).upper()
++        turmas_data.append([turma_id, nome_turma, grade_level, class_letter])
++
++    alunos_headers = ["StudentID", "Name", "Status", "TurmaID"]
++    for turma in turmas_list:
++        nome_turma = turma["nome_turma"]
++        turma_id = turma_id_map.get(nome_turma)
++        if not turma_id:
++            continue
++        for aluno in turma.get("alunos", []):
++            try:
++                student_id = f"A{current_aluno_id:04d}"
++                nome_aluno_limpo = get_clean_student_name(aluno["nome"])
++                aluno_id_map[(nome_turma, nome_aluno_limpo)] = student_id
++                current_aluno_id += 1
++                status = "ATIVO"
++                alunos_data.append([student_id, nome_aluno_limpo, status, turma_id])
++            except Exception as e:
++                logger.error(f"Erro Tabela Alunos (Power Pivot) {aluno.get('nome')}: {e}")
++
++    disciplinas_headers = ["DisciplineCode", "DisciplineName"]
++    for code in DISCIPLINAS:
++        disciplinas_data.append([code, DISCIPLINAS_NOMES.get(code, code)])
++
++    notas_headers = ["NotaID", "StudentID", "DisciplineCode", "BIM1Grade", "BIM2Grade", "BIM3Grade", "BIM4Grade", "NF", "MG", "MF", "Situation"]
++    col_map_disc_to_notas = {'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9, 'J': 10}
++    for turma in turmas_list:
++        nome_turma = turma["nome_turma"]
++        for aluno in turma.get("alunos", []):
++            nome_aluno_limpo = get_clean_student_name(aluno["nome"])
++            student_id = aluno_id_map.get((nome_turma, nome_aluno_limpo))
++            if not student_id:
++                continue
++            for discipline_code in DISCIPLINAS:
++                ws_disc = wb.get_sheet_by_name(discipline_code) if discipline_code in wb.sheetnames else None
++                if not ws_disc:
++                    continue
++                linha_aluno = _get_student_row_in_discipline_sheet(ws_disc, nome_turma, nome_aluno_limpo, turmas_list)
++                if linha_aluno:
++                    try:
++                        nota_row = [f"N{current_nota_id:05d}", student_id, discipline_code] + [None] * (len(notas_headers) - 3)
++                        valid_data = False
++                        for col_letter, header_idx in col_map_disc_to_notas.items():
++                            col_idx_num = column_index_from_string(col_letter)
++                            cell_value = ws_disc.cell(row=linha_aluno, column=col_idx_num).value
++                            processed = None
++                            if header_idx <= 9:
++                                try:
++                                    if isinstance(cell_value, (int, float)):
++                                        processed = float(cell_value)
++                                        valid_data = True
++                                    elif isinstance(cell_value, str) and cell_value == '-':
++                                        processed = None
++                                    else:
++                                        processed = float(cell_value)
++                                        valid_data = True
++                                except:
++                                    processed = None
++                            elif header_idx == 10:
++                                processed = str(cell_value).strip() if cell_value else "N/D"
++                                valid_data = True
++                            nota_row[header_idx] = processed
++                        if valid_data:
++                            notas_data.append(nota_row)
++                            current_nota_id += 1
++                    except Exception as read_err:
++                        logger.error(f"Erro leitura notas (Power Pivot) {nome_aluno_limpo}/{discipline_code}: {read_err}")
++
++    def create_table_sheet(wb, title, headers, data, table_name):
++        ws = wb.create_sheet(title=title)
++        ws.sheet_properties.tabColor = "ADD8E6"
++        current_row = 2  # Começar em A2 para evitar sobreposição com o cabeçalho
++        ws.append(headers)
++        header_row = current_row
++        current_row += 1
++        if not data:
++            logger.warning(f"Sem dados para tabela '{table_name}'.")
++        else:
++            for row_data in data:
++                try:
++                    safe_row = [re.sub(r'[\x00-\x1F\x7F]', '', str(item)) if isinstance(item, str) else (item if item is not None else "") for item in row_data]
++                    ws.append(safe_row)
++                    current_row += 1
++                except Exception as write_err:
++                    logger.error(f"Erro escrita {table_name}: {row_data} -> {write_err}")
++        data_end_row = current_row - 1
++        if data_end_row >= header_row:
++            table_ref = f"A{header_row}:{get_column_letter(len(headers))}{data_end_row}"
++            logger.info(f"Tentando criar tabela '{table_name}' com intervalo {table_ref}")
++            try:
++                table = Table(displayName=table_name, ref=table_ref)
++                table.tableStyleInfo = TableStyleInfo(name="TableStyleMedium2", showFirstColumn=False, showLastColumn=False, showRowStripes=True, showColumnStripes=False)
++                ws.add_table(table)
++                logger.info(f"Tabela '{table_name}' criada em aba '{title}': {table_ref}")
++            except Exception as table_err:
++                logger.error(f"Erro ao adicionar tabela '{table_name}' ref '{table_ref}': {table_err}")
++        else:
++            logger.warning(f"Tabela '{table_name}' não criada (sem dados ou intervalo inválido).")
++        # Ajustar larguras das colunas
++        ws.column_dimensions['A'].width = 15
++        ws.column_dimensions['B'].width = 35
++        if table_name == TBL_NOTAS_NAME:
++            for col_letter in ['D', 'E', 'F', 'G', 'H', 'I']:
++                ws.column_dimensions[col_letter].width = 10
++            ws.column_dimensions['K'].width = 18
++        # Limpar células fora do intervalo da tabela
++        for row in ws.iter_rows(min_row=1, max_row=1):  # Limpar linha 1
++            for cell in row:
++                cell.value = None
++        for row in ws.iter_rows(min_row=data_end_row + 1, max_row=ws.max_row):
++            for cell in row:
++                cell.value = None
++        for col in ws.iter_cols(min_col=len(headers) + 1, max_col=ws.max_column):
++            for cell in col:
++                cell.value = None
++
++    create_table_sheet(wb, TBL_TURMAS_NAME, turmas_headers, turmas_data, TBL_TURMAS_NAME)
++    create_table_sheet(wb, TBL_ALUNOS_NAME, alunos_headers, alunos_data, TBL_ALUNOS_NAME)
++    create_table_sheet(wb, TBL_DISCIPLINAS_NAME, disciplinas_headers, disciplinas_data, TBL_DISCIPLINAS_NAME)
++    create_table_sheet(wb, TBL_NOTAS_NAME, notas_headers, notas_data, TBL_NOTAS_NAME)
++
+ def criar_planilha():
+-    logger.info("Iniciando criação da planilha")
++    logger.info("="*45)
++    logger.info(" Iniciando criação da planilha ")
++    logger.info("="*45)
++    if not CAMINHO_JSON.exists():
++        logger.error(f"JSON não encontrado: {CAMINHO_JSON}")
++        raise FileNotFoundError(f"Arquivo JSON '{CAMINHO_JSON}' não encontrado.")
+     wb = Workbook()
+     wb.remove(wb.active)
+-
+-    if not CAMINHO_IMAGEM.exists():
+-        raise FileNotFoundError(f"A imagem não foi encontrada no caminho: {CAMINHO_IMAGEM}")
+-    if not CAMINHO_JSON.exists():
+-        raise FileNotFoundError(f"O arquivo JSON não foi encontrado em: {CAMINHO_JSON}")
+-    with open(CAMINHO_JSON, 'r', encoding='utf-8') as f:
+-        dados = json.load(f)
+-    turmas = dados["turmas"]
+-
++    try:
++        with open(CAMINHO_JSON, 'r', encoding='utf-8') as f:
++            dados = json.load(f)
++            turmas = dados.get("turmas")
++        if not turmas:
++            raise ValueError("JSON inválido ou vazio.")
++        logger.info(f"JSON carregado. {len(turmas)} turmas.")
++    except Exception as load_err:
++        logger.error(f"Erro carregando JSON: {load_err}")
++        raise
++
++    logger.info("-> Criando aba SEC...")
+     criar_aba_sec(wb, turmas)
++    logger.info("-> Criando abas de Disciplinas...")
+     for disciplina in DISCIPLINAS:
++        logger.info(f"   - Criando aba {disciplina}...")
+         criar_aba_disciplina(wb, disciplina, turmas)
+-
++    logger.info("-> Criando aba BOLETIM...")
+     criar_aba_boletim(wb, turmas)
+-
++    logger.info("-> Criando abas Power Pivot...")
++    criar_tabelas_powerpivot(wb, turmas)
++    logger.info("-> Criando aba DASHBOARD (em branco)...")
++    criar_aba_em_branco(wb, "DASHBOARD")
+     abas_adicionais = ["INDIVIDUAL", "BOL", "RESULTADO", "FREQUÊNCIA"]
++    logger.info(f"-> Criando abas em branco: {', '.join(abas_adicionais)}")
+     for aba in abas_adicionais:
+         criar_aba_em_branco(wb, aba)
+ 
+-    caminho_completo = os.path.join(CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO)
+-    wb.save(caminho_completo)
+-    logger.info(f"Planilha salva em: {caminho_completo}")
+-    return caminho_completo
+\ No newline at end of file
++    diretorio_saida = Path(CAMINHO_PADRAO)
++    try:
++        diretorio_saida.mkdir(parents=True, exist_ok=True)
++    except OSError as dir_err:
++        logger.error(f"Erro criando diretório '{diretorio_saida}': {dir_err}")
++        raise
++    caminho_completo = diretorio_saida / NOME_ARQUIVO_PADRAO
++    logger.info(f"-> Tentando salvar em: {caminho_completo}")
++    try:
++        wb.save(caminho_completo)
++        logger.info("="*45)
++        logger.info(f" Planilha salva: {caminho_completo}")
++        logger.info("="*45)
++        return str(caminho_completo)
++    except Exception as save_err:
++        logger.error(f"Falha ao salvar: {save_err}")
++        logger.exception("Detalhes:")
++        raise
++
++if __name__ == '__main__':
++    print(f"Executando {__file__}...")
++    print(f"JSON: {CAMINHO_JSON}")
++    print(f"Imagem: {CAMINHO_IMAGEM}")
++    print(f"Saída: {Path(CAMINHO_PADRAO) / NOME_ARQUIVO_PADRAO}")
++    try:
++        criar_planilha()
++        print("\nExecução concluída!")
++    except Exception as main_err:
++        print(f"\nERRO: {main_err}")
++        logger.exception("Detalhes:")
+\ No newline at end of file
+diff --git a/siage-fastapi/app/utils/excel_utils.py b/siage-fastapi/app/utils/excel_utils.py
+index 96a192b..48446e7 100644
+--- a/siage-fastapi/app/utils/excel_utils.py
++++ b/siage-fastapi/app/utils/excel_utils.py
+@@ -1,261 +1,327 @@
+-from openpyxl.utils import get_column_letter
+-from openpyxl.styles import Font, Border, Side
+-from openpyxl.chart import BarChart, Reference, Series
++import logging
++from openpyxl.utils import get_column_letter, column_index_from_string
++from openpyxl.styles import Font, Border, Side, Alignment
++from openpyxl.chart import BarChart, Reference
+ from openpyxl.chart.axis import ChartLines
+-from app.core.config import (
+-    COLUNAS, DASHBOARD_INDICADORES, FILL_BIMESTRES, COLUNAS_SEC, DASHBOARD_SEC_TURMA,
+-    DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO, DASHBOARD_SEC_APROVACAO, DISCIPLINAS,
+-    LARGURAS_COLUNAS, LARGURAS_COLUNAS_ABAS_DISC
+-)
+-
+-def configurar_largura_colunas(ws, colunas_largura, colunas_ref):
+-    for coluna_nome, largura_cm in colunas_largura.items():
+-        coluna_idx = colunas_ref.index(coluna_nome) + 1
+-        coluna_letra = get_column_letter(coluna_idx)
+-        largura_unidades = largura_cm * 3.78
+-        ws.column_dimensions[coluna_letra].width = largura_unidades
+-
+-def criar_dashboard_turma(ws, linha_inicio_tabela, linha_inicio_dados):
+-    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+-    
+-    dashboard_linha = linha_inicio_tabela
+-    ws[f'N{dashboard_linha}'] = "Resumo da Turma"
+-    ws[f'N{dashboard_linha}'].font = Font(bold=True)
+-    ws[f'N{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-    ws.merge_cells(f'N{dashboard_linha}:R{dashboard_linha}')
+-
++from openpyxl.chart.label import DataLabelList
++from openpyxl.drawing.text import RichTextProperties, Paragraph, ParagraphProperties, CharacterProperties
++
++try:
++    from app.core.config import (
++        DASHBOARD_INDICADORES, FILL_BIMESTRES, DASHBOARD_SEC_TURMA,
++        DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO, DASHBOARD_SEC_APROVACAO,
++        DISCIPLINAS, BORDER_THIN, MAX_ALUNOS_FORMATAR
++    )
++except ImportError:
++    from core.config import (
++        DASHBOARD_INDICADORES, FILL_BIMESTRES, DASHBOARD_SEC_TURMA,
++        DASHBOARD_SEC_GERAL, ALINHAMENTO_CENTRALIZADO, DASHBOARD_SEC_APROVACAO,
++        DISCIPLINAS, BORDER_THIN, MAX_ALUNOS_FORMATAR
++    )
++
++logger = logging.getLogger(__name__)
++
++def configurar_largura_colunas(ws, colunas_largura_letras):
++    """Configura a largura das colunas com base em {Letra: Largura}."""
++    for col_letra, largura_unidades in colunas_largura_letras.items():
++        try:
++            ws.column_dimensions[col_letra.upper()].width = largura_unidades
++        except Exception as e:
++            logger.error(f"Erro largura coluna '{col_letra}' aba {ws.title}: {e}")
++
++def criar_dashboard_turma(ws, linha_inicio_tabela_header, linha_inicio_dados, num_alunos):
++    """Cria o dashboard de resumo por turma na aba de disciplina."""
++    dashboard_col_start_idx = 14
++    num_bimestres = 4
++    ws_title = ws.title
++    dashboard_linha = linha_inicio_tabela_header + 1
++    cell_titulo = ws.cell(row=dashboard_linha, column=dashboard_col_start_idx, value="Resumo da Turma")
++    cell_titulo.font = Font(bold=True, size=12)
++    cell_titulo.alignment = ALINHAMENTO_CENTRALIZADO
++    ws.merge_cells(start_row=dashboard_linha, start_column=dashboard_col_start_idx, end_row=dashboard_linha, end_column=dashboard_col_start_idx + num_bimestres)
+     dashboard_linha += 1
+-    ws[f'O{dashboard_linha}'] = "1º Bimestre"
+-    ws[f'P{dashboard_linha}'] = "2º Bimestre"
+-    ws[f'Q{dashboard_linha}'] = "3º Bimestre"
+-    ws[f'R{dashboard_linha}'] = "4º Bimestre"
+-    for col in range(15, 19):
+-        cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
++    ws.cell(row=dashboard_linha, column=dashboard_col_start_idx, value="Indicador").font = Font(bold=True)
++    ws.cell(row=dashboard_linha, column=dashboard_col_start_idx).alignment = ALINHAMENTO_CENTRALIZADO
++    for i in range(num_bimestres):
++        cell = ws.cell(row=dashboard_linha, column=dashboard_col_start_idx + 1 + i, value=f"{i+1}º Bimestre")
+         cell.font = Font(bold=True)
+         cell.alignment = ALINHAMENTO_CENTRALIZADO
+         cell.fill = FILL_BIMESTRES
+-
+     inicio = linha_inicio_dados
+-    fim = linha_inicio_dados + 34
+-    bimestre_cols = ['C', 'D', 'E', 'F']
+-
+-    indicadores_inteiros = [
+-        "ALUNOS APROVADOS",
+-        "ALUNOS REPROVADOS",
+-        "Nº ALUNOS COM MÉDIA > 8,0",
+-        "Nº ALUNOS QUE NÃO ATINGIRAM MÉDIA > 8,0",
+-        "MATRÍCULAS"
+-    ]
+-
+-    for idx, indicador in enumerate(DASHBOARD_INDICADORES):
++    fim = linha_inicio_dados + num_alunos - 1 if num_alunos > 0 else inicio
++    bimestre_cols_letters = ['C', 'D', 'E', 'F']
++    indicadores_inteiros = ["ALUNOS APROVADOS", "ALUNOS REPROVADOS", "Nº ALUNOS COM MÉDIA > 8,0", "Nº ALUNOS QUE NÃO ATINGIRAM MÉDIA > 8,0", "MATRÍCULAS"]
++    linha_final_indicadores = dashboard_linha
++    for indicador in DASHBOARD_INDICADORES:
+         dashboard_linha += 1
+-        ws[f'N{dashboard_linha}'] = indicador["nome"]
+-        ws[f'N{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-        
+-        if indicador["formula"]:
+-            for col_idx, bimestre_col in enumerate(bimestre_cols):
+-                ws[f'{get_column_letter(15 + col_idx)}{dashboard_linha}'] = indicador["formula"](bimestre_col, inicio, fim)
+-        
+-        for col in range(15, 19):
+-            cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
+-            cell.alignment = ALINHAMENTO_CENTRALIZADO
+-            if indicador["formato"]:
+-                cell.number_format = indicador["formato"]
+-            elif indicador["nome"] in indicadores_inteiros:
+-                cell.number_format = '0'
+-            else:
+-                cell.number_format = '0.00'
+-
+-    for row in range(linha_inicio_tabela, dashboard_linha + 1):
+-        for col in range(14, 19):
+-            cell = ws[f'{get_column_letter(col)}{row}']
+-            cell.border = border
+-
+-    ws.column_dimensions['N'].width = 25
+-    ws.column_dimensions['O'].width = 10
+-    ws.column_dimensions['P'].width = 10
+-    ws.column_dimensions['Q'].width = 10
+-    ws.column_dimensions['R'].width = 10
+-
+-def criar_dashboard_sec_turma(ws, linha_inicio_tabela, linha_inicio_dados, num_alunos):
+-    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+-    
+-    dashboard_linha = linha_inicio_tabela
+-    ws[f'G{dashboard_linha}'] = "Resumo Parcial por Turma"
+-    ws[f'G{dashboard_linha}'].font = Font(bold=True)
+-    ws[f'G{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-    ws.merge_cells(f'G{dashboard_linha}:I{dashboard_linha}')
+-
++        linha_final_indicadores = dashboard_linha
++        ws.cell(row=dashboard_linha, column=dashboard_col_start_idx, value=indicador["nome"]).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
++        if callable(indicador.get("formula")):
++            try:
++                for i, bim_col_letter in enumerate(bimestre_cols_letters):
++                    cell_valor = ws.cell(row=dashboard_linha, column=dashboard_col_start_idx + 1 + i)
++                    formula_str = indicador["formula"](bim_col_letter, inicio, fim, ws_title)
++                    cell_valor.value = formula_str
++                    cell_valor.alignment = ALINHAMENTO_CENTRALIZADO
++                    fmt = indicador.get("formato")
++                    is_int = indicador["nome"] in indicadores_inteiros
++                    if fmt:
++                        cell_valor.number_format = fmt
++                    elif is_int:
++                        cell_valor.number_format = '0'
++                    else:
++                        cell_valor.number_format = '0.00'
++            except Exception as e:
++                logger.error(f"Erro formula '{indicador['nome']}' ({ws.title}): {e}")
++        else:
++            logger.warning(f"Formula não chamável '{indicador['nome']}' ({ws.title})")
++    max_col_dashboard = dashboard_col_start_idx + num_bimestres
++    for row in range(linha_inicio_tabela_header + 1, linha_final_indicadores + 1):
++        for col in range(dashboard_col_start_idx, max_col_dashboard + 1):
++            ws.cell(row=row, column=col).border = BORDER_THIN
++
++def criar_dashboard_sec_turma(ws, linha_inicio_tabela_header, linha_inicio_dados, num_alunos):
++    """Cria o dashboard de resumo de status por turma na aba SEC."""
++    dashboard_col_start_idx = 7
++    dashboard_col_end_idx = 8
++    dashboard_linha = linha_inicio_tabela_header + 1
++    cell_titulo = ws.cell(row=dashboard_linha, column=dashboard_col_start_idx, value="Resumo Status Turma")
++    cell_titulo.font = Font(bold=True, size=12)
++    cell_titulo.alignment = ALINHAMENTO_CENTRALIZADO
++    ws.merge_cells(start_row=dashboard_linha, start_column=dashboard_col_start_idx, end_row=dashboard_linha, end_column=dashboard_col_end_idx)
++    dashboard_linha += 1
++    ws.cell(row=dashboard_linha, column=dashboard_col_start_idx, value="Indicador").font = Font(bold=True)
++    ws.cell(row=dashboard_linha, column=dashboard_col_start_idx).alignment = ALINHAMENTO_CENTRALIZADO
++    ws.cell(row=dashboard_linha, column=dashboard_col_end_idx, value="Qtd").font = Font(bold=True)
++    ws.cell(row=dashboard_linha, column=dashboard_col_end_idx).alignment = ALINHAMENTO_CENTRALIZADO
+     inicio = linha_inicio_dados
+-    fim = linha_inicio_dados + num_alunos - 1
+-
++    fim = linha_inicio_dados + num_alunos - 1 if num_alunos > 0 else inicio
+     indicadores_inteiros = ["MATRÍCULAS", "ATIVOS", "TRANSFERIDOS", "DESISTENTES"]
+-
+-    for idx, indicador in enumerate(DASHBOARD_SEC_TURMA):
++    linha_final_indicadores_sec_turma = dashboard_linha
++    for indicador in DASHBOARD_SEC_TURMA:
+         dashboard_linha += 1
+-        ws[f'G{dashboard_linha}'] = indicador["nome"]
+-        ws[f'G{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-        col_ref = 'C' if indicador["nome"] == "ATIVOS" else 'D' if indicador["nome"] == "TRANSFERIDOS" else 'E' if indicador["nome"] == "DESISTENTES" else 'B'
+-        ws[f'H{dashboard_linha}'] = indicador["formula"](col_ref, inicio, fim)
+-        ws[f'H{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-        ws[f'I{dashboard_linha}'] = ws[f'H{dashboard_linha}'].value
+-        ws[f'I{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-        
+-        if indicador["nome"] in indicadores_inteiros:
+-            ws[f'H{dashboard_linha}'].number_format = '0'
+-            ws[f'I{dashboard_linha}'].number_format = '0'
+-
+-    for row in range(linha_inicio_tabela, dashboard_linha + 1):
+-        for col in range(7, 10):
+-            cell = ws[f'{get_column_letter(col)}{row}']
+-            cell.border = border
+-
+-    ws.column_dimensions['G'].width = 20
+-    ws.column_dimensions['H'].width = 10
+-    ws.column_dimensions['I'].width = 10
+-
+-def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas, num_alunos_por_turma):
+-    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+-    
+-    dashboard_linha = linhas_inicio_tabelas[0]
+-    ws[f'J{dashboard_linha}'] = "Resumo Geral da Escola"
+-    ws[f'J{dashboard_linha}'].font = Font(bold=True)
+-    ws[f'J{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-    ws.merge_cells(f'J{dashboard_linha}:L{dashboard_linha}')
+-
+-    matriculas_refs = [f'H{linha_inicio + 1}' for linha_inicio in linhas_inicio_tabelas]
+-    ativos_refs = [f'H{linha_inicio + 2}' for linha_inicio in linhas_inicio_tabelas]
+-    transferidos_refs = [f'H{linha_inicio + 3}' for linha_inicio in linhas_inicio_tabelas]
+-    desistentes_refs = [f'H{linha_inicio + 4}' for linha_inicio in linhas_inicio_tabelas]
+-
+-    refs_por_indicador = {
+-        "MATRÍCULAS": matriculas_refs,
+-        "ATIVOS": ativos_refs,
+-        "TRANSFERIDOS": transferidos_refs,
+-        "DESISTENTES": desistentes_refs
+-    }
+-
++        linha_final_indicadores_sec_turma = dashboard_linha
++        ws.cell(row=dashboard_linha, column=dashboard_col_start_idx, value=indicador["nome"]).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
++        cell_valor = ws.cell(row=dashboard_linha, column=dashboard_col_end_idx)
++        if callable(indicador.get("formula")):
++            try:
++                formula_str = indicador["formula"]('C', inicio, fim)
++                cell_valor.value = formula_str
++                cell_valor.alignment = ALINHAMENTO_CENTRALIZADO
++                if indicador["nome"] in indicadores_inteiros:
++                    cell_valor.number_format = '0'
++                else:
++                    cell_valor.number_format = '0.00'
++            except Exception as e:
++                logger.error(f"Erro formula SEC_TURMA '{indicador['nome']}': {e}")
++                cell_valor.value = "#ERRO!"
++        else:
++            logger.warning(f"Formula não chamável SEC_TURMA '{indicador['nome']}'")
++            cell_valor.value = "#N/A"
++    for row in range(linha_inicio_tabela_header + 1, linha_final_indicadores_sec_turma + 1):
++        for col in range(dashboard_col_start_idx, dashboard_col_end_idx + 1):
++            ws.cell(row=row, column=col).border = BORDER_THIN
++
++def criar_dashboard_sec_geral(ws, linhas_inicio_tabelas_headers, num_alunos_por_turma, start_col='L', start_row=4):
++    """Cria o dashboard geral e o GRÁFICO DE STATUS na aba SEC."""
++    if not linhas_inicio_tabelas_headers:
++        logger.warning("Sem dados para dashboard SEC GERAL.")
++        return
++    dashboard_col_start_idx = column_index_from_string(start_col)
++    dashboard_col_end_idx = dashboard_col_start_idx + 1
++    dashboard_linha_ref = start_row
++    cell_titulo = ws.cell(row=dashboard_linha_ref, column=dashboard_col_start_idx, value="Resumo Geral Escola")
++    cell_titulo.font = Font(bold=True, size=12)
++    cell_titulo.alignment = ALINHAMENTO_CENTRALIZADO
++    ws.merge_cells(start_row=dashboard_linha_ref, start_column=dashboard_col_start_idx, end_row=dashboard_linha_ref, end_column=dashboard_col_end_idx)
++    dashboard_linha_atual = dashboard_linha_ref + 1
++    ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx, value="Indicador Geral").font = Font(bold=True)
++    ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx).alignment = ALINHAMENTO_CENTRALIZADO
++    ws.cell(row=dashboard_linha_atual, column=dashboard_col_end_idx, value="Total").font = Font(bold=True)
++    ws.cell(row=dashboard_linha_atual, column=dashboard_col_end_idx).alignment = ALINHAMENTO_CENTRALIZADO
++    indicador_row_offset = 2
++    matriculas_refs = [f'H{lh + indicador_row_offset + 1}' for lh in linhas_inicio_tabelas_headers]
++    ativos_refs = [f'H{lh + indicador_row_offset + 2}' for lh in linhas_inicio_tabelas_headers]
++    transferidos_refs = [f'H{lh + indicador_row_offset + 3}' for lh in linhas_inicio_tabelas_headers]
++    desistentes_refs = [f'H{lh + indicador_row_offset + 4}' for lh in linhas_inicio_tabelas_headers]
++    refs_por_indicador = {"MATRÍCULAS": matriculas_refs, "ATIVOS": ativos_refs, "TRANSFERIDOS": transferidos_refs, "DESISTENTES": desistentes_refs}
+     indicadores_inteiros = ["MATRÍCULAS", "ATIVOS", "TRANSFERIDOS", "DESISTENTES", "Nº ABANDONO(S)"]
+-
+-    for idx, indicador in enumerate(DASHBOARD_SEC_GERAL):
+-        dashboard_linha += 1
+-        ws[f'J{dashboard_linha}'] = indicador["nome"]
+-        ws[f'J{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-        
+-        if indicador["nome"] in refs_por_indicador:
+-            ws[f'K{dashboard_linha}'] = indicador["formula"](refs_por_indicador[indicador["nome"]])
++    valor_col_letter = get_column_letter(dashboard_col_end_idx)
++    linha_inicio_dados_geral = dashboard_linha_atual + 1
++    for indicador in DASHBOARD_SEC_GERAL:
++        dashboard_linha_atual += 1
++        ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx, value=indicador["nome"]).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
++        cell_valor = ws.cell(row=dashboard_linha_atual, column=dashboard_col_end_idx)
++        formula_aplicada = False
++        if callable(indicador.get("formula")):
++            try:
++                if indicador["nome"] in refs_por_indicador:
++                    refs = refs_por_indicador[indicador["nome"]]
++                    formula_str = indicador["formula"](refs) if refs else "0"
++                    formula_aplicada = True
++                elif indicador["nome"] in ["Nº ABANDONO(S)", "ABANDONO(S) (%)"]:
++                    formula_str = indicador["formula"](dashboard_linha_atual, valor_col_letter)
++                    formula_aplicada = True
++                else:
++                    formula_str = indicador["formula"]()
++                    formula_aplicada = True
++                if formula_aplicada:
++                    cell_valor.value = formula_str
++                    cell_valor.alignment = ALINHAMENTO_CENTRALIZADO
++                    fmt = indicador.get("formato")
++                    is_int = indicador["nome"] in indicadores_inteiros
++                    if fmt:
++                        cell_valor.number_format = fmt
++                    elif is_int:
++                        cell_valor.number_format = '0'
++                    else:
++                        cell_valor.number_format = '0.00'
++            except Exception as e:
++                logger.error(f"Erro formula SEC_GERAL '{indicador['nome']}': {e}")
++                cell_valor.value = "#ERRO!"
+         else:
+-            ws[f'K{dashboard_linha}'] = indicador["formula"](dashboard_linha)
+-        
+-        ws[f'K{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-        if indicador["formato"]:
+-            ws[f'K{dashboard_linha}'].number_format = indicador["formato"]
+-        elif indicador["nome"] in indicadores_inteiros:
+-            ws[f'K{dashboard_linha}'].number_format = '0'
++            logger.warning(f"Formula não chamável SEC_GERAL '{indicador['nome']}'")
++            cell_valor.value = "#N/A"
++    linha_fim_dados_geral = dashboard_linha_atual
++    for row in range(dashboard_linha_ref, linha_fim_dados_geral + 1):
++        for col in range(dashboard_col_start_idx, dashboard_col_end_idx + 1):
++            ws.cell(row=row, column=col).border = BORDER_THIN
++    try:
++        chart_status = BarChart()
++        chart_status.type = "col"
++        chart_status.style = 11
++        title_font = Font(name='Calibri', size=14, bold=True)
++        title_char_props = CharacterProperties(latin=title_font.name, sz=int(title_font.sz*100), b=title_font.bold)
++        chart_status.title = RichTextProperties(p=[Paragraph(pPr=ParagraphProperties(defRPr=title_char_props), endParaRPr=title_char_props, r=[])], bodyPr='', lstStyle='', lvl1pPr='')
++        chart_status.title.text = "Distribuição de Status Geral"
++        chart_status.y_axis.title = 'Número de Alunos'
++        chart_status.x_axis.title = 'Status'
++        chart_status.height = 10
++        chart_status.width = 15
++        row_ativos = linha_inicio_dados_geral + 1
++        row_transferidos = linha_inicio_dados_geral + 2
++        row_desistentes = linha_inicio_dados_geral + 3
++        if row_desistentes <= linha_fim_dados_geral:
++            data = Reference(ws, min_col=dashboard_col_end_idx, min_row=row_ativos, max_row=row_desistentes)
++            cats = Reference(ws, min_col=dashboard_col_start_idx, min_row=row_ativos, max_row=row_desistentes)
++            chart_status.add_data(data, titles_from_data=False)
++            chart_status.set_categories(cats)
++            chart_status.legend = None
++            series = chart_status.series[0]
++            colors = ["9BBB59", "FFC000", "C0504D"]
++            for idx, pt in enumerate(series.points):
++                if idx < len(colors):
++                    pt.graphicalProperties.solidFill = colors[idx]
++            series.dLbls = DataLabelList()
++            series.dLbls.showVal = True
++            series.dLbls.numFmt = '0'
++            chart_status.y_axis.majorGridlines = None
++            chart_anchor = f"{get_column_letter(dashboard_col_start_idx + 3)}{dashboard_linha_ref}"
++            ws.add_chart(chart_status, chart_anchor)
++            logger.info(f"Gráfico status GERAL add {chart_anchor}")
+         else:
+-            ws[f'K{dashboard_linha}'].number_format = '0.00'
+-
+-    for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
+-        for col in range(10, 13):
+-            cell = ws[f'{get_column_letter(col)}{row}']
+-            cell.border = border
+-
+-    ws.column_dimensions['J'].width = 25
+-    ws.column_dimensions['K'].width = 10
+-    ws.column_dimensions['L'].width = 10
+-
+-def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas):
+-    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+-    
+-    dashboard_linha = linhas_inicio_tabelas[0]
+-    ws[f'M{dashboard_linha}'] = "TAXA DE APROVAÇÃO BIMESTRAL"
+-    ws[f'M{dashboard_linha}'].font = Font(bold=True)
+-    ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-    ws.merge_cells(f'M{dashboard_linha}:Q{dashboard_linha}')
+-
+-    dashboard_linha += 1
+-    ws[f'M{dashboard_linha}'] = "TURMA"
+-    ws[f'N{dashboard_linha}'] = "B1"
+-    ws[f'O{dashboard_linha}'] = "B2"
+-    ws[f'P{dashboard_linha}'] = "B3"
+-    ws[f'Q{dashboard_linha}'] = "B4"
+-    for col in range(13, 18):
+-        cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
++            logger.warning(f"Dados insuficientes para gráfico status GERAL.")
++    except Exception as chart_err:
++        logger.error(f"Erro gráfico status GERAL: {chart_err}")
++
++def criar_dashboard_sec_aprovacao(ws, turmas, linhas_inicio_tabelas_headers, start_col='R', start_row=4):
++    """Cria o dashboard de aprovação e o GRÁFICO na aba SEC."""
++    if not linhas_inicio_tabelas_headers or not turmas:
++        logger.warning("Dados insuficientes para dash SEC APROVAÇÃO.")
++        return
++    dashboard_col_start_idx = column_index_from_string(start_col)
++    num_bimestres = 4
++    max_col_idx = dashboard_col_start_idx + num_bimestres
++    dashboard_linha_ref = start_row
++    cell_titulo = ws.cell(row=dashboard_linha_ref, column=dashboard_col_start_idx, value="TAXA MÉDIA APROVAÇÃO BIMESTRAL")
++    cell_titulo.font = Font(bold=True, size=12)
++    cell_titulo.alignment = ALINHAMENTO_CENTRALIZADO
++    ws.merge_cells(start_row=dashboard_linha_ref, start_column=dashboard_col_start_idx, end_row=dashboard_linha_ref, end_column=max_col_idx)
++    dashboard_linha_atual = dashboard_linha_ref + 1
++    ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx, value="TURMA").font = Font(bold=True)
++    ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx).alignment = ALINHAMENTO_CENTRALIZADO
++    for i in range(num_bimestres):
++        cell = ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx + 1 + i, value=f"B{i+1}")
+         cell.font = Font(bold=True)
+         cell.alignment = ALINHAMENTO_CENTRALIZADO
+         cell.fill = FILL_BIMESTRES
+-
++    linha_inicio_dados_turmas = dashboard_linha_atual + 1
++    wb = ws.parent
+     for idx, turma in enumerate(turmas):
+-        dashboard_linha += 1
+-        ws[f'M{dashboard_linha}'] = turma["nome_turma"]
+-        ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-
+-        linha_ref_base = 12
+-        linha_ref = linha_ref_base + (idx * 52)
+-
+-        ws[f'N{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!O{linha_ref},0)" for disc in DISCIPLINAS])})'
+-        ws[f'O{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!P{linha_ref},0)" for disc in DISCIPLINAS])})'
+-        ws[f'P{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!Q{linha_ref},0)" for disc in DISCIPLINAS])})'
+-        ws[f'Q{dashboard_linha}'] = f'=AVERAGE({",".join([f"IFERROR({disc}!R{linha_ref},0)" for disc in DISCIPLINAS])})'
+-
+-        for col in range(13, 18):
+-            cell = ws[f'{get_column_letter(col)}{dashboard_linha}']
++        dashboard_linha_atual += 1
++        ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx, value=turma["nome_turma"]).alignment = Alignment(horizontal='left', vertical='center')
++        linhas_por_bloco_turma_disc = 1 + 1 + MAX_ALUNOS_FORMATAR + 15
++        linha_inicio_bloco_disc = 3 + (idx * linhas_por_bloco_turma_disc)
++        linha_header_disc = linha_inicio_bloco_disc + 1
++        linha_inicio_dash_disc = linha_header_disc + 1
++        linha_ref_taxa_aprov = linha_inicio_dash_disc + 10
++        col_map_disc_dash = {'O': 'N', 'P': 'O', 'Q': 'P', 'R': 'Q'}
++        for disc_col_letter, aprov_col_letter in col_map_disc_dash.items():
++            refs = [f"IFERROR('{d}'!{disc_col_letter}{linha_ref_taxa_aprov}, 0)" for d in DISCIPLINAS if d in wb.sheetnames]
++            formula_str = f'=IFERROR(AVERAGE({",".join(refs)}),0)' if refs else '=0'
++            aprov_col_idx = list(col_map_disc_dash.values()).index(aprov_col_letter) + dashboard_col_start_idx + 1
++            cell = ws.cell(row=dashboard_linha_atual, column=aprov_col_idx)
++            cell.value = formula_str
+             cell.number_format = '0.00%'
+             cell.alignment = ALINHAMENTO_CENTRALIZADO
+-
+-    linha_inicio_turmas = linhas_inicio_tabelas[0] + 2
+-    linha_fim_turmas = linha_inicio_turmas + len(turmas) - 1
+-    
+-    for indicador in DASHBOARD_SEC_APROVACAO:
+-        dashboard_linha += 1
+-        ws[f'M{dashboard_linha}'] = indicador["nome"]
+-        ws[f'M{dashboard_linha}'].font = Font(size=10)
+-        ws[f'M{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-
+-        for col in ['N', 'O', 'P', 'Q']:
+-            if indicador["nome"] == "TX APROVAÇÃO %":
+-                ws[f'{col}{dashboard_linha}'] = f'=AVERAGE({col}{linha_inicio_turmas}:{col}{linha_fim_turmas})'
++    linha_fim_dados_turmas = dashboard_linha_atual
++    for indicador_info in DASHBOARD_SEC_APROVACAO:
++        dashboard_linha_atual += 1
++        ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx, value=indicador_info["nome"]).font = Font(size=10, bold=True)
++        ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx).alignment = ALINHAMENTO_CENTRALIZADO
++        for i in range(num_bimestres):
++            col_letter = get_column_letter(dashboard_col_start_idx + 1 + i)
++            cell = ws.cell(row=dashboard_linha_atual, column=dashboard_col_start_idx + 1 + i)
++            if indicador_info["nome"] == "TX APROVAÇÃO %":
++                formula_str = f'=IFERROR(AVERAGE({col_letter}{linha_inicio_dados_turmas}:{col_letter}{linha_fim_dados_turmas}),0)' if linha_inicio_dados_turmas <= linha_fim_dados_turmas else '=0'
++            elif indicador_info["nome"] == "TX REPROVAÇÃO %":
++                formula_str = f'=IFERROR(1-{col_letter}{dashboard_linha_atual-1}, 0)'
+             else:
+-                ws[f'{col}{dashboard_linha}'] = f'=IFERROR(1-{col}{dashboard_linha-1},0)'
+-            
+-            ws[f'{col}{dashboard_linha}'].font = Font(size=10)
+-            ws[f'{col}{dashboard_linha}'].number_format = '0.00%'
+-            ws[f'{col}{dashboard_linha}'].alignment = ALINHAMENTO_CENTRALIZADO
+-
+-    for row in range(linhas_inicio_tabelas[0], dashboard_linha + 1):
+-        for col in range(13, 18):
+-            cell = ws[f'{get_column_letter(col)}{row}']
+-            cell.border = border
+-
+-    ws.column_dimensions['M'].width = 15
+-    ws.column_dimensions['N'].width = 10
+-    ws.column_dimensions['O'].width = 10
+-    ws.column_dimensions['P'].width = 10
+-    ws.column_dimensions['Q'].width = 10
+-
+-    chart = BarChart()
+-    chart.type = "col"
+-    chart.style = 10
+-    chart.title = "TAXA DE APROVAÇÃO"
+-    chart.y_axis.title = "Taxa de Aprovação (%)"
+-    chart.x_axis.title = "Turma"
+-    chart.height = 15
+-    chart.width = 20
+-
+-    data = Reference(ws, min_col=14, min_row=linhas_inicio_tabelas[0] + 1, max_col=17, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
+-    cats = Reference(ws, min_col=13, min_row=linhas_inicio_tabelas[0] + 2, max_row=linhas_inicio_tabelas[0] + len(turmas) + 1)
+-    chart.add_data(data, titles_from_data=True)
+-    chart.set_categories(cats)
+-
+-    series_colors = ["DAA520", "CD853F", "F4A460", "DEB887"]
+-    for idx, series in enumerate(chart.series):
+-        series.graphicalProperties.solidFill = series_colors[idx]
+-
+-    chart.gapWidth = 50
+-    chart.y_axis.scaling.min = 0
+-    chart.y_axis.scaling.max = 1
+-    chart.y_axis.number_format = '0%'
+-
+-    chart.y_axis.majorGridlines = ChartLines()
+-
+-    ws.add_chart(chart, f"M{dashboard_linha + 2}")
+\ No newline at end of file
++                formula_str = '#N/A'
++            cell.value = formula_str
++            cell.font = Font(size=10, bold=True)
++            cell.number_format = indicador_info["formato"]
++            cell.alignment = ALINHAMENTO_CENTRALIZADO
++    max_row_aprov = dashboard_linha_atual
++    for row in range(dashboard_linha_ref, max_row_aprov + 1):
++        for col in range(dashboard_col_start_idx, max_col_idx + 1):
++            ws.cell(row=row, column=col).border = BORDER_THIN
++    try:
++        chart_aprov = BarChart()
++        chart_aprov.type = "col"
++        chart_aprov.style = 10
++        title_font_aprov = Font(name='Calibri', size=14, bold=True)
++        title_char_props_aprov = CharacterProperties(latin=title_font_aprov.name, sz=int(title_font_aprov.sz*100), b=title_font_aprov.bold)
++        chart_aprov.title = RichTextProperties(p=[Paragraph(pPr=ParagraphProperties(defRPr=title_char_props_aprov), endParaRPr=title_char_props_aprov, r=[])], bodyPr='', lstStyle='', lvl1pPr='')
++        chart_aprov.title.text = "TAXA MÉDIA DE APROVAÇÃO POR TURMA E BIMESTRE"
++        chart_aprov.y_axis.title = "Taxa Média (%)"
++        chart_aprov.x_axis.title = "Turma"
++        chart_aprov.height = 14
++        chart_aprov.width = 22
++        min_col_data = dashboard_col_start_idx + 1
++        max_col_data = max_col_idx
++        min_row_data = linha_inicio_dados_turmas - 1
++        max_row_data = linha_fim_dados_turmas
++        if min_row_data < max_row_data:
++            data = Reference(ws, min_col=min_col_data, min_row=min_row_data, max_col=max_col_data, max_row=max_row_data)
++            cats = Reference(ws, min_col=dashboard_col_start_idx, min_row=linha_inicio_dados_turmas, max_row=max_row_data)
++            chart_aprov.add_data(data, titles_from_data=True)
++            chart_aprov.set_categories(cats)
++            series_colors = ["4F81BD", "C0504D", "9BBB59", "8064A2"]
++            for idx, series in enumerate(chart_aprov.series):
++                if idx < len(series_colors):
++                    series.graphicalProperties.solidFill = series_colors[idx]
++            chart_aprov.legend.position = 'b'
++            chart_aprov.y_axis.scaling.min = 0.0
++            chart_aprov.y_axis.scaling.max = 1.0
++            chart_aprov.y_axis.majorUnit = 0.2
++            chart_aprov.y_axis.number_format = '0%'
++            chart_aprov.y_axis.majorGridlines = ChartLines()
++            chart_aprov.y_axis.majorGridlines.graphicalProperties.line.solidFill = "D9D9D9"
++            chart_anchor = f"{get_column_letter(dashboard_col_start_idx + 6)}{dashboard_linha_ref}"
++            ws.add_chart(chart_aprov, chart_anchor)
++            logger.info(f"Gráfico aprovação add {chart_anchor}")
++        else:
++            logger.warning(f"Sem dados para gráfico aprovação ({ws.title}).")
++    except Exception as chart_err:
++        logger.error(f"Erro gráfico aprovação: {chart_err}")
+\ No newline at end of file
+diff --git a/siage-fastapi/gerar_planilha_teste.py b/siage-fastapi/gerar_planilha_teste.py
+new file mode 100644
+index 0000000..ceb4954
+--- /dev/null
++++ b/siage-fastapi/gerar_planilha_teste.py
+@@ -0,0 +1,78 @@
++import requests
++import openpyxl
++from app.utils.excel_utils import criar_dashboard_sec_aprovacao
++from app.core.config import DISCIPLINAS, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO
++import json
++from pathlib import Path
++import os
++
++# Configurações
++URL_ENDPOINT = "http://localhost:8000/api/v1/gerar-planilha"
++CAMINHO_PLANILHA_BASE = f"{CAMINHO_PADRAO}/{NOME_ARQUIVO_PADRAO}"
++CAMINHO_PLANILHA_TESTE = f"{CAMINHO_PADRAO}/planilha_teste_populada.xlsx"
++CAMINHO_JSON = Path(__file__).parent / "turmas_alunos.json"
++def chamar_endpoint():
++    """Chama o endpoint para gerar a planilha base."""
++    if os.path.exists(CAMINHO_PLANILHA_BASE):
++        os.remove(CAMINHO_PLANILHA_BASE)  # Remove o arquivo existente para evitar PermissionError
++    response = requests.get(URL_ENDPOINT)
++    if response.status_code == 200:
++        with open(CAMINHO_PLANILHA_BASE, "wb") as f:
++            f.write(response.content)
++        print(f"Planilha base gerada em: {CAMINHO_PLANILHA_BASE}")
++    else:
++        raise Exception(f"Erro ao chamar o endpoint: {response.status_code}")
++
++def carregar_turmas():
++    """Carrega as turmas do arquivo JSON."""
++    with open(CAMINHO_JSON, 'r', encoding='utf-8') as f:
++        dados = json.load(f)
++    return dados["turmas"]
++
++def popular_dados_ficticios(wb, turmas):
++    """Popula a planilha com dados fictícios para o B1 em todas as disciplinas."""
++    for idx, turma in enumerate(turmas):
++        # Linha inicial para dados da turma (após cabeçalhos e título da turma)
++        linha_base = 4 + (idx * 53)  # 53 linhas por turma (1 cabeçalho + 1 título + 35 dados + 15 dashboard)
++        num_alunos = len(turma["alunos"])
++        
++        for disciplina in DISCIPLINAS:
++            ws = wb[disciplina]
++            for aluno in turma["alunos"]:
++                row = linha_base + int(aluno["numero"]) - 1  # Ajusta para a linha correta do aluno
++                # Notas fictícias para B1 (coluna C)
++                if "A" in turma["nome_turma"]:
++                    ws[f"C{row}"] = 8 if int(aluno["numero"]) <= num_alunos * 0.8 else 6
++                else:
++                    ws[f"C{row}"] = 8 if int(aluno["numero"]) <= num_alunos * 0.2 else 6
++                
++                # Calcula MG (média geral) para consistência
++                ws[f"H{row}"] = f"=SUM(C{row}:F{row})/4"
++            
++            # Taxa de aprovação (ajustado para a linha correta do dashboard)
++            linha_taxa = 12 + (idx * 53)
++            ws[f"O{linha_taxa}"] = f"=COUNTIF(C{linha_base}:C{linha_base + num_alunos - 1}, \">=7\")/COUNTA(C{linha_base}:C{linha_base + num_alunos - 1})"
++
++def gerar_planilha_teste():
++    """Gera a planilha de teste populada com dashboards e gráfico."""
++    chamar_endpoint()
++    
++    wb = openpyxl.load_workbook(CAMINHO_PLANILHA_BASE)
++    turmas = carregar_turmas()
++    
++    popular_dados_ficticios(wb, turmas)
++    
++    # Calcular a linha inicial do dashboard na aba SEC
++    # Cada turma ocupa 40 linhas (1 título + 1 cabeçalho + 35 dados + 3 dashboard)
++    # Há 7 turmas, então a última linha usada é 1 + (40 * 7) = 281
++    # Começar o dashboard na linha 283 para evitar sobreposição
++    LINHAS_INICIO_TABELAS = [1 + (40 * len(turmas)) + 2]
++    
++    ws_sec = wb["SEC"]
++    criar_dashboard_sec_aprovacao(ws_sec, turmas, LINHAS_INICIO_TABELAS)
++    
++    wb.save(CAMINHO_PLANILHA_TESTE)
++    print(f"Planilha de teste gerada em: {CAMINHO_PLANILHA_TESTE}")
++
++if __name__ == "__main__":
++    gerar_planilha_teste()
+\ No newline at end of file
+diff --git a/siage-fastapi/planilha_notas_complexa.xlsx b/siage-fastapi/planilha_notas_gerada_final_v5.xlsx
+similarity index 56%
+rename from siage-fastapi/planilha_notas_complexa.xlsx
+rename to siage-fastapi/planilha_notas_gerada_final_v5.xlsx
+index 8965df7..50bb877 100644
+Binary files a/siage-fastapi/planilha_notas_complexa.xlsx and b/siage-fastapi/planilha_notas_gerada_final_v5.xlsx differ
+diff --git a/siage-fastapi/planilha_teste.xlsx b/siage-fastapi/planilha_teste.xlsx
+index 8965df7..50bb877 100644
+Binary files a/siage-fastapi/planilha_teste.xlsx and b/siage-fastapi/planilha_teste.xlsx differ
+diff --git a/siage-fastapi/testar_planilha.py b/siage-fastapi/testar_planilha.py
+new file mode 100644
+index 0000000..9fea213
+--- /dev/null
++++ b/siage-fastapi/testar_planilha.py
+@@ -0,0 +1,76 @@
++import requests
++import openpyxl
++from app.utils.excel_utils import criar_dashboard_sec_aprovacao
++from app.core.config import DISCIPLINAS, CAMINHO_PADRAO, NOME_ARQUIVO_PADRAO
++import json
++from pathlib import Path
++import os
++import random  # Importa o módulo random
++
++# Configurações
++URL_ENDPOINT = "http://localhost:8000/api/v1/gerar-planilha"
++CAMINHO_PLANILHA_BASE = f"{CAMINHO_PADRAO}/{NOME_ARQUIVO_PADRAO}"
++CAMINHO_PLANILHA_TESTE = f"{CAMINHO_PADRAO}/planilha_teste_populada.xlsx"
++CAMINHO_JSON = Path(__file__).parent / "turmas_alunos.json"
++
++def chamar_endpoint():
++    """Chama o endpoint para gerar a planilha base."""
++    if os.path.exists(CAMINHO_PLANILHA_BASE):
++        os.remove(CAMINHO_PLANILHA_BASE)  # Remove o arquivo existente para evitar PermissionError
++    response = requests.get(URL_ENDPOINT)
++    if response.status_code == 200:
++        with open(CAMINHO_PLANILHA_BASE, "wb") as f:
++            f.write(response.content)
++        print(f"Planilha base gerada em: {CAMINHO_PLANILHA_BASE}")
++    else:
++        raise Exception(f"Erro ao chamar o endpoint: {response.status_code}")
++
++def carregar_turmas():
++    """Carrega as turmas do arquivo JSON."""
++    with open(CAMINHO_JSON, 'r', encoding='utf-8') as f:
++        dados = json.load(f)
++    return dados["turmas"]
++
++def popular_dados_ficticios(wb, turmas):
++    """Popula a planilha com notas aleatórias no 1º bimestre,
++    baseando-se nos nomes dos alunos já presentes na coluna "Nome do Aluno".
++    """
++    for disciplina in DISCIPLINAS:
++        ws = wb[disciplina]
++        # Itera sobre as linhas da planilha, começando da linha 4
++        # (onde os dados dos alunos começam) e indo até a linha 400 (um limite razoável)
++        for row in range(4, 400):
++            # Obtém o nome do aluno na coluna "Nome do Aluno" (coluna B)
++            nome_aluno = ws[f"B{row}"].value
++            # Se a célula "Nome do Aluno" estiver preenchida
++            if nome_aluno:
++                # Gera uma nota aleatória entre 1 e 10
++                nota = random.randint(1, 10)
++                # Atribui a nota gerada à coluna do 1º Bimestre (coluna C)
++                ws[f"C{row}"] = nota
++                # Recalcula a média geral
++                ws[f"H{row}"] = f"=SUM(C{row}:F{row})/4"
++
++def gerar_planilha_teste():
++    """Gera a planilha de teste populada com dashboards e gráfico."""
++    chamar_endpoint()
++
++    wb = openpyxl.load_workbook(CAMINHO_PLANILHA_BASE)
++    turmas = carregar_turmas()
++
++    popular_dados_ficticios(wb, turmas)
++
++    # Calcular a linha inicial do dashboard na aba SEC
++    # Cada turma ocupa 40 linhas (1 título + 1 cabeçalho + 35 dados + 3 dashboard)
++    # Há 7 turmas, então a última linha usada é 1 + (40 * 7) = 281
++    # Começar o dashboard na linha 283 para evitar sobreposição
++    LINHAS_INICIO_TABELAS = [1 + (40 * len(turmas)) + 2]
++
++    ws_sec = wb["SEC"]
++    criar_dashboard_sec_aprovacao(ws_sec, turmas, LINHAS_INICIO_TABELAS)
++
++    wb.save(CAMINHO_PLANILHA_TESTE)
++    print(f"Planilha de teste gerada em: {CAMINHO_PLANILHA_TESTE}")
++
++if __name__ == "__main__":
++    gerar_planilha_teste()
+\ No newline at end of file

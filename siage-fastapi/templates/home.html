@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}EduGrade - Home{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-md text-center">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to EduGrade</h1>
+    <p class="text-gray-600 mb-6">Upload your student data and generate grade reports easily.</p>
+    <a href="/upload" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200">Go to Upload</a>
+    <div class="mt-6">
+        <a href="/download/grades" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition duration-200">Download Grades</a>
+    </div>
+</div>
+{% endblock %}
