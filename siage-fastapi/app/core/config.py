@@ -1,8 +1,8 @@
+from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 from pathlib import Path
-from openpyxl.styles import PatternFill, Font, Alignment
 
 # Caminhos para arquivos e diretórios
-CAMINHO_IMAGEM = Path("/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi/app/core/static/images/siage_interno.png")
+CAMINHO_IMAGEM = Path("/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi/static/images/siage_interno.png")
 CAMINHO_PADRAO = "/home/lmbernardo/teste-planilha-siage-interno/siage-fastapi"
 NOME_ARQUIVO_PADRAO = "planilha_notas_complexa.xlsx"
 
@@ -11,6 +11,23 @@ DISCIPLINAS = [
     "BIO", "MAT", "FIS", "QUI", "GEO", "SOC", "HIS", 
     "FIL", "ESP", "POR", "ART", "EDF", "ING"
 ]
+
+# Dicionário mapeando códigos para nomes completos das disciplinas
+DISCIPLINAS_NOMES = {
+    "BIO": "Biologia",
+    "MAT": "Matemática",
+    "FIS": "Física",
+    "QUI": "Química",
+    "GEO": "Geografia",
+    "SOC": "Sociologia",
+    "HIS": "História",
+    "FIL": "Filosofia",
+    "ESP": "Espanhol",
+    "POR": "Português",
+    "ART": "Artes",
+    "EDF": "Educação Física",
+    "ING": "Inglês"
+}
 
 # Colunas das abas de disciplinas
 COLUNAS = [
@@ -48,8 +65,53 @@ LARGURAS_COLUNAS_ABAS_DISC = {
     "SF": 3
 }
 
+# Configurações de largura das colunas da aba SEC (em número de caracteres)
+LARGURAS_COLUNAS_SEC_LETRAS = {
+    "Nº": 5,
+    "Nome do Aluno": 40,
+    "ATIVO": 15,
+    "TRANSFERIDO": 15,
+    "DESISTENTE": 15,
+    "SITUAÇÃO DO ALUNO": 40
+}
+
+# Configurações de largura das colunas das abas de disciplinas (em número de caracteres)
+LARGURAS_COLUNAS_ABAS_DISC_LETRAS = {
+    "Nº": 5,
+    "Nome do Aluno": 60,
+    "1º BIM": 10,
+    "2º BIM": 10,
+    "3º BIM": 10,
+    "4º BIM": 10,
+    "NF": 10,
+    "MG": 10,
+    "MF": 10,
+    "SITUAÇÃO DO ALUNO": 40,
+    "PF": 10,
+    "SF": 10
+}
+
+# Nomes das tabelas Power Pivot
+TBL_TURMAS_NAME = "tblTurmas"
+TBL_ALUNOS_NAME = "tblAlunos"
+TBL_NOTAS_NAME = "tblNotas"
+TBL_DISCIPLINAS_NAME = "tblDisciplinas"
+
+# Limites e posições
+MAX_ALUNOS_FORMATAR = 50  # Número máximo de alunos a formatar por aba
+LINHA_INICIAL = 5  # Linha inicial para dados na planilha
+COLUNA_INICIAL = "A"  # Coluna inicial para dados
+
 # Estilos e formatações
 COR_ABA = "FFDAB9"  # Cor das abas (PeachPuff)
+
+# Estilo de borda fina
+BORDER_THIN = Border(
+    left=Side(border_style="thin"),
+    right=Side(border_style="thin"),
+    top=Side(border_style="thin"),
+    bottom=Side(border_style="thin")
+)
 
 # Preenchimentos (fills) para células
 FILL_NOME_ALUNO = PatternFill(start_color="FF6347", end_color="FF6347", fill_type="solid")  # Tomato
